@@ -11,15 +11,21 @@ namespace serialog
 
         Thread serialReadThread = null;        
 
+        private string[] GetSortedPorts()
+        {
+            var port_names = SerialCom.GetPortNames();
+            Array.Sort(port_names, (x, y) => Int32.Parse(x.Substring(3, x.Length - 3)) >
+            Int32.Parse(y.Substring(3, y.Length - 3)) ? 1 : -1);
+
+            return port_names;
+        }
+
         public Form1()
         {
             InitializeComponent();
 
-            var port_names = SerialCom.GetPortNames();
-            foreach (var item in port_names)
-            {
-                comboBox_port.Items.Add(item);
-            }
+            comboBox_port.Items.AddRange(GetSortedPorts());
+
             if (comboBox_port.Items.Count > 0)
                 comboBox_port.SelectedIndex = 0;
 
@@ -86,11 +92,7 @@ namespace serialog
         private void comboBox_port_DropDown(object sender, EventArgs e)
         {
             comboBox_port.Items.Clear();
-            var port_names = SerialCom.GetPortNames();
-            foreach (var item in port_names)
-            {
-                comboBox_port.Items.Add(item);
-            }
+            comboBox_port.Items.AddRange(GetSortedPorts());
             if (comboBox_port.Items.Count > 0)
                 comboBox_port.SelectedIndex = 0;
         }
@@ -196,10 +198,16 @@ namespace serialog
                 }
                 Clipboard.SetText(text);
             }
-
-            if (e.Control && e.KeyCode == Keys.W)
+            else if (e.Control && e.KeyCode == Keys.W)
             {
                 listView1.Items.Clear();
+            }
+            else if (e.Control && e.KeyCode == Keys.A)
+            {
+                foreach (ListViewItem item in listView1.Items)
+                {
+                    item.Selected = true;
+                }                
             }
         }
 
