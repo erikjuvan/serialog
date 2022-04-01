@@ -1,6 +1,6 @@
 ﻿namespace serialog
 {
-    partial class Form2_Highlighting
+    partial class Form2_Highlight
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2_Highlighting));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2_Highlight));
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
@@ -65,6 +65,7 @@
             this.button2.TabIndex = 1;
             this.button2.Text = "Cancel";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // listView1
             // 
@@ -206,7 +207,7 @@
             this.button8.TabStop = false;
             this.button8.UseVisualStyleBackColor = true;
             // 
-            // Form2_Highlighting
+            // Form2_Highlight
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -229,8 +230,8 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form2_Highlighting";
-            this.Text = "Highlighting";
+            this.Name = "Form2_Highlight";
+            this.Text = "Highlight";
             this.ResumeLayout(false);
             this.PerformLayout();
 

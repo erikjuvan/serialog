@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace serialog
 {
-    public partial class Form2_Highlighting : Form
+    public partial class Form2_Highlight : Form
     {
-        public Form2_Highlighting()
+        public Form2_Highlight()
         {
             InitializeComponent();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

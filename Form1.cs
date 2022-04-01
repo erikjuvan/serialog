@@ -47,8 +47,8 @@ namespace serialog
 
         private void highlightsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form2_Highlighting form2_Highlighting = new Form2_Highlighting();
-            form2_Highlighting.ShowDialog();
+            Form2_Highlight form2_Highlight = new Form2_Highlight();
+            form2_Highlight.ShowDialog();
         }
 
         private void button_run_Click(object sender, EventArgs e)
