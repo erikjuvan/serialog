@@ -2,14 +2,15 @@ namespace serialog
 {
     public partial class Form1 : Form
     {
-        static bool _serialcomPaused = new bool();
-        static bool _serialcomStopped = new bool();
-        static SerialCom _serialCom = new SerialCom();
-        static List<string> _serialDataList = new List<string>();
-        int _serialDataListCountAddedToTable = 0;
+        private static bool _serialcomPaused = new bool();
+        private static bool _serialcomStopped = new bool();
+        private static SerialCom _serialCom = new SerialCom();
+        private static List<string> _serialDataList = new List<string>();
+        private int _serialDataListCountAddedToTable = 0;
         private static Mutex mtx = new Mutex();
-
-        Thread serialReadThread = null;        
+        private Thread serialReadThread = null;
+        
+        public HighlightingSettings highlightingSettings = new HighlightingSettings();
 
         private string[] GetSortedPorts()
         {
@@ -334,4 +335,59 @@ namespace serialog
             }
         }
     }
+
+    public class HighlightEntry
+    {
+        string text;
+        Color foreColor = Color.White;
+        Color backColor = Color.Black;
+        bool bold = false;
+        bool italic = false;
+        bool caseSensitive = true;
+
+        public HighlightEntry(string text)
+        {
+            this.text = text;
+        }
+        public HighlightEntry(string text, Color foreColor)
+        {
+            this.text = text;
+            this.foreColor = Color.White;
+        }
+        public HighlightEntry(string text, Color foreColor, Color backColor)
+        {
+            this.text = text;
+            this.foreColor = foreColor;
+            this.backColor = backColor;
+        }
+        public HighlightEntry(string text, Color foreColor, Color backColor, bool bold, bool caseSensitive)
+        {
+            this.text = text;
+            this.foreColor = foreColor;
+            this.backColor = backColor;
+            this.bold = bold;
+            this.caseSensitive = caseSensitive;
+        }
+    }
+
+    public class HighlightingSettings
+    {
+        List<HighlightEntry> highlightEntries;
+
+        public void Add(HighlightEntry highlightEntry)
+        {
+            highlightEntries.Add(highlightEntry);
+        }
+
+        public void Remove(HighlightEntry highlightEntry)
+        {
+            highlightEntries.Remove(highlightEntry);
+        }
+
+        public void Clear()
+        {
+            highlightEntries.Clear();
+        }
+    }
+
 }
