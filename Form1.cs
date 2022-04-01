@@ -14,8 +14,12 @@ namespace serialog
         private string[] GetSortedPorts()
         {
             var port_names = SerialCom.GetPortNames();
-            Array.Sort(port_names, (x, y) => Int32.Parse(x.Substring(3, x.Length - 3)) >
+            try
+            {
+                Array.Sort(port_names, (x, y) => Int32.Parse(x.Substring(3, x.Length - 3)) >
             Int32.Parse(y.Substring(3, y.Length - 3)) ? 1 : -1);
+            }            
+            catch (Exception ex) {}
 
             return port_names;
         }
