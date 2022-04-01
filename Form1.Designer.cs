@@ -29,11 +29,247 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            this.listView1 = new serialog.ListViewNF();
+            this.column1 = new System.Windows.Forms.ColumnHeader();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.highlightsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textBox_baud = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.button_run = new System.Windows.Forms.Button();
+            this.comboBox_port = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.button_stop = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.button_pause = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.menuStrip1.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // listView1
+            // 
+            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.column1});
+            this.listView1.GridLines = true;
+            this.listView1.Location = new System.Drawing.Point(12, 61);
+            this.listView1.Name = "listView1";
+            this.listView1.ShowGroups = false;
+            this.listView1.Size = new System.Drawing.Size(810, 888);
+            this.listView1.TabIndex = 12;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
+            this.listView1.Scrolled += new System.EventHandler<EventArgs>(this.listView1_Scrolled);
+            // 
+            // column1
+            // 
+            this.column1.Text = "";
+            this.column1.Width = 780;
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.editToolStripMenuItem,
+            this.settingsToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(834, 24);
+            this.menuStrip1.TabIndex = 0;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openToolStripMenuItem,
+            this.saveAsToolStripMenuItem,
+            this.exitToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.openToolStripMenuItem.Text = "Open";
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.saveAsToolStripMenuItem.Text = "Save As...";
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Text = "Edit";
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.highlightsToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // highlightsToolStripMenuItem
+            // 
+            this.highlightsToolStripMenuItem.Name = "highlightsToolStripMenuItem";
+            this.highlightsToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.highlightsToolStripMenuItem.Text = "Highlighting...";
+            this.highlightsToolStripMenuItem.Click += new System.EventHandler(this.highlightsToolStripMenuItem_Click);
+            // 
+            // textBox_baud
+            // 
+            this.textBox_baud.Location = new System.Drawing.Point(213, 32);
+            this.textBox_baud.Name = "textBox_baud";
+            this.textBox_baud.Size = new System.Drawing.Size(100, 23);
+            this.textBox_baud.TabIndex = 3;
+            this.textBox_baud.Text = "115200";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 36);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(32, 15);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Port:";
+            // 
+            // button_run
+            // 
+            this.button_run.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.button_run.Location = new System.Drawing.Point(349, 32);
+            this.button_run.Name = "button_run";
+            this.button_run.Size = new System.Drawing.Size(33, 23);
+            this.button_run.TabIndex = 5;
+            this.button_run.Text = "▶";
+            this.button_run.UseVisualStyleBackColor = true;
+            this.button_run.Click += new System.EventHandler(this.button_run_Click);
+            // 
+            // comboBox_port
+            // 
+            this.comboBox_port.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBox_port.FormattingEnabled = true;
+            this.comboBox_port.Location = new System.Drawing.Point(50, 32);
+            this.comboBox_port.Name = "comboBox_port";
+            this.comboBox_port.Size = new System.Drawing.Size(100, 23);
+            this.comboBox_port.TabIndex = 6;
+            this.comboBox_port.DropDown += new System.EventHandler(this.comboBox_port_DropDown);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(170, 36);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(37, 15);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Baud:";
+            // 
+            // button_stop
+            // 
+            this.button_stop.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.button_stop.Location = new System.Drawing.Point(423, 32);
+            this.button_stop.Name = "button_stop";
+            this.button_stop.Size = new System.Drawing.Size(33, 23);
+            this.button_stop.TabIndex = 8;
+            this.button_stop.Text = "■";
+            this.button_stop.UseVisualStyleBackColor = true;
+            this.button_stop.Click += new System.EventHandler(this.button_stop_Click);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Location = new System.Drawing.Point(501, 34);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(80, 19);
+            this.checkBox1.TabIndex = 9;
+            this.checkBox1.Text = "Follow tail";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // button_pause
+            // 
+            this.button_pause.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.button_pause.ForeColor = System.Drawing.Color.Black;
+            this.button_pause.Location = new System.Drawing.Point(386, 32);
+            this.button_pause.Name = "button_pause";
+            this.button_pause.Size = new System.Drawing.Size(33, 23);
+            this.button_pause.TabIndex = 10;
+            this.button_pause.Text = "||";
+            this.button_pause.UseVisualStyleBackColor = true;
+            this.button_pause.Click += new System.EventHandler(this.button_pause_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(834, 961);
+            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.button_pause);
+            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.button_stop);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.comboBox_port);
+            this.Controls.Add(this.button_run);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.textBox_baud);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
+            this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem openToolStripMenuItem;
+        private ToolStripMenuItem saveAsToolStripMenuItem;
+        private ToolStripMenuItem exitToolStripMenuItem;
+        private ToolStripMenuItem editToolStripMenuItem;
+        private ToolStripMenuItem settingsToolStripMenuItem;
+        private TextBox textBox_baud;
+        private Label label1;
+        private Button button_run;
+        private ComboBox comboBox_port;
+        private Label label2;
+        private Button button_stop;
+        private ToolStripMenuItem highlightsToolStripMenuItem;
+        private CheckBox checkBox1;
+        private Button button_pause;
+        private System.Windows.Forms.Timer timer1;
+        private ColumnHeader column1;
+        private ListViewNF listView1;
     }
 }
