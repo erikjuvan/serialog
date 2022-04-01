@@ -297,7 +297,7 @@ namespace serialog
             var writer = new StreamWriter(stream);
             foreach (ListViewItem item in selectedListViewItemCollection)
             {
-                writer.Write(item.Text);
+                writer.Write(item.Text + '\n');
             }                
             writer.Flush();
             stream.Position = 0;
