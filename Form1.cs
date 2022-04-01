@@ -290,5 +290,48 @@ namespace serialog
                 fileStream.Close();
             }
         }
+
+        public static Stream GenerateStreamFromListOfItems(ListView.SelectedListViewItemCollection selectedListViewItemCollection)
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            foreach (ListViewItem item in selectedListViewItemCollection)
+            {
+                writer.Write(item.Text);
+            }                
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
+        }
+
+        private void saveSelectedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Please select lines to save.");
+                return;
+            }
+
+            Stream myStream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    // Code to write the stream goes here.
+                    using (var stream = GenerateStreamFromListOfItems(listView1.SelectedItems))
+                    {
+                        stream.CopyTo(myStream);
+                    }
+
+                    myStream.Close();
+                }
+            }
+        }
     }
 }
