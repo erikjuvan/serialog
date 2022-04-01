@@ -215,6 +215,76 @@ namespace serialog
         {
             checkBox1.Checked = false;
         }
-        
+
+        public static Stream GenerateStreamFromListOfStrings(List<string> s)
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            foreach (string item in s)
+                writer.Write(item + "\n");
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Stream myStream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    // Code to write the stream goes here.
+                    using (var stream = GenerateStreamFromListOfStrings(_serialDataList))
+                    {
+                        stream.CopyTo(myStream);
+                    }
+
+                    myStream.Close();
+                }
+            }
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var fileContent = string.Empty;
+            var filePath = string.Empty;
+
+            //openFileDialog.InitialDirectory = "c:\\";
+            openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 2;
+            openFileDialog1.RestoreDirectory = true;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                //Get the path of specified file
+                filePath = openFileDialog1.FileName;
+
+                //Read the contents of the file into a stream
+                var fileStream = openFileDialog1.OpenFile();
+
+                using (StreamReader reader = new StreamReader(fileStream))
+                {
+                    fileContent = reader.ReadToEnd();
+                    var list_of_lines = fileContent.Split('\n').ToList();
+                    foreach (var line in list_of_lines)
+                    {
+                        listView1.Items.Add(line);
+                        listView1.Items[listView1.Items.Count - 1].ForeColor = GetForeColor(line);
+                        listView1.Items[listView1.Items.Count - 1].BackColor = GetBackColor(line);
+                    }
+
+                    listView1.Items[listView1.Items.Count - 1].EnsureVisible();
+                }
+
+                fileStream.Close();
+            }
+        }
     }
 }
