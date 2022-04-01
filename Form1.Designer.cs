@@ -39,7 +39,6 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.highlightsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.textBox_baud = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button_run = new System.Windows.Forms.Button();
             this.comboBox_port = new System.Windows.Forms.ComboBox();
@@ -48,6 +47,7 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button_pause = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.comboBox_baud = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,6 +59,7 @@
             this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.column1});
+            this.listView1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.listView1.GridLines = true;
             this.listView1.Location = new System.Drawing.Point(12, 61);
             this.listView1.Name = "listView1";
@@ -67,8 +68,8 @@
             this.listView1.TabIndex = 12;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.Scrolled += new System.EventHandler<System.EventArgs>(this.listView1_Scrolled);
             this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
-            this.listView1.Scrolled += new System.EventHandler<EventArgs>(this.listView1_Scrolled);
             // 
             // column1
             // 
@@ -137,14 +138,6 @@
             this.highlightsToolStripMenuItem.Text = "Highlighting...";
             this.highlightsToolStripMenuItem.Click += new System.EventHandler(this.highlightsToolStripMenuItem_Click);
             // 
-            // textBox_baud
-            // 
-            this.textBox_baud.Location = new System.Drawing.Point(213, 32);
-            this.textBox_baud.Name = "textBox_baud";
-            this.textBox_baud.Size = new System.Drawing.Size(100, 23);
-            this.textBox_baud.TabIndex = 3;
-            this.textBox_baud.Text = "115200";
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -172,7 +165,7 @@
             this.comboBox_port.Location = new System.Drawing.Point(50, 32);
             this.comboBox_port.Name = "comboBox_port";
             this.comboBox_port.Size = new System.Drawing.Size(100, 23);
-            this.comboBox_port.TabIndex = 6;
+            this.comboBox_port.TabIndex = 1;
             this.comboBox_port.DropDown += new System.EventHandler(this.comboBox_port_DropDown);
             // 
             // label2
@@ -224,11 +217,25 @@
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // comboBox_baud
+            // 
+            this.comboBox_baud.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBox_baud.FormattingEnabled = true;
+            this.comboBox_baud.Items.AddRange(new object[] {
+            "9600",
+            "115200",
+            "1000000"});
+            this.comboBox_baud.Location = new System.Drawing.Point(213, 32);
+            this.comboBox_baud.Name = "comboBox_baud";
+            this.comboBox_baud.Size = new System.Drawing.Size(100, 23);
+            this.comboBox_baud.TabIndex = 13;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(834, 961);
+            this.Controls.Add(this.comboBox_baud);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.button_pause);
             this.Controls.Add(this.checkBox1);
@@ -237,7 +244,6 @@
             this.Controls.Add(this.comboBox_port);
             this.Controls.Add(this.button_run);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox_baud);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
@@ -259,7 +265,6 @@
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripMenuItem editToolStripMenuItem;
         private ToolStripMenuItem settingsToolStripMenuItem;
-        private TextBox textBox_baud;
         private Label label1;
         private Button button_run;
         private ComboBox comboBox_port;
@@ -271,5 +276,6 @@
         private System.Windows.Forms.Timer timer1;
         private ColumnHeader column1;
         private ListViewNF listView1;
+        private ComboBox comboBox_baud;
     }
 }

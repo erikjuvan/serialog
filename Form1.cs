@@ -5,7 +5,8 @@ namespace serialog
         static bool _serialcomPaused = new bool();
         static bool _serialcomStopped = new bool();
         static SerialCom _serialCom = new SerialCom();
-        static string _serialData = new string("");
+        static List<string> _serialDataList = new List<string>();
+        int _serialDataListCountAddedToTable = 0;
         private static Mutex mtx = new Mutex();
 
         Thread serialReadThread = null;        
@@ -22,8 +23,11 @@ namespace serialog
             if (comboBox_port.Items.Count > 0)
                 comboBox_port.SelectedIndex = 0;
 
+            comboBox_baud.SelectedItem = "1000000";
+
             _serialcomStopped = true;
             _serialcomPaused = true;
+
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -42,7 +46,7 @@ namespace serialog
             if (_serialcomStopped)
             {
                 int baud = 0;
-                bool success = int.TryParse(textBox_baud.Text, out baud);
+                bool success = int.TryParse(comboBox_baud.Text, out baud);
 
                 if (!success)
                     return;
@@ -53,7 +57,7 @@ namespace serialog
                 _serialcomStopped = false;
 
                 comboBox_port.Enabled = false;
-                textBox_baud.Enabled = false;
+                comboBox_baud.Enabled = false;
 
                 serialReadThread = new Thread(SerialRead);
                 serialReadThread.Start();
@@ -76,7 +80,7 @@ namespace serialog
             _serialCom.Close();
 
             comboBox_port.Enabled = true;
-            textBox_baud.Enabled = true;
+            comboBox_baud.Enabled = true;
         }
 
         private void comboBox_port_DropDown(object sender, EventArgs e)
@@ -89,72 +93,87 @@ namespace serialog
             }
             if (comboBox_port.Items.Count > 0)
                 comboBox_port.SelectedIndex = 0;
-
-            MessageBox.Show(comboBox_port.Items.Count.ToString());
         }
 
         private static void SerialRead()
         {
-            string[] str_arr = { "Hello\n", "bye\n", "Timeout\n", "fsf\n", "turtla\n", "abcaivoasmnoivmsoivmsoavmos\n", "BABBYBY!!!!!!!!\n" };
-            int i = 0;
             while (!_serialcomStopped)
             {
                 if (!_serialcomPaused)
                 {
-                    mtx.WaitOne();
+                    var line = "";
+                    
                     try
                     {
-                        byte[] by = new byte[100];
-                        //_serialData += _serialCom.ReadExisting();
-                        _serialCom.Read(by, 0, 100);
+                        line = _serialCom.ReadLine();                        
                     }
                     catch (TimeoutException) 
                     {
-                        _serialData += str_arr[i++ % 7];
-                    }
-                    mtx.ReleaseMutex();
+                    }                    
 
-                    Thread.Sleep(100);
+                    if (line.Length > 0)
+                    {
+                        mtx.WaitOne();
+                        _serialDataList.Add(line);
+                        mtx.ReleaseMutex();
+                    }                    
+
+                    //Thread.Sleep(100);
                 }
             }            
         }
 
+        private Color GetForeColor(string line)
+        {
+            if (line.Contains("RX"))
+            {
+                return Color.Red;
+            }
+            else if (line.Contains("TX"))
+            {
+                return Color.Violet;
+            }
+            else
+            {
+                return Color.Black;
+            }            
+        }
+
+        private Color GetBackColor(string line)
+        {
+            if (line.Contains("DOC"))
+            {
+                return Color.AliceBlue;
+            }
+            else
+            {
+                return Color.White;
+            }            
+        }
+
+        private void AddEntry()
+        {
+            mtx.WaitOne();
+            if (_serialDataListCountAddedToTable < _serialDataList.Count)
+            {
+                for (int i = _serialDataListCountAddedToTable; i < _serialDataList.Count; i++)
+                {
+                    var entry = _serialDataList[i];
+                    listView1.Items.Add(entry);
+                    listView1.Items[listView1.Items.Count - 1].ForeColor = GetForeColor(entry);
+                    listView1.Items[listView1.Items.Count - 1].BackColor = GetBackColor(entry);
+                }
+                _serialDataListCountAddedToTable = _serialDataList.Count;
+
+                if (checkBox1.Checked)
+                    listView1.Items[listView1.Items.Count - 1].EnsureVisible();
+            }
+            mtx.ReleaseMutex();
+        }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (_serialData.Length > 0)
-            {
-                mtx.WaitOne();
-                string str = _serialData;
-                _serialData = string.Empty;
-                mtx.ReleaseMutex();
-
-                string[] lines = str.Split(
-                    new string[] { "\n" },
-                    StringSplitOptions.RemoveEmptyEntries
-                );
-
-                foreach (string line in lines)
-                {
-                    if (line == "bye")
-                    {
-                        /*richTextBox1.DeselectAll();
-                        richTextBox1.SelectionColor = Color.Red;
-                        richTextBox1.AppendText(line + "\n");*/
-
-                        listView1.Items.Add(line);
-                        listView1.Items[listView1.Items.Count - 1].ForeColor = Color.Red;
-                    }
-                    else 
-                    {
-                        /*richTextBox1.DeselectAll();
-                        richTextBox1.AppendText(line + "\n");*/
-                        listView1.Items.Add(line);
-                    }
-
-                    if (checkBox1.Checked)
-                        listView1.Items[listView1.Items.Count - 1].EnsureVisible();
-                }
-            }
+            AddEntry();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
