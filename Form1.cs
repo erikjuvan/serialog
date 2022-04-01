@@ -8,9 +8,7 @@ namespace serialog
         private static List<string> _serialDataList = new List<string>();
         private int _serialDataListCountAddedToTable = 0;
         private static Mutex mtx = new Mutex();
-        private Thread serialReadThread = null;
-        
-        public HighlightingSettings highlightingSettings = new HighlightingSettings();
+        private Thread serialReadThread = null;                
 
         private string[] GetSortedPorts()
         {
@@ -39,6 +37,7 @@ namespace serialog
             _serialcomStopped = true;
             _serialcomPaused = true;
 
+            Form2_Highlight.InitializeHighlightSettings();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -132,30 +131,28 @@ namespace serialog
 
         private Color GetForeColor(string line)
         {
-            if (line.Contains("RX"))
+            foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightSettings.highlightEntries)
             {
-                return Color.Red;
+                if (line.Contains(highlightEntry.text))
+                {
+                    return highlightEntry.foreColor;
+                }
             }
-            else if (line.Contains("TX"))
-            {
-                return Color.Violet;
-            }
-            else
-            {
-                return Color.Black;
-            }            
+
+            return Color.Black;
         }
 
         private Color GetBackColor(string line)
         {
-            if (line.Contains("DOC"))
+            foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightSettings.highlightEntries)
             {
-                return Color.AliceBlue;
+                if (line.Contains(highlightEntry.text))
+                {
+                    return highlightEntry.backColor;
+                }
             }
-            else
-            {
-                return Color.White;
-            }            
+
+            return Color.White;
         }
 
         private void AddEntry()
@@ -335,59 +332,4 @@ namespace serialog
             }
         }
     }
-
-    public class HighlightEntry
-    {
-        string text;
-        Color foreColor = Color.White;
-        Color backColor = Color.Black;
-        bool bold = false;
-        bool italic = false;
-        bool caseSensitive = true;
-
-        public HighlightEntry(string text)
-        {
-            this.text = text;
-        }
-        public HighlightEntry(string text, Color foreColor)
-        {
-            this.text = text;
-            this.foreColor = Color.White;
-        }
-        public HighlightEntry(string text, Color foreColor, Color backColor)
-        {
-            this.text = text;
-            this.foreColor = foreColor;
-            this.backColor = backColor;
-        }
-        public HighlightEntry(string text, Color foreColor, Color backColor, bool bold, bool caseSensitive)
-        {
-            this.text = text;
-            this.foreColor = foreColor;
-            this.backColor = backColor;
-            this.bold = bold;
-            this.caseSensitive = caseSensitive;
-        }
-    }
-
-    public class HighlightingSettings
-    {
-        List<HighlightEntry> highlightEntries;
-
-        public void Add(HighlightEntry highlightEntry)
-        {
-            highlightEntries.Add(highlightEntry);
-        }
-
-        public void Remove(HighlightEntry highlightEntry)
-        {
-            highlightEntries.Remove(highlightEntry);
-        }
-
-        public void Clear()
-        {
-            highlightEntries.Clear();
-        }
-    }
-
 }

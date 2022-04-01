@@ -29,43 +29,43 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2_Highlight));
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.button_ok = new System.Windows.Forms.Button();
+            this.button_cancel = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
+            this.button_add = new System.Windows.Forms.Button();
+            this.button_delete = new System.Windows.Forms.Button();
+            this.button_moveup = new System.Windows.Forms.Button();
+            this.button_movedown = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.button7 = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboBox_bgcolor = new System.Windows.Forms.ComboBox();
+            this.button_fgcolor = new System.Windows.Forms.Button();
+            this.comboBox_fgcolor = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.button8 = new System.Windows.Forms.Button();
+            this.textBox_string = new System.Windows.Forms.TextBox();
+            this.checkBox_ignorecase = new System.Windows.Forms.CheckBox();
+            this.checkBox_bold = new System.Windows.Forms.CheckBox();
+            this.button_bgcolor = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // button1
+            // button_ok
             // 
-            this.button1.Location = new System.Drawing.Point(182, 414);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(81, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "OK";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button_ok.Location = new System.Drawing.Point(182, 414);
+            this.button_ok.Name = "button_ok";
+            this.button_ok.Size = new System.Drawing.Size(81, 23);
+            this.button_ok.TabIndex = 0;
+            this.button_ok.Text = "OK";
+            this.button_ok.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // button_cancel
             // 
-            this.button2.Location = new System.Drawing.Point(269, 414);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(81, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Cancel";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button_cancel.Location = new System.Drawing.Point(269, 414);
+            this.button_cancel.Name = "button_cancel";
+            this.button_cancel.Size = new System.Drawing.Size(81, 23);
+            this.button_cancel.TabIndex = 1;
+            this.button_cancel.Text = "Cancel";
+            this.button_cancel.UseVisualStyleBackColor = true;
+            this.button_cancel.Click += new System.EventHandler(this.button2_Click);
             // 
             // listView1
             // 
@@ -75,41 +75,41 @@
             this.listView1.TabIndex = 2;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
-            // button3
+            // button_add
             // 
-            this.button3.Location = new System.Drawing.Point(12, 228);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(81, 23);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "Add";
-            this.button3.UseVisualStyleBackColor = true;
+            this.button_add.Location = new System.Drawing.Point(12, 228);
+            this.button_add.Name = "button_add";
+            this.button_add.Size = new System.Drawing.Size(81, 23);
+            this.button_add.TabIndex = 3;
+            this.button_add.Text = "Add";
+            this.button_add.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // button_delete
             // 
-            this.button4.Location = new System.Drawing.Point(97, 228);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(81, 23);
-            this.button4.TabIndex = 4;
-            this.button4.Text = "Delete";
-            this.button4.UseVisualStyleBackColor = true;
+            this.button_delete.Location = new System.Drawing.Point(97, 228);
+            this.button_delete.Name = "button_delete";
+            this.button_delete.Size = new System.Drawing.Size(81, 23);
+            this.button_delete.TabIndex = 4;
+            this.button_delete.Text = "Delete";
+            this.button_delete.UseVisualStyleBackColor = true;
             // 
-            // button5
+            // button_moveup
             // 
-            this.button5.Location = new System.Drawing.Point(182, 228);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(81, 23);
-            this.button5.TabIndex = 5;
-            this.button5.Text = "Move Up";
-            this.button5.UseVisualStyleBackColor = true;
+            this.button_moveup.Location = new System.Drawing.Point(182, 228);
+            this.button_moveup.Name = "button_moveup";
+            this.button_moveup.Size = new System.Drawing.Size(81, 23);
+            this.button_moveup.TabIndex = 5;
+            this.button_moveup.Text = "Move Up";
+            this.button_moveup.UseVisualStyleBackColor = true;
             // 
-            // button6
+            // button_movedown
             // 
-            this.button6.Location = new System.Drawing.Point(269, 228);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(81, 23);
-            this.button6.TabIndex = 6;
-            this.button6.Text = "Move Down";
-            this.button6.UseVisualStyleBackColor = true;
+            this.button_movedown.Location = new System.Drawing.Point(269, 228);
+            this.button_movedown.Name = "button_movedown";
+            this.button_movedown.Size = new System.Drawing.Size(81, 23);
+            this.button_movedown.TabIndex = 6;
+            this.button_movedown.Text = "Move Down";
+            this.button_movedown.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -129,35 +129,35 @@
             this.label2.TabIndex = 8;
             this.label2.Text = "Background Color:";
             // 
-            // comboBox2
+            // comboBox_bgcolor
             // 
-            this.comboBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(194, 282);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(123, 23);
-            this.comboBox2.TabIndex = 10;
+            this.comboBox_bgcolor.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBox_bgcolor.FormattingEnabled = true;
+            this.comboBox_bgcolor.Location = new System.Drawing.Point(194, 282);
+            this.comboBox_bgcolor.Name = "comboBox_bgcolor";
+            this.comboBox_bgcolor.Size = new System.Drawing.Size(123, 23);
+            this.comboBox_bgcolor.TabIndex = 10;
             // 
-            // button7
+            // button_fgcolor
             // 
-            this.button7.FlatAppearance.BorderSize = 0;
-            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button7.Image = ((System.Drawing.Image)(resources.GetObject("button7.Image")));
-            this.button7.Location = new System.Drawing.Point(141, 282);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(27, 23);
-            this.button7.TabIndex = 14;
-            this.button7.TabStop = false;
-            this.button7.UseVisualStyleBackColor = true;
+            this.button_fgcolor.FlatAppearance.BorderSize = 0;
+            this.button_fgcolor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_fgcolor.Image = ((System.Drawing.Image)(resources.GetObject("button_fgcolor.Image")));
+            this.button_fgcolor.Location = new System.Drawing.Point(141, 282);
+            this.button_fgcolor.Name = "button_fgcolor";
+            this.button_fgcolor.Size = new System.Drawing.Size(27, 23);
+            this.button_fgcolor.TabIndex = 14;
+            this.button_fgcolor.TabStop = false;
+            this.button_fgcolor.UseVisualStyleBackColor = true;
             // 
-            // comboBox1
+            // comboBox_fgcolor
             // 
-            this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(12, 282);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(123, 23);
-            this.comboBox1.TabIndex = 13;
+            this.comboBox_fgcolor.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBox_fgcolor.FormattingEnabled = true;
+            this.comboBox_fgcolor.Location = new System.Drawing.Point(12, 282);
+            this.comboBox_fgcolor.Name = "comboBox_fgcolor";
+            this.comboBox_fgcolor.Size = new System.Drawing.Size(123, 23);
+            this.comboBox_fgcolor.TabIndex = 13;
             // 
             // label3
             // 
@@ -168,67 +168,67 @@
             this.label3.TabIndex = 15;
             this.label3.Text = "String:";
             // 
-            // textBox1
+            // textBox_string
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 341);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(338, 23);
-            this.textBox1.TabIndex = 16;
+            this.textBox_string.Location = new System.Drawing.Point(12, 341);
+            this.textBox_string.Name = "textBox_string";
+            this.textBox_string.Size = new System.Drawing.Size(338, 23);
+            this.textBox_string.TabIndex = 16;
             // 
-            // checkBox1
+            // checkBox_ignorecase
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(12, 379);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(88, 19);
-            this.checkBox1.TabIndex = 17;
-            this.checkBox1.Text = "Ignore Case";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox_ignorecase.AutoSize = true;
+            this.checkBox_ignorecase.Location = new System.Drawing.Point(12, 379);
+            this.checkBox_ignorecase.Name = "checkBox_ignorecase";
+            this.checkBox_ignorecase.Size = new System.Drawing.Size(88, 19);
+            this.checkBox_ignorecase.TabIndex = 17;
+            this.checkBox_ignorecase.Text = "Ignore Case";
+            this.checkBox_ignorecase.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
+            // checkBox_bold
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(106, 379);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(50, 19);
-            this.checkBox2.TabIndex = 18;
-            this.checkBox2.Text = "Bold";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox_bold.AutoSize = true;
+            this.checkBox_bold.Location = new System.Drawing.Point(106, 379);
+            this.checkBox_bold.Name = "checkBox_bold";
+            this.checkBox_bold.Size = new System.Drawing.Size(50, 19);
+            this.checkBox_bold.TabIndex = 18;
+            this.checkBox_bold.Text = "Bold";
+            this.checkBox_bold.UseVisualStyleBackColor = true;
             // 
-            // button8
+            // button_bgcolor
             // 
-            this.button8.FlatAppearance.BorderSize = 0;
-            this.button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button8.Image = ((System.Drawing.Image)(resources.GetObject("button8.Image")));
-            this.button8.Location = new System.Drawing.Point(323, 282);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(27, 23);
-            this.button8.TabIndex = 19;
-            this.button8.TabStop = false;
-            this.button8.UseVisualStyleBackColor = true;
+            this.button_bgcolor.FlatAppearance.BorderSize = 0;
+            this.button_bgcolor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_bgcolor.Image = ((System.Drawing.Image)(resources.GetObject("button_bgcolor.Image")));
+            this.button_bgcolor.Location = new System.Drawing.Point(323, 282);
+            this.button_bgcolor.Name = "button_bgcolor";
+            this.button_bgcolor.Size = new System.Drawing.Size(27, 23);
+            this.button_bgcolor.TabIndex = 19;
+            this.button_bgcolor.TabStop = false;
+            this.button_bgcolor.UseVisualStyleBackColor = true;
             // 
             // Form2_Highlight
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(362, 449);
-            this.Controls.Add(this.button8);
-            this.Controls.Add(this.checkBox2);
-            this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.button_bgcolor);
+            this.Controls.Add(this.checkBox_bold);
+            this.Controls.Add(this.checkBox_ignorecase);
+            this.Controls.Add(this.textBox_string);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.button7);
-            this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.comboBox2);
+            this.Controls.Add(this.button_fgcolor);
+            this.Controls.Add(this.comboBox_fgcolor);
+            this.Controls.Add(this.comboBox_bgcolor);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.button_movedown);
+            this.Controls.Add(this.button_moveup);
+            this.Controls.Add(this.button_delete);
+            this.Controls.Add(this.button_add);
             this.Controls.Add(this.listView1);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.button_cancel);
+            this.Controls.Add(this.button_ok);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form2_Highlight";
             this.Text = "Highlight";
@@ -239,22 +239,22 @@
 
         #endregion
 
-        private Button button1;
-        private Button button2;
+        private Button button_ok;
+        private Button button_cancel;
         private ListView listView1;
-        private Button button3;
-        private Button button4;
-        private Button button5;
-        private Button button6;
+        private Button button_add;
+        private Button button_delete;
+        private Button button_moveup;
+        private Button button_movedown;
         private Label label1;
         private Label label2;
-        private ComboBox comboBox2;
-        private Button button7;
-        private ComboBox comboBox1;
+        private ComboBox comboBox_bgcolor;
+        private Button button_fgcolor;
+        private ComboBox comboBox_fgcolor;
         private Label label3;
-        private TextBox textBox1;
-        private CheckBox checkBox1;
-        private CheckBox checkBox2;
-        private Button button8;
+        private TextBox textBox_string;
+        private CheckBox checkBox_ignorecase;
+        private CheckBox checkBox_bold;
+        private Button button_bgcolor;
     }
 }
