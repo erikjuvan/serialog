@@ -48,6 +48,11 @@ namespace serialog
         private void highlightsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form2_Highlight form2_Highlight = new Form2_Highlight();
+
+            form2_Highlight.StartPosition = FormStartPosition.Manual;
+            form2_Highlight.Left = Form1.MousePosition.X;
+            form2_Highlight.Top = Form1.MousePosition.Y;
+
             form2_Highlight.ShowDialog();
         }
 
