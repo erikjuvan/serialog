@@ -72,7 +72,7 @@
             this.listView1.Location = new System.Drawing.Point(12, 61);
             this.listView1.Name = "listView1";
             this.listView1.ShowGroups = false;
-            this.listView1.Size = new System.Drawing.Size(770, 788);
+            this.listView1.Size = new System.Drawing.Size(745, 788);
             this.listView1.TabIndex = 12;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -82,7 +82,7 @@
             // column1
             // 
             this.column1.Text = "";
-            this.column1.Width = 750;
+            this.column1.Width = 730;
             // 
             // menuStrip1
             // 
@@ -91,7 +91,7 @@
             this.settingsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(794, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(769, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -206,9 +206,9 @@
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1.Location = new System.Drawing.Point(433, 34);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(80, 19);
+            this.checkBox1.Size = new System.Drawing.Size(61, 19);
             this.checkBox1.TabIndex = 9;
-            this.checkBox1.Text = "Follow tail";
+            this.checkBox1.Text = "Follow";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // button_pause
@@ -245,7 +245,7 @@
             // 
             this.button_findnext.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button_findnext.ForeColor = System.Drawing.Color.Black;
-            this.button_findnext.Location = new System.Drawing.Point(710, 32);
+            this.button_findnext.Location = new System.Drawing.Point(686, 32);
             this.button_findnext.Name = "button_findnext";
             this.button_findnext.Size = new System.Drawing.Size(33, 23);
             this.button_findnext.TabIndex = 16;
@@ -257,7 +257,7 @@
             // 
             this.button_findprev.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button_findprev.ForeColor = System.Drawing.Color.Black;
-            this.button_findprev.Location = new System.Drawing.Point(671, 32);
+            this.button_findprev.Location = new System.Drawing.Point(648, 32);
             this.button_findprev.Name = "button_findprev";
             this.button_findprev.Size = new System.Drawing.Size(33, 23);
             this.button_findprev.TabIndex = 17;
@@ -268,7 +268,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(526, 36);
+            this.label3.Location = new System.Drawing.Point(503, 36);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(33, 15);
             this.label3.TabIndex = 18;
@@ -276,7 +276,7 @@
             // 
             // textBox_find
             // 
-            this.textBox_find.Location = new System.Drawing.Point(565, 32);
+            this.textBox_find.Location = new System.Drawing.Point(542, 32);
             this.textBox_find.Name = "textBox_find";
             this.textBox_find.Size = new System.Drawing.Size(100, 23);
             this.textBox_find.TabIndex = 19;
@@ -285,7 +285,7 @@
             // 
             this.button_findall.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button_findall.ForeColor = System.Drawing.Color.Black;
-            this.button_findall.Location = new System.Drawing.Point(749, 32);
+            this.button_findall.Location = new System.Drawing.Point(724, 32);
             this.button_findall.Name = "button_findall";
             this.button_findall.Size = new System.Drawing.Size(33, 23);
             this.button_findall.TabIndex = 20;
@@ -297,7 +297,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(794, 861);
+            this.ClientSize = new System.Drawing.Size(769, 861);
             this.Controls.Add(this.button_findall);
             this.Controls.Add(this.textBox_find);
             this.Controls.Add(this.label3);
@@ -316,7 +316,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
-            this.MinimumSize = new System.Drawing.Size(810, 300);
+            this.MinimumSize = new System.Drawing.Size(785, 300);
             this.Name = "Form1";
             this.Text = "serialog";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
