@@ -47,6 +47,7 @@
             this.checkBox_ignorecase = new System.Windows.Forms.CheckBox();
             this.checkBox_bold = new System.Windows.Forms.CheckBox();
             this.button_bgcolor = new System.Windows.Forms.Button();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.SuspendLayout();
             // 
             // button_ok
@@ -176,6 +177,7 @@
             this.button_fgcolor.TabIndex = 14;
             this.button_fgcolor.TabStop = false;
             this.button_fgcolor.UseVisualStyleBackColor = true;
+            this.button_fgcolor.Click += new System.EventHandler(this.button_fgcolor_Click);
             // 
             // comboBox_fgcolor
             // 
@@ -239,6 +241,7 @@
             this.button_bgcolor.TabIndex = 19;
             this.button_bgcolor.TabStop = false;
             this.button_bgcolor.UseVisualStyleBackColor = true;
+            this.button_bgcolor.Click += new System.EventHandler(this.button_bgcolor_Click);
             // 
             // Form2_Highlight
             // 
@@ -263,10 +266,12 @@
             this.Controls.Add(this.button_cancel);
             this.Controls.Add(this.button_ok);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MaximumSize = new System.Drawing.Size(378, 800);
             this.MinimumSize = new System.Drawing.Size(378, 500);
             this.Name = "Form2_Highlight";
             this.Text = "Highlight";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form2_Highlight_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -292,5 +297,6 @@
         private CheckBox checkBox_bold;
         private Button button_bgcolor;
         private ColumnHeader columnHeader1;
+        private ColorDialog colorDialog1;
     }
 }

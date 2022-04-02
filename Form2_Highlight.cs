@@ -27,12 +27,33 @@ namespace serialog
             InitializeComponent();
 
             // copy to temp
-            tempHighlightSettings = highlightSettings;
+            foreach (var item in highlightSettings.highlightEntries)
+                tempHighlightSettings.Add(item);
 
-            foreach(var item in tempHighlightSettings.highlightEntries)
+            foreach (var item in tempHighlightSettings.highlightEntries)
             {
                 AddHighlightEntryToListView(ref listView1, item);
-            }            
+            }
+
+            KnownColor[] colors = (KnownColor[])Enum.GetValues(typeof(KnownColor));
+            foreach (KnownColor knowColor in colors)
+            {
+                Color color = Color.FromKnownColor(knowColor);
+                comboBox_bgcolor.Items.Add(color);
+                comboBox_fgcolor.Items.Add(color);
+            }
+        }
+        private void Form2_Highlight_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                button_delete_Click(sender, e);
+            }
+
+            if (e.KeyCode == Keys.Enter)
+            {
+                button_add_Click(sender, e);
+            }
         }
 
         static public void InitializeHighlightSettings()
@@ -44,6 +65,9 @@ namespace serialog
 
         private void button_add_Click(object sender, EventArgs e)
         {
+            if (textBox_string.Text.Length == 0)
+                return;
+
             Color bgcol;
             if (comboBox_bgcolor.Text.Length == 0)
                 bgcol = Color.White;
@@ -71,10 +95,52 @@ namespace serialog
 
         private void button_delete_Click(object sender, EventArgs e)
         {
-            foreach(int index in listView1.SelectedIndices)
+            if (listView1.SelectedIndices.Count == 0)
+                return;
+
+            while (listView1.SelectedIndices.Count > 0)
             {
-                tempHighlightSettings.RemoveAt(index);
-                listView1.Items.RemoveAt(index);
+                int idx = listView1.SelectedIndices[listView1.SelectedIndices.Count - 1];
+                tempHighlightSettings.RemoveAt(idx);
+                listView1.Items.RemoveAt(idx);
+            }
+        }
+
+        private void button_fgcolor_Click(object sender, EventArgs e)
+        {
+            // Keeps the user from selecting a custom color.
+            colorDialog1.AllowFullOpen = false;
+            // Allows the user to get help. (The default is false.)
+            colorDialog1.ShowHelp = true;
+            // Sets the initial color select to the current text color.
+            colorDialog1.Color = Color.Red;
+
+            // Update the text box color if the user clicks OK 
+            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if (comboBox_fgcolor.Items.Contains(colorDialog1.Color))
+                {
+                    comboBox_fgcolor.SelectedIndex = comboBox_fgcolor.FindString(colorDialog1.Color.Name);
+                }
+            }                
+        }
+
+        private void button_bgcolor_Click(object sender, EventArgs e)
+        {
+            // Keeps the user from selecting a custom color.
+            colorDialog1.AllowFullOpen = false;
+            // Allows the user to get help. (The default is false.)
+            colorDialog1.ShowHelp = true;
+            // Sets the initial color select.
+            colorDialog1.Color = Color.Beige;
+
+            // Update the text box color if the user clicks OK 
+            if (colorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if (comboBox_bgcolor.Items.Contains(colorDialog1.Color))
+                {
+                    comboBox_bgcolor.SelectedIndex = comboBox_bgcolor.FindString(colorDialog1.Color.Name);
+                }
             }
         }
     }
