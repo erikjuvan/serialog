@@ -39,6 +39,31 @@ namespace serialog
 
             Form2_Highlight.InitializeHighlightSettings();
         }
+        
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.F)
+            {
+                textBox_find.Select();
+            }
+
+            if (textBox_find.Focused)
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    string text = textBox_find.Text;
+
+                    if (e.Shift)
+                    {                        
+                        FindPrevString(text);
+                    }
+                    else
+                    {
+                        FindNextString(text);
+                    }
+                }
+            }
+        }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -335,6 +360,139 @@ namespace serialog
                     myStream.Close();
                 }
             }
+        }
+
+        private void FindNextString(string text)
+        {
+            var selected = listView1.SelectedIndices;
+            int searchFromIndex = 0;
+            
+            if (selected.Count > 0)
+                searchFromIndex = selected[selected.Count - 1] + 1;
+
+            for (int i = searchFromIndex; i < listView1.Items.Count; i++)
+            {
+                if (listView1.Items[i].Text.Contains(text))
+                {
+                    //listView1.Select();
+                    listView1.SelectedItems.Clear();                    
+                    listView1.Items[i].Selected = true;
+                    listView1.Items[i].EnsureVisible();
+                    break;
+                }
+            }
+        }
+
+        private void FindPrevString(string text)
+        {
+            var selected = listView1.SelectedIndices;
+            int searchFromIndex = listView1.Items.Count - 1;
+
+            if (selected.Count > 0)
+                searchFromIndex = selected[0] - 1;
+
+            if (searchFromIndex == 0)
+                return;
+
+            for (int i = searchFromIndex; i >= 0; i--)
+            {
+                if (listView1.Items[i].Text.Contains(text))
+                {
+                    //listView1.Select();
+                    listView1.SelectedItems.Clear();
+                    listView1.Items[i].Selected = true;
+                    listView1.Items[i].EnsureVisible();
+                    break;
+                }
+            }
+        }
+
+        private void FindFirstString(string text)
+        {
+            for (int i = 0; i < listView1.Items.Count; i++)
+            {
+                if (listView1.Items[i].Text.Contains(text))
+                {
+                    //listView1.Select();
+                    listView1.SelectedItems.Clear();
+                    listView1.Items[i].Selected = true;
+                    listView1.Items[i].EnsureVisible();
+                    break;
+                }
+            }
+        }
+
+        private void FindLastString(string text)
+        {
+            for (int i = listView1.Items.Count-1; i >= 0; i--)
+            {
+                if (listView1.Items[i].Text.Contains(text))
+                {
+                    //listView1.Select();
+                    listView1.SelectedItems.Clear();
+                    listView1.Items[i].Selected = true;
+                    listView1.Items[i].EnsureVisible();
+                    break;
+                }
+            }
+        }
+
+        private void FindAllString(string text)
+        {
+            bool foundText = false;
+            for (int i = 0; i < listView1.Items.Count; i++)
+            {
+                if (listView1.Items[i].Text.Contains(text))
+                {
+                    if (!foundText)
+                    {
+                        foundText = true;
+                        listView1.Select();
+                        listView1.SelectedItems.Clear();
+                    }                    
+                    listView1.Items[i].Selected = true;                    
+                }
+            }
+
+            if (foundText)
+            {
+                listView1.Items[listView1.SelectedIndices[listView1.SelectedIndices.Count-1]].EnsureVisible();
+            }
+        }
+
+        private void button_findnext_Click(object sender, EventArgs e)
+        {
+            string text = textBox_find.Text;
+
+            if ((ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                FindLastString(text);
+            }
+            else
+            {
+                FindNextString(text);
+            }
+        }
+
+        private void button_findprev_Click(object sender, EventArgs e)
+        {
+            string text = textBox_find.Text;
+
+            if ((ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                FindFirstString(text);
+            }
+            else
+            {
+                FindPrevString(text);
+            }
+        }
+
+        private void button_findall_Click(object sender, EventArgs e)
+        {
+            string text = textBox_find.Text;
+
+            FindAllString(text);
         }
     }
 }
