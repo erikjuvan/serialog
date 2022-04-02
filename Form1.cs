@@ -248,12 +248,27 @@ namespace serialog
             checkBox1.Checked = false;
         }
 
-        public static Stream GenerateStreamFromListOfStrings(List<string> s)
+        public static Stream GenerateStreamFromListOfItems(ListView.ListViewItemCollection items)
         {
             var stream = new MemoryStream();
             var writer = new StreamWriter(stream);
-            foreach (string item in s)
-                writer.Write(item + "\n");
+            foreach (ListViewItem item in items)
+            {
+                writer.Write(item.Text + '\n');
+            }
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
+        }
+
+        public static Stream GenerateStreamFromListOfItems(ListView.SelectedListViewItemCollection items)
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            foreach (ListViewItem item in items)
+            {
+                writer.Write(item.Text + '\n');
+            }
             writer.Flush();
             stream.Position = 0;
             return stream;
@@ -273,7 +288,7 @@ namespace serialog
                 if ((myStream = saveFileDialog1.OpenFile()) != null)
                 {
                     // Code to write the stream goes here.
-                    using (var stream = GenerateStreamFromListOfStrings(_serialDataList))
+                    using (var stream = GenerateStreamFromListOfItems(listView1.Items))
                     {
                         stream.CopyTo(myStream);
                     }
@@ -317,19 +332,6 @@ namespace serialog
 
                 fileStream.Close();
             }
-        }
-
-        public static Stream GenerateStreamFromListOfItems(ListView.SelectedListViewItemCollection selectedListViewItemCollection)
-        {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            foreach (ListViewItem item in selectedListViewItemCollection)
-            {
-                writer.Write(item.Text + '\n');
-            }                
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
         }
 
         private void saveSelectedToolStripMenuItem_Click(object sender, EventArgs e)
@@ -493,6 +495,18 @@ namespace serialog
             string text = textBox_find.Text;
 
             FindAllString(text);
+        }
+
+        private void toolStripMenuItem_hiderest_Click(object sender, EventArgs e)
+        {
+            if (toolStripMenuItem_hiderest.Checked)
+            {
+                // Hide non matching entries
+            }
+            else
+            {
+                // Show non matching entries
+            }
         }
     }
 }

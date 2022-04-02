@@ -54,6 +54,11 @@ namespace serialog
             {
                 button_add_Click(sender, e);
             }
+
+            if (e.KeyCode == Keys.Escape)
+            {
+                this.Close();
+            }
         }
 
         static public void InitializeHighlightSettings()
