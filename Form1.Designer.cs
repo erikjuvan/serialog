@@ -41,6 +41,7 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.highlightsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_hiderest = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,7 +61,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBox_find = new System.Windows.Forms.TextBox();
             this.button_findall = new System.Windows.Forms.Button();
-            this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,12 +72,12 @@
             this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.column1});
-            this.listView1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.listView1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.listView1.GridLines = true;
             this.listView1.Location = new System.Drawing.Point(12, 61);
             this.listView1.Name = "listView1";
             this.listView1.ShowGroups = false;
-            this.listView1.Size = new System.Drawing.Size(745, 788);
+            this.listView1.Size = new System.Drawing.Size(960, 898);
             this.listView1.TabIndex = 12;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -87,7 +87,7 @@
             // column1
             // 
             this.column1.Text = "";
-            this.column1.Width = 730;
+            this.column1.Width = 930;
             // 
             // menuStrip1
             // 
@@ -97,7 +97,7 @@
             this.settingsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(769, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(984, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -159,7 +159,7 @@
             // 
             this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
             this.selectAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.selectAllToolStripMenuItem.Text = "Select All";
             this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
             // 
@@ -167,9 +167,17 @@
             // 
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
             this.clearAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.clearAllToolStripMenuItem.Text = "Clear All";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click_1);
+            // 
+            // reloadToolStripMenuItem
+            // 
+            this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
+            this.reloadToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.reloadToolStripMenuItem.Text = "Reload";
+            this.reloadToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
@@ -341,19 +349,11 @@
             this.button_findall.UseVisualStyleBackColor = true;
             this.button_findall.Click += new System.EventHandler(this.button_findall_Click);
             // 
-            // reloadToolStripMenuItem
-            // 
-            this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
-            this.reloadToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.reloadToolStripMenuItem.Text = "Reload";
-            this.reloadToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(769, 861);
+            this.ClientSize = new System.Drawing.Size(984, 971);
             this.Controls.Add(this.button_findall);
             this.Controls.Add(this.textBox_find);
             this.Controls.Add(this.label3);
