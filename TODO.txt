@@ -1,3 +1,2 @@
 - Add process information (RAM usage, uptime)
-- Bugfix (adding empty line when saving to file)
 - When deleting from the end it takes a really long time if list is long

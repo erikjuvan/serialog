@@ -342,10 +342,15 @@ namespace serialog
         {
             var stream = new MemoryStream();
             var writer = new StreamWriter(stream);
-            foreach (ListViewItem item in items)
+
+            // for instead of foreach so that we can control last item and not add "\n" at the end so that we 
+            // do not introduce an extra item in list
+            for (int i = 0; i < items.Count-1; i++)
             {
-                writer.Write(item.Text + '\n');
+                writer.Write(items[i].Text + '\n');
             }
+            writer.Write(items[items.Count - 1].Text);
+            
             writer.Flush();
             stream.Position = 0;
             return stream;
@@ -355,10 +360,15 @@ namespace serialog
         {
             var stream = new MemoryStream();
             var writer = new StreamWriter(stream);
-            foreach (ListViewItem item in items)
+
+            // for instead of foreach so that we can control last item and not add "\n" at the end so that we 
+            // do not introduce an extra item in list
+            for (int i = 0; i < items.Count - 1; i++)
             {
-                writer.Write(item.Text + '\n');
+                writer.Write(items[i].Text + '\n');
             }
+            writer.Write(items[items.Count - 1].Text);
+            
             writer.Flush();
             stream.Position = 0;
             return stream;
