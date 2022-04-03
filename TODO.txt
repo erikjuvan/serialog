@@ -1,1 +1,1 @@
-- on delete key press and selected items delete those items
+- Add the ability to reload current serial data in list

@@ -307,6 +307,24 @@ namespace serialog
                     item.Selected = true;
                 }                
             }
+            else if (e.KeyCode == Keys.Delete)
+            {
+                if (listView1.SelectedItems.Count == 0)
+                    return;
+
+                if (MessageBox.Show("Delete selected text? You can't get it back!", "Careful...", 
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    int idx = 0;
+                    foreach (ListViewItem item in listView1.SelectedItems)
+                    {
+                        idx = item.Index;
+                        listView1.Items.Remove(item);
+                    }
+                    //listView1.Items[idx].Selected = true; // no need to select item
+                    listView1.Items[idx].Focused = true;
+                }                
+            }
         }
 
         private void listView1_Scrolled(object sender, EventArgs e)
