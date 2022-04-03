@@ -130,7 +130,9 @@ namespace serialog
                 checkBox_ignorecase.Checked, checkBox_bold.Checked, 
                 checkBox_italic.Checked, checkBox_hide.Checked);
 
-            // Check if same text already exists and ask to replace with existing
+            // Check if same text already exists and ask to replace with existing - REMOVED IT!!!
+            // I think its actually ok to have multiple same texts, since it anyways matches just the first one
+            /*
             foreach (ListViewItem item in listView1.Items)
             {
                 if (highlightEntry.text == item.Text)
@@ -147,6 +149,7 @@ namespace serialog
                     return;
                 }
             }
+            */
 
             tempHighlightEntires.Add(highlightEntry);
             AddHighlightEntryToListView(ref listView1, highlightEntry);
@@ -440,8 +443,19 @@ namespace serialog
                     return;
                 }
 
+                // Extract color from string that is more than just color name: "Color [Black]"
+                string fgColText = items[1];
+                int from = fgColText.IndexOf("[") + "[".Length;
+                int to = fgColText.IndexOf("]");
+                Color fgCol = Color.FromName(fgColText.Substring(from, to - from));
+
+                string bgColText = items[2];
+                from = bgColText.IndexOf("[") + "[".Length;
+                to = bgColText.IndexOf("]");
+                Color bgCol = Color.FromName(bgColText.Substring(from, to - from));
+
                 HighlightEntry entry = new HighlightEntry(items[0],
-                    Color.FromName(items[1]), Color.FromName(items[2]),
+                    fgCol, bgCol,
                     Convert.ToBoolean(items[3]), Convert.ToBoolean(items[4]),
                     Convert.ToBoolean(items[5]), Convert.ToBoolean(items[6]));
 

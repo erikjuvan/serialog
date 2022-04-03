@@ -1,3 +1,1 @@
-- highlight presets
-- ko najde, dej fokus na listview
-- upostevaj se ignore case pri dupliciranih vnosih
+- on delete key press and selected items delete those items
