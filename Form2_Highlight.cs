@@ -26,6 +26,7 @@ namespace serialog
                 AddHighlightEntryToListView(ref listView1, entry);
             }
 
+            // Fill comboBox_fgcolor and comboBox_bgcolor with color names
             KnownColor[] colors = (KnownColor[])Enum.GetValues(typeof(KnownColor));
             foreach (KnownColor knowColor in colors)
             {
@@ -346,5 +347,130 @@ namespace serialog
             checkBox_italic.Checked = entry.italic;
             checkBox_hide.Checked = entry.hide;
         }
+
+        private void Populate_comboBox_preset()
+        {
+            comboBox_preset.Items.Clear();
+
+            string dirPath = ".settings";
+            // list of files without the path, just file name
+            var listOfFiles2 = Directory.EnumerateFiles(dirPath, "*", SearchOption.AllDirectories).Select(Path.GetFileName);
+            var listOfPresets = listOfFiles2.Where(text => text.Contains(".highlight"));
+            foreach (var preset in listOfPresets)
+            {
+                int to = preset.IndexOf(".");
+
+                var result = preset.Substring(0, to);
+
+                comboBox_preset.Items.Add(result);
+            }
+        }
+
+        private async void button_preset_save_Click(object sender, EventArgs e)
+        {
+            if (comboBox_preset.Text.Length == 0)
+                return;
+
+            string filename = comboBox_preset.Text;
+            string fullpath = ".settings/" + filename + ".highlight";
+            bool write = true;
+
+            System.IO.Directory.CreateDirectory(".settings");
+
+            if (System.IO.File.Exists(fullpath))
+            {
+                var ret = MessageBox.Show("Preset '" + comboBox_preset.Text + "' already exists, overwrite it?", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (ret == DialogResult.No)
+                    write = false;
+            }
+
+            if (write)
+            {
+                List<string> items = new List<string>();
+
+                foreach (var item in tempHighlightEntires.Items)
+                {
+                    /*
+                    public string text;
+                    public Color foreColor = Color.Black;
+                    public Color backColor = Color.White;
+                    public bool ignoreCase = false;
+                    public bool bold = false;
+                    public bool italic = false;
+                    public bool hide = false;
+                    */
+                    items.Add(item.text + "," +
+                        item.foreColor.ToString() + "," +
+                        item.backColor.ToString() + "," +
+                        item.ignoreCase.ToString() + "," +
+                        item.bold.ToString() + "," +
+                        item.italic.ToString() + "," +
+                        item.hide.ToString()
+                        );
+                }
+
+                await File.WriteAllLinesAsync(fullpath, items);
+            }
+        }
+
+        private void button_preset_load_Click(object sender, EventArgs e)
+        {
+            if (comboBox_preset.Text.Length == 0)
+                return;
+
+            string filename = ".settings/" + comboBox_preset.Text + ".highlight";
+            
+            if (!System.IO.File.Exists(filename))
+            {
+                MessageBox.Show("Preset '" + comboBox_preset.Text + "' doesn't exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Parse file
+            var lines = File.ReadAllLines(filename);
+
+            foreach (var line in lines)
+            {
+                var items = line.Split(",");
+
+                if (items.Length != 7)
+                {
+                    MessageBox.Show("Error in preset '" + comboBox_preset.Text + "'!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                HighlightEntry entry = new HighlightEntry(items[0],
+                    Color.FromName(items[1]), Color.FromName(items[2]),
+                    Convert.ToBoolean(items[3]), Convert.ToBoolean(items[4]),
+                    Convert.ToBoolean(items[5]), Convert.ToBoolean(items[6]));
+
+                tempHighlightEntires.Add(entry);
+                AddHighlightEntryToListView(ref listView1, entry);
+            }
+        }
+
+        private void button_deletepreset_Click(object sender, EventArgs e)
+        {
+            string filename = comboBox_preset.Text;
+            string fullpath = ".settings/" + filename + ".highlight";
+
+            try
+            {
+                File.Delete(fullpath);
+                comboBox_preset.Text = "";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not delete '" + comboBox_preset.Text + "'!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void comboBox_preset_DropDown(object sender, EventArgs e)
+        {
+            Populate_comboBox_preset();
+        }
     }
+
+    
 }

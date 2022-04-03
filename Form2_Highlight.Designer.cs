@@ -50,21 +50,22 @@
             this.checkBox_bold = new System.Windows.Forms.CheckBox();
             this.button_bgcolor = new System.Windows.Forms.Button();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.comboBox_preset = new System.Windows.Forms.ComboBox();
+            this.comboBox_preset = new serialog.ComboBoxEx();
             this.button_preset_save = new System.Windows.Forms.Button();
             this.button_preset_load = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.checkBox_hide = new System.Windows.Forms.CheckBox();
             this.checkBox_italic = new System.Windows.Forms.CheckBox();
             this.button_apply = new System.Windows.Forms.Button();
+            this.button_deletepreset = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button_ok
             // 
             this.button_ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_ok.Location = new System.Drawing.Point(182, 469);
+            this.button_ok.Location = new System.Drawing.Point(205, 469);
             this.button_ok.Name = "button_ok";
-            this.button_ok.Size = new System.Drawing.Size(81, 23);
+            this.button_ok.Size = new System.Drawing.Size(70, 23);
             this.button_ok.TabIndex = 12;
             this.button_ok.Text = "OK";
             this.button_ok.UseVisualStyleBackColor = true;
@@ -73,9 +74,9 @@
             // button_cancel
             // 
             this.button_cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_cancel.Location = new System.Drawing.Point(269, 469);
+            this.button_cancel.Location = new System.Drawing.Point(281, 469);
             this.button_cancel.Name = "button_cancel";
-            this.button_cancel.Size = new System.Drawing.Size(81, 23);
+            this.button_cancel.Size = new System.Drawing.Size(70, 23);
             this.button_cancel.TabIndex = 13;
             this.button_cancel.Text = "Cancel";
             this.button_cancel.UseVisualStyleBackColor = true;
@@ -279,28 +280,31 @@
             this.comboBox_preset.FormattingEnabled = true;
             this.comboBox_preset.Location = new System.Drawing.Point(11, 440);
             this.comboBox_preset.Name = "comboBox_preset";
-            this.comboBox_preset.Size = new System.Drawing.Size(124, 23);
+            this.comboBox_preset.Size = new System.Drawing.Size(161, 23);
             this.comboBox_preset.TabIndex = 14;
+            this.comboBox_preset.DropDown += new System.EventHandler(this.comboBox_preset_DropDown);
             // 
             // button_preset_save
             // 
             this.button_preset_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_preset_save.Location = new System.Drawing.Point(12, 469);
+            this.button_preset_save.Location = new System.Drawing.Point(11, 469);
             this.button_preset_save.Name = "button_preset_save";
-            this.button_preset_save.Size = new System.Drawing.Size(58, 23);
+            this.button_preset_save.Size = new System.Drawing.Size(50, 23);
             this.button_preset_save.TabIndex = 15;
             this.button_preset_save.Text = "Save";
             this.button_preset_save.UseVisualStyleBackColor = true;
+            this.button_preset_save.Click += new System.EventHandler(this.button_preset_save_Click);
             // 
             // button_preset_load
             // 
             this.button_preset_load.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_preset_load.Location = new System.Drawing.Point(77, 469);
+            this.button_preset_load.Location = new System.Drawing.Point(66, 469);
             this.button_preset_load.Name = "button_preset_load";
-            this.button_preset_load.Size = new System.Drawing.Size(58, 23);
+            this.button_preset_load.Size = new System.Drawing.Size(50, 23);
             this.button_preset_load.TabIndex = 16;
             this.button_preset_load.Text = "Load";
             this.button_preset_load.UseVisualStyleBackColor = true;
+            this.button_preset_load.Click += new System.EventHandler(this.button_preset_load_Click);
             // 
             // label4
             // 
@@ -337,19 +341,31 @@
             // button_apply
             // 
             this.button_apply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_apply.Location = new System.Drawing.Point(270, 440);
+            this.button_apply.Location = new System.Drawing.Point(281, 440);
             this.button_apply.Name = "button_apply";
-            this.button_apply.Size = new System.Drawing.Size(81, 23);
+            this.button_apply.Size = new System.Drawing.Size(70, 23);
             this.button_apply.TabIndex = 24;
             this.button_apply.Text = "Apply";
             this.button_apply.UseVisualStyleBackColor = true;
             this.button_apply.Click += new System.EventHandler(this.button_apply_Click);
+            // 
+            // button_deletepreset
+            // 
+            this.button_deletepreset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button_deletepreset.Location = new System.Drawing.Point(122, 469);
+            this.button_deletepreset.Name = "button_deletepreset";
+            this.button_deletepreset.Size = new System.Drawing.Size(50, 23);
+            this.button_deletepreset.TabIndex = 25;
+            this.button_deletepreset.Text = "Delete";
+            this.button_deletepreset.UseVisualStyleBackColor = true;
+            this.button_deletepreset.Click += new System.EventHandler(this.button_deletepreset_Click);
             // 
             // Form2_Highlight
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(362, 504);
+            this.Controls.Add(this.button_deletepreset);
             this.Controls.Add(this.button_apply);
             this.Controls.Add(this.checkBox_italic);
             this.Controls.Add(this.checkBox_hide);
@@ -407,7 +423,6 @@
         private Button button_bgcolor;
         private ColumnHeader columnHeader1;
         private ColorDialog colorDialog1;
-        private ComboBox comboBox_preset;
         private Button button_preset_save;
         private Button button_preset_load;
         private Label label4;
@@ -416,5 +431,7 @@
         private CheckBox checkBox_hide;
         private CheckBox checkBox_italic;
         private Button button_apply;
+        private Button button_deletepreset;
+        private ComboBoxEx comboBox_preset;
     }
 }
