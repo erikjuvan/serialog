@@ -95,8 +95,8 @@ namespace serialog
                 form2Highlight = new Form2_Highlight();
                 form2Highlight.FormClosed += form2Highlight_Closed;
                 form2Highlight.StartPosition = FormStartPosition.Manual;
-                form2Highlight.Left = Form1.MousePosition.X;
-                form2Highlight.Top = Form1.MousePosition.Y;
+                form2Highlight.Left = this.Location.X + this.Width - form2Highlight.Width;
+                form2Highlight.Top = this.Location.Y + 100;
                 form2Highlight.Show();
             }
         }
