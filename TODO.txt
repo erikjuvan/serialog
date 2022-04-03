@@ -1,1 +1,3 @@
-- double click na entry v highlight polju prenese nastavitve v polja
+- highlight presets
+- ko najde, dej fokus na listview
+- upostevaj se ignore case pri dupliciranih vnosih

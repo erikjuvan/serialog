@@ -117,8 +117,14 @@ namespace serialog
             else
                 bgcol = Color.FromName(comboBox_bgcolor.Text);
 
-            HighlightEntry highlightEntry = new HighlightEntry(textBox_string.Text, 
-                Color.FromName(comboBox_fgcolor.Text), bgcol,
+            Color fgcol;
+            if (comboBox_fgcolor.Text.Length == 0)
+                fgcol = Color.Black;
+            else
+                fgcol = Color.FromName(comboBox_fgcolor.Text);
+
+            HighlightEntry highlightEntry = new HighlightEntry(textBox_string.Text,
+                fgcol, bgcol,
                 checkBox_ignorecase.Checked, checkBox_bold.Checked, 
                 checkBox_italic.Checked, checkBox_hide.Checked);
 
@@ -322,6 +328,22 @@ namespace serialog
         private void button_apply_Click(object sender, EventArgs e)
         {
             highlightEntries = new HighlightEntires(tempHighlightEntires);
+        }
+
+        private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (listView1.SelectedItems.Count != 1)
+                return;
+
+            var entry = tempHighlightEntires.Items[listView1.SelectedIndices[0]];
+
+            textBox_string.Text = entry.text;
+            comboBox_fgcolor.Text = entry.foreColor.Name;
+            comboBox_bgcolor.Text = entry.backColor.Name;
+            checkBox_ignorecase.Checked = entry.ignoreCase;
+            checkBox_bold.Checked = entry.bold;
+            checkBox_italic.Checked = entry.italic;
+            checkBox_hide.Checked = entry.hide;
         }
     }
 }
