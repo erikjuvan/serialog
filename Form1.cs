@@ -12,19 +12,6 @@ namespace serialog
 
         private Form2_Highlight form2Highlight = null;
 
-        private string[] GetSortedPorts()
-        {
-            var port_names = SerialCom.GetPortNames();
-            try
-            {
-                Array.Sort(port_names, (x, y) => Int32.Parse(x.Substring(3, x.Length - 3)) >
-            Int32.Parse(y.Substring(3, y.Length - 3)) ? 1 : -1);
-            }            
-            catch (Exception ex) {}
-
-            return port_names;
-        }
-
         public Form1()
         {
             InitializeComponent();
@@ -75,6 +62,19 @@ namespace serialog
                 FindNextString(textBox_find.Text);
             }
             
+        }
+
+        private string[] GetSortedPorts()
+        {
+            var port_names = SerialCom.GetPortNames();
+            try
+            {
+                Array.Sort(port_names, (x, y) => Int32.Parse(x.Substring(3, x.Length - 3)) >
+            Int32.Parse(y.Substring(3, y.Length - 3)) ? 1 : -1);
+            }
+            catch (Exception ex) { }
+
+            return port_names;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -322,7 +322,13 @@ namespace serialog
                         listView1.Items.Remove(item);
                     }
                     //listView1.Items[idx].Selected = true; // no need to select item
-                    listView1.Items[idx].Focused = true;
+
+                    try
+                    {
+                        listView1.Items[idx].Focused = true;
+                    }
+                    catch (Exception ex)
+                    { }
                 }                
             }
         }
@@ -615,6 +621,16 @@ namespace serialog
         private void clearAllToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             listView1.Items.Clear();
+        }
+
+        private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < listView1.Items.Count; i++)
+            {
+                listView1.Items[i] = CreateHighlightedListItem(listView1.Items[i].Text);
+                //listView1.Items.Insert(item.Index + 1, CreateHighlightedListItem(item.Text));
+                //listView1.Items.Remove(item);
+            }
         }
     }
 }
