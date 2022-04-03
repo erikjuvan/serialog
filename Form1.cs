@@ -65,6 +65,16 @@ namespace serialog
                     }
                 }
             }
+
+            if (e.Shift && e.KeyCode == Keys.F3)
+            {
+                FindPrevString(textBox_find.Text);
+            }
+            else if (e.KeyCode == Keys.F3)
+            {
+                FindNextString(textBox_find.Text);
+            }
+            
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
