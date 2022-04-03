@@ -15,6 +15,26 @@ namespace serialog
         static public HighlightEntires highlightEntries = new HighlightEntires();
         private HighlightEntires tempHighlightEntires = new HighlightEntires();
 
+        public Form2_Highlight()
+        {
+            InitializeComponent();
+
+            // copy to temp
+            tempHighlightEntires = new HighlightEntires(highlightEntries);
+            foreach (HighlightEntry entry in tempHighlightEntires.Items)
+            {
+                AddHighlightEntryToListView(ref listView1, entry);
+            }
+
+            KnownColor[] colors = (KnownColor[])Enum.GetValues(typeof(KnownColor));
+            foreach (KnownColor knowColor in colors)
+            {
+                Color color = Color.FromKnownColor(knowColor);
+                comboBox_bgcolor.Items.Add(color);
+                comboBox_fgcolor.Items.Add(color);
+            }
+        }
+
         private void AddHighlightEntryToListView(ref ListView listView, HighlightEntry highlightEntry)
         {
             ListViewItem item = new ListViewItem();
@@ -71,25 +91,6 @@ namespace serialog
             addedItem.EnsureVisible();
         }
 
-        public Form2_Highlight()
-        {
-            InitializeComponent();
-
-            // copy to temp
-            tempHighlightEntires = new HighlightEntires(highlightEntries);
-            foreach (HighlightEntry entry in tempHighlightEntires.Items)
-            {
-                AddHighlightEntryToListView(ref listView1, entry);
-            }            
-
-            KnownColor[] colors = (KnownColor[])Enum.GetValues(typeof(KnownColor));
-            foreach (KnownColor knowColor in colors)
-            {
-                Color color = Color.FromKnownColor(knowColor);
-                comboBox_bgcolor.Items.Add(color);
-                comboBox_fgcolor.Items.Add(color);
-            }
-        }
         private void Form2_Highlight_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
