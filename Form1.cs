@@ -8,7 +8,9 @@ namespace serialog
         private static List<string> _serialDataList = new List<string>();
         private int _serialDataListCountAddedToTable = 0;
         private static Mutex mtx = new Mutex();
-        private Thread serialReadThread = null;                
+        private Thread serialReadThread = null;
+
+        private Form2_Highlight form2Highlight = null;
 
         private string[] GetSortedPorts()
         {
@@ -70,15 +72,23 @@ namespace serialog
             this.Close();
         }
 
+        private void form2Highlight_Closed(object sender, FormClosedEventArgs e)
+        {
+            form2Highlight.FormClosed -= form2Highlight_Closed;
+            form2Highlight = null;
+        }
+
         private void highlightsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form2_Highlight form2_Highlight = new Form2_Highlight();
-
-            form2_Highlight.StartPosition = FormStartPosition.Manual;
-            form2_Highlight.Left = Form1.MousePosition.X;
-            form2_Highlight.Top = Form1.MousePosition.Y;
-
-            form2_Highlight.ShowDialog();
+            if (form2Highlight == null)
+            {
+                form2Highlight = new Form2_Highlight();
+                form2Highlight.FormClosed += form2Highlight_Closed;
+                form2Highlight.StartPosition = FormStartPosition.Manual;
+                form2Highlight.Left = Form1.MousePosition.X;
+                form2Highlight.Top = Form1.MousePosition.Y;
+                form2Highlight.Show();
+            }
         }
 
         private void button_run_Click(object sender, EventArgs e)
@@ -368,9 +378,7 @@ namespace serialog
                     var list_of_lines = fileContent.Split('\n').ToList();
                     foreach (var line in list_of_lines)
                     {
-                        listView1.Items.Add(line);
-                        listView1.Items[listView1.Items.Count - 1].ForeColor = GetForeColor(line);
-                        listView1.Items[listView1.Items.Count - 1].BackColor = GetBackColor(line);
+                        listView1.Items.Add(CreateHighlightedListItem(line));
                     }
 
                     listView1.Items[listView1.Items.Count - 1].EnsureVisible();

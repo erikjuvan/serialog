@@ -56,6 +56,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.checkBox_hide = new System.Windows.Forms.CheckBox();
             this.checkBox_italic = new System.Windows.Forms.CheckBox();
+            this.button_apply = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button_ok
@@ -332,11 +333,23 @@
             this.checkBox_italic.Text = "Italic";
             this.checkBox_italic.UseVisualStyleBackColor = true;
             // 
+            // button_apply
+            // 
+            this.button_apply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button_apply.Location = new System.Drawing.Point(270, 440);
+            this.button_apply.Name = "button_apply";
+            this.button_apply.Size = new System.Drawing.Size(81, 23);
+            this.button_apply.TabIndex = 24;
+            this.button_apply.Text = "Apply";
+            this.button_apply.UseVisualStyleBackColor = true;
+            this.button_apply.Click += new System.EventHandler(this.button_apply_Click);
+            // 
             // Form2_Highlight
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(362, 504);
+            this.Controls.Add(this.button_apply);
             this.Controls.Add(this.checkBox_italic);
             this.Controls.Add(this.checkBox_hide);
             this.Controls.Add(this.label4);
@@ -401,5 +414,6 @@
         private ColumnHeader columnHeader3;
         private CheckBox checkBox_hide;
         private CheckBox checkBox_italic;
+        private Button button_apply;
     }
 }
