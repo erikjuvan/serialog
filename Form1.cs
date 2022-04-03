@@ -161,7 +161,7 @@ namespace serialog
 
         private Color GetForeColor(string line)
         {
-            foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightSettings.highlightEntries)
+            foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightEntries.Items)
             {
                 if (line.Contains(highlightEntry.text))
                 {
@@ -174,7 +174,7 @@ namespace serialog
 
         private Color GetBackColor(string line)
         {
-            foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightSettings.highlightEntries)
+            foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightEntries.Items)
             {
                 if (line.Contains(highlightEntry.text))
                 {
@@ -185,6 +185,53 @@ namespace serialog
             return Color.White;
         }
 
+        private ListViewItem CreateHighlightedListItem(string line)
+        {            
+            ListViewItem item = new ListViewItem(line);
+
+            foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightEntries.Items)
+            {
+                // text
+                string text = highlightEntry.text;
+
+                // ignoreCase
+                if (highlightEntry.ignoreCase)
+                {
+                    line = line.ToLower();
+                    text = text.ToLower();
+                }
+
+                if (line.Contains(text))
+                {
+                    // hide
+                    if (highlightEntry.hide)
+                    {
+                        item.Text = "";                        
+                    }
+                    else
+                    {
+                        // foreColor
+                        item.ForeColor = highlightEntry.foreColor;
+                        // backColor
+                        item.BackColor = highlightEntry.backColor;
+
+                        // Font (bold, italic)
+                        if (highlightEntry.bold && highlightEntry.italic)
+                            item.Font = new Font("Courier New", 10, FontStyle.Bold | FontStyle.Italic);
+                        else if (highlightEntry.bold)
+                            item.Font = new Font("Courier New", 10, FontStyle.Bold);
+                        else if (highlightEntry.italic)
+                            item.Font = new Font("Courier New", 10, FontStyle.Italic);
+                    }
+
+                    // This break implements that the higher entries have priority since it breaks as soon as it finds first match
+                    break;
+                }
+            }
+
+            return item;
+        }
+
         private void AddEntry()
         {
             mtx.WaitOne();
@@ -192,10 +239,9 @@ namespace serialog
             {
                 for (int i = _serialDataListCountAddedToTable; i < _serialDataList.Count; i++)
                 {
-                    var entry = _serialDataList[i];
-                    listView1.Items.Add(entry);
-                    listView1.Items[listView1.Items.Count - 1].ForeColor = GetForeColor(entry);
-                    listView1.Items[listView1.Items.Count - 1].BackColor = GetBackColor(entry);
+                    string line = _serialDataList[i];
+
+                    listView1.Items.Add(CreateHighlightedListItem(line));
                 }
                 _serialDataListCountAddedToTable = _serialDataList.Count;
 
@@ -366,6 +412,9 @@ namespace serialog
 
         private void FindNextString(string text)
         {
+            if (text == "")
+                return;
+
             var selected = listView1.SelectedIndices;
             int searchFromIndex = 0;
             
@@ -387,14 +436,14 @@ namespace serialog
 
         private void FindPrevString(string text)
         {
+            if (text == "")
+                return;
+
             var selected = listView1.SelectedIndices;
             int searchFromIndex = listView1.Items.Count - 1;
 
             if (selected.Count > 0)
                 searchFromIndex = selected[0] - 1;
-
-            if (searchFromIndex == 0)
-                return;
 
             for (int i = searchFromIndex; i >= 0; i--)
             {
@@ -411,6 +460,9 @@ namespace serialog
 
         private void FindFirstString(string text)
         {
+            if (text == "")
+                return;
+
             for (int i = 0; i < listView1.Items.Count; i++)
             {
                 if (listView1.Items[i].Text.Contains(text))
@@ -426,6 +478,9 @@ namespace serialog
 
         private void FindLastString(string text)
         {
+            if (text == "")
+                return;
+
             for (int i = listView1.Items.Count-1; i >= 0; i--)
             {
                 if (listView1.Items[i].Text.Contains(text))
@@ -441,6 +496,9 @@ namespace serialog
 
         private void FindAllString(string text)
         {
+            if (text == "")
+                return;
+
             bool foundText = false;
             for (int i = 0; i < listView1.Items.Count; i++)
             {
@@ -507,6 +565,20 @@ namespace serialog
             {
                 // Show non matching entries
             }
+        }
+
+        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in listView1.Items)
+            {
+                item.Selected = true;
+            }
+            listView1.Focus();
+        }
+
+        private void clearAllToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            listView1.Items.Clear();
         }
     }
 }

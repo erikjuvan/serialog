@@ -33,6 +33,8 @@
             this.button_cancel = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.button_add = new System.Windows.Forms.Button();
             this.button_delete = new System.Windows.Forms.Button();
             this.button_moveup = new System.Windows.Forms.Button();
@@ -48,15 +50,21 @@
             this.checkBox_bold = new System.Windows.Forms.CheckBox();
             this.button_bgcolor = new System.Windows.Forms.Button();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.comboBox_preset = new System.Windows.Forms.ComboBox();
+            this.button_preset_save = new System.Windows.Forms.Button();
+            this.button_preset_load = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.checkBox_hide = new System.Windows.Forms.CheckBox();
+            this.checkBox_italic = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button_ok
             // 
             this.button_ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_ok.Location = new System.Drawing.Point(182, 426);
+            this.button_ok.Location = new System.Drawing.Point(182, 469);
             this.button_ok.Name = "button_ok";
             this.button_ok.Size = new System.Drawing.Size(81, 23);
-            this.button_ok.TabIndex = 0;
+            this.button_ok.TabIndex = 12;
             this.button_ok.Text = "OK";
             this.button_ok.UseVisualStyleBackColor = true;
             this.button_ok.Click += new System.EventHandler(this.button_ok_Click);
@@ -64,10 +72,10 @@
             // button_cancel
             // 
             this.button_cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_cancel.Location = new System.Drawing.Point(269, 426);
+            this.button_cancel.Location = new System.Drawing.Point(269, 469);
             this.button_cancel.Name = "button_cancel";
             this.button_cancel.Size = new System.Drawing.Size(81, 23);
-            this.button_cancel.TabIndex = 1;
+            this.button_cancel.TabIndex = 13;
             this.button_cancel.Text = "Cancel";
             this.button_cancel.UseVisualStyleBackColor = true;
             this.button_cancel.Click += new System.EventHandler(this.button_cancel_Click);
@@ -77,29 +85,43 @@
             this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3});
             this.listView1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
             this.listView1.Location = new System.Drawing.Point(12, 12);
             this.listView1.Name = "listView1";
             this.listView1.ShowGroups = false;
-            this.listView1.Size = new System.Drawing.Size(338, 222);
-            this.listView1.TabIndex = 2;
+            this.listView1.Size = new System.Drawing.Size(338, 249);
+            this.listView1.TabIndex = 19;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
             // 
             // columnHeader1
             // 
-            this.columnHeader1.Text = "";
-            this.columnHeader1.Width = 300;
+            this.columnHeader1.Text = "Contains Text";
+            this.columnHeader1.Width = 160;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Ignore Case";
+            this.columnHeader2.Width = 100;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Hide";
+            this.columnHeader3.Width = 50;
             // 
             // button_add
             // 
             this.button_add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_add.Location = new System.Drawing.Point(12, 240);
+            this.button_add.Location = new System.Drawing.Point(12, 267);
             this.button_add.Name = "button_add";
             this.button_add.Size = new System.Drawing.Size(81, 23);
-            this.button_add.TabIndex = 3;
+            this.button_add.TabIndex = 8;
             this.button_add.Text = "Add";
             this.button_add.UseVisualStyleBackColor = true;
             this.button_add.Click += new System.EventHandler(this.button_add_Click);
@@ -107,10 +129,10 @@
             // button_delete
             // 
             this.button_delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_delete.Location = new System.Drawing.Point(97, 240);
+            this.button_delete.Location = new System.Drawing.Point(97, 267);
             this.button_delete.Name = "button_delete";
             this.button_delete.Size = new System.Drawing.Size(81, 23);
-            this.button_delete.TabIndex = 4;
+            this.button_delete.TabIndex = 9;
             this.button_delete.Text = "Delete";
             this.button_delete.UseVisualStyleBackColor = true;
             this.button_delete.Click += new System.EventHandler(this.button_delete_Click);
@@ -118,28 +140,30 @@
             // button_moveup
             // 
             this.button_moveup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_moveup.Location = new System.Drawing.Point(182, 240);
+            this.button_moveup.Location = new System.Drawing.Point(182, 267);
             this.button_moveup.Name = "button_moveup";
             this.button_moveup.Size = new System.Drawing.Size(81, 23);
-            this.button_moveup.TabIndex = 5;
+            this.button_moveup.TabIndex = 10;
             this.button_moveup.Text = "Move Up";
             this.button_moveup.UseVisualStyleBackColor = true;
+            this.button_moveup.Click += new System.EventHandler(this.button_moveup_Click);
             // 
             // button_movedown
             // 
             this.button_movedown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_movedown.Location = new System.Drawing.Point(269, 240);
+            this.button_movedown.Location = new System.Drawing.Point(269, 267);
             this.button_movedown.Name = "button_movedown";
             this.button_movedown.Size = new System.Drawing.Size(81, 23);
-            this.button_movedown.TabIndex = 6;
+            this.button_movedown.TabIndex = 11;
             this.button_movedown.Text = "Move Down";
             this.button_movedown.UseVisualStyleBackColor = true;
+            this.button_movedown.Click += new System.EventHandler(this.button_movedown_Click);
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 275);
+            this.label1.Location = new System.Drawing.Point(12, 302);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(104, 15);
             this.label1.TabIndex = 7;
@@ -149,7 +173,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(194, 275);
+            this.label2.Location = new System.Drawing.Point(194, 302);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(106, 15);
             this.label2.TabIndex = 8;
@@ -160,10 +184,11 @@
             this.comboBox_bgcolor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.comboBox_bgcolor.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox_bgcolor.FormattingEnabled = true;
-            this.comboBox_bgcolor.Location = new System.Drawing.Point(194, 294);
+            this.comboBox_bgcolor.Location = new System.Drawing.Point(194, 321);
             this.comboBox_bgcolor.Name = "comboBox_bgcolor";
             this.comboBox_bgcolor.Size = new System.Drawing.Size(123, 23);
-            this.comboBox_bgcolor.TabIndex = 10;
+            this.comboBox_bgcolor.TabIndex = 3;
+            this.comboBox_bgcolor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.comboBox_bgcolor_KeyDown);
             // 
             // button_fgcolor
             // 
@@ -171,10 +196,10 @@
             this.button_fgcolor.FlatAppearance.BorderSize = 0;
             this.button_fgcolor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_fgcolor.Image = ((System.Drawing.Image)(resources.GetObject("button_fgcolor.Image")));
-            this.button_fgcolor.Location = new System.Drawing.Point(141, 294);
+            this.button_fgcolor.Location = new System.Drawing.Point(141, 321);
             this.button_fgcolor.Name = "button_fgcolor";
             this.button_fgcolor.Size = new System.Drawing.Size(27, 23);
-            this.button_fgcolor.TabIndex = 14;
+            this.button_fgcolor.TabIndex = 17;
             this.button_fgcolor.TabStop = false;
             this.button_fgcolor.UseVisualStyleBackColor = true;
             this.button_fgcolor.Click += new System.EventHandler(this.button_fgcolor_Click);
@@ -184,16 +209,17 @@
             this.comboBox_fgcolor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.comboBox_fgcolor.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox_fgcolor.FormattingEnabled = true;
-            this.comboBox_fgcolor.Location = new System.Drawing.Point(12, 294);
+            this.comboBox_fgcolor.Location = new System.Drawing.Point(12, 321);
             this.comboBox_fgcolor.Name = "comboBox_fgcolor";
             this.comboBox_fgcolor.Size = new System.Drawing.Size(123, 23);
-            this.comboBox_fgcolor.TabIndex = 13;
+            this.comboBox_fgcolor.TabIndex = 2;
+            this.comboBox_fgcolor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.comboBox_fgcolor_KeyDown);
             // 
             // label3
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 335);
+            this.label3.Location = new System.Drawing.Point(11, 362);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(41, 15);
             this.label3.TabIndex = 15;
@@ -202,19 +228,20 @@
             // textBox_string
             // 
             this.textBox_string.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.textBox_string.Location = new System.Drawing.Point(12, 353);
+            this.textBox_string.Location = new System.Drawing.Point(12, 380);
             this.textBox_string.Name = "textBox_string";
             this.textBox_string.Size = new System.Drawing.Size(338, 23);
-            this.textBox_string.TabIndex = 16;
+            this.textBox_string.TabIndex = 1;
+            this.textBox_string.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_string_KeyDown);
             // 
             // checkBox_ignorecase
             // 
             this.checkBox_ignorecase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBox_ignorecase.AutoSize = true;
-            this.checkBox_ignorecase.Location = new System.Drawing.Point(12, 391);
+            this.checkBox_ignorecase.Location = new System.Drawing.Point(94, 409);
             this.checkBox_ignorecase.Name = "checkBox_ignorecase";
             this.checkBox_ignorecase.Size = new System.Drawing.Size(88, 19);
-            this.checkBox_ignorecase.TabIndex = 17;
+            this.checkBox_ignorecase.TabIndex = 4;
             this.checkBox_ignorecase.Text = "Ignore Case";
             this.checkBox_ignorecase.UseVisualStyleBackColor = true;
             // 
@@ -222,10 +249,10 @@
             // 
             this.checkBox_bold.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBox_bold.AutoSize = true;
-            this.checkBox_bold.Location = new System.Drawing.Point(106, 391);
+            this.checkBox_bold.Location = new System.Drawing.Point(188, 409);
             this.checkBox_bold.Name = "checkBox_bold";
             this.checkBox_bold.Size = new System.Drawing.Size(50, 19);
-            this.checkBox_bold.TabIndex = 18;
+            this.checkBox_bold.TabIndex = 5;
             this.checkBox_bold.Text = "Bold";
             this.checkBox_bold.UseVisualStyleBackColor = true;
             // 
@@ -235,19 +262,87 @@
             this.button_bgcolor.FlatAppearance.BorderSize = 0;
             this.button_bgcolor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_bgcolor.Image = ((System.Drawing.Image)(resources.GetObject("button_bgcolor.Image")));
-            this.button_bgcolor.Location = new System.Drawing.Point(323, 294);
+            this.button_bgcolor.Location = new System.Drawing.Point(323, 321);
             this.button_bgcolor.Name = "button_bgcolor";
             this.button_bgcolor.Size = new System.Drawing.Size(27, 23);
-            this.button_bgcolor.TabIndex = 19;
+            this.button_bgcolor.TabIndex = 18;
             this.button_bgcolor.TabStop = false;
             this.button_bgcolor.UseVisualStyleBackColor = true;
             this.button_bgcolor.Click += new System.EventHandler(this.button_bgcolor_Click);
+            // 
+            // comboBox_preset
+            // 
+            this.comboBox_preset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.comboBox_preset.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBox_preset.FormattingEnabled = true;
+            this.comboBox_preset.Location = new System.Drawing.Point(11, 440);
+            this.comboBox_preset.Name = "comboBox_preset";
+            this.comboBox_preset.Size = new System.Drawing.Size(124, 23);
+            this.comboBox_preset.TabIndex = 14;
+            // 
+            // button_preset_save
+            // 
+            this.button_preset_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button_preset_save.Location = new System.Drawing.Point(12, 469);
+            this.button_preset_save.Name = "button_preset_save";
+            this.button_preset_save.Size = new System.Drawing.Size(58, 23);
+            this.button_preset_save.TabIndex = 15;
+            this.button_preset_save.Text = "Save";
+            this.button_preset_save.UseVisualStyleBackColor = true;
+            // 
+            // button_preset_load
+            // 
+            this.button_preset_load.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button_preset_load.Location = new System.Drawing.Point(77, 469);
+            this.button_preset_load.Name = "button_preset_load";
+            this.button_preset_load.Size = new System.Drawing.Size(58, 23);
+            this.button_preset_load.TabIndex = 16;
+            this.button_preset_load.Text = "Load";
+            this.button_preset_load.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(11, 422);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(42, 15);
+            this.label4.TabIndex = 23;
+            this.label4.Text = "Preset:";
+            // 
+            // checkBox_hide
+            // 
+            this.checkBox_hide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBox_hide.AutoSize = true;
+            this.checkBox_hide.Location = new System.Drawing.Point(300, 409);
+            this.checkBox_hide.Name = "checkBox_hide";
+            this.checkBox_hide.Size = new System.Drawing.Size(51, 19);
+            this.checkBox_hide.TabIndex = 7;
+            this.checkBox_hide.Text = "Hide";
+            this.checkBox_hide.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_italic
+            // 
+            this.checkBox_italic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBox_italic.AutoSize = true;
+            this.checkBox_italic.Location = new System.Drawing.Point(244, 409);
+            this.checkBox_italic.Name = "checkBox_italic";
+            this.checkBox_italic.Size = new System.Drawing.Size(51, 19);
+            this.checkBox_italic.TabIndex = 6;
+            this.checkBox_italic.Text = "Italic";
+            this.checkBox_italic.UseVisualStyleBackColor = true;
             // 
             // Form2_Highlight
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(362, 461);
+            this.ClientSize = new System.Drawing.Size(362, 504);
+            this.Controls.Add(this.checkBox_italic);
+            this.Controls.Add(this.checkBox_hide);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.button_preset_load);
+            this.Controls.Add(this.button_preset_save);
+            this.Controls.Add(this.comboBox_preset);
             this.Controls.Add(this.button_bgcolor);
             this.Controls.Add(this.checkBox_bold);
             this.Controls.Add(this.checkBox_ignorecase);
@@ -298,5 +393,13 @@
         private Button button_bgcolor;
         private ColumnHeader columnHeader1;
         private ColorDialog colorDialog1;
+        private ComboBox comboBox_preset;
+        private Button button_preset_save;
+        private Button button_preset_load;
+        private Label label4;
+        private ColumnHeader columnHeader2;
+        private ColumnHeader columnHeader3;
+        private CheckBox checkBox_hide;
+        private CheckBox checkBox_italic;
     }
 }

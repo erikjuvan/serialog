@@ -38,6 +38,9 @@
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.highlightsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_hiderest = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,6 +92,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.editToolStripMenuItem,
             this.settingsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -140,6 +144,31 @@
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectAllToolStripMenuItem,
+            this.clearAllToolStripMenuItem});
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Text = "Edit";
+            // 
+            // selectAllToolStripMenuItem
+            // 
+            this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
+            this.selectAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.selectAllToolStripMenuItem.Text = "Select All";
+            this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
+            // 
+            // clearAllToolStripMenuItem
+            // 
+            this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
+            this.clearAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearAllToolStripMenuItem.Text = "Clear All";
+            this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click_1);
+            // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -161,6 +190,7 @@
             // 
             this.toolStripMenuItem_hiderest.CheckOnClick = true;
             this.toolStripMenuItem_hiderest.Name = "toolStripMenuItem_hiderest";
+            this.toolStripMenuItem_hiderest.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.toolStripMenuItem_hiderest.Size = new System.Drawing.Size(193, 22);
             this.toolStripMenuItem_hiderest.Text = "Hide Rest";
             this.toolStripMenuItem_hiderest.Click += new System.EventHandler(this.toolStripMenuItem_hiderest_Click);
@@ -180,7 +210,7 @@
             this.button_run.Location = new System.Drawing.Point(305, 32);
             this.button_run.Name = "button_run";
             this.button_run.Size = new System.Drawing.Size(33, 23);
-            this.button_run.TabIndex = 5;
+            this.button_run.TabIndex = 3;
             this.button_run.Text = "▶";
             this.button_run.UseVisualStyleBackColor = true;
             this.button_run.Click += new System.EventHandler(this.button_run_Click);
@@ -210,7 +240,7 @@
             this.button_stop.Location = new System.Drawing.Point(383, 32);
             this.button_stop.Name = "button_stop";
             this.button_stop.Size = new System.Drawing.Size(33, 23);
-            this.button_stop.TabIndex = 8;
+            this.button_stop.TabIndex = 5;
             this.button_stop.Text = "■";
             this.button_stop.UseVisualStyleBackColor = true;
             this.button_stop.Click += new System.EventHandler(this.button_stop_Click);
@@ -223,7 +253,7 @@
             this.checkBox1.Location = new System.Drawing.Point(433, 34);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(61, 19);
-            this.checkBox1.TabIndex = 9;
+            this.checkBox1.TabIndex = 6;
             this.checkBox1.Text = "Follow";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
@@ -234,7 +264,7 @@
             this.button_pause.Location = new System.Drawing.Point(344, 32);
             this.button_pause.Name = "button_pause";
             this.button_pause.Size = new System.Drawing.Size(33, 23);
-            this.button_pause.TabIndex = 10;
+            this.button_pause.TabIndex = 4;
             this.button_pause.Text = "||";
             this.button_pause.UseVisualStyleBackColor = true;
             this.button_pause.Click += new System.EventHandler(this.button_pause_Click);
@@ -255,7 +285,7 @@
             this.comboBox_baud.Location = new System.Drawing.Point(199, 32);
             this.comboBox_baud.Name = "comboBox_baud";
             this.comboBox_baud.Size = new System.Drawing.Size(100, 23);
-            this.comboBox_baud.TabIndex = 13;
+            this.comboBox_baud.TabIndex = 2;
             // 
             // button_findnext
             // 
@@ -264,7 +294,7 @@
             this.button_findnext.Location = new System.Drawing.Point(686, 32);
             this.button_findnext.Name = "button_findnext";
             this.button_findnext.Size = new System.Drawing.Size(33, 23);
-            this.button_findnext.TabIndex = 16;
+            this.button_findnext.TabIndex = 9;
             this.button_findnext.Text = ">";
             this.button_findnext.UseVisualStyleBackColor = true;
             this.button_findnext.Click += new System.EventHandler(this.button_findnext_Click);
@@ -276,7 +306,7 @@
             this.button_findprev.Location = new System.Drawing.Point(648, 32);
             this.button_findprev.Name = "button_findprev";
             this.button_findprev.Size = new System.Drawing.Size(33, 23);
-            this.button_findprev.TabIndex = 17;
+            this.button_findprev.TabIndex = 8;
             this.button_findprev.Text = "<";
             this.button_findprev.UseVisualStyleBackColor = true;
             this.button_findprev.Click += new System.EventHandler(this.button_findprev_Click);
@@ -295,7 +325,7 @@
             this.textBox_find.Location = new System.Drawing.Point(542, 32);
             this.textBox_find.Name = "textBox_find";
             this.textBox_find.Size = new System.Drawing.Size(100, 23);
-            this.textBox_find.TabIndex = 19;
+            this.textBox_find.TabIndex = 7;
             // 
             // button_findall
             // 
@@ -304,7 +334,7 @@
             this.button_findall.Location = new System.Drawing.Point(724, 32);
             this.button_findall.Name = "button_findall";
             this.button_findall.Size = new System.Drawing.Size(33, 23);
-            this.button_findall.TabIndex = 20;
+            this.button_findall.TabIndex = 10;
             this.button_findall.Text = "All";
             this.button_findall.UseVisualStyleBackColor = true;
             this.button_findall.Click += new System.EventHandler(this.button_findall_Click);
@@ -373,5 +403,8 @@
         private TextBox textBox_find;
         private Button button_findall;
         private ToolStripMenuItem toolStripMenuItem_hiderest;
+        private ToolStripMenuItem editToolStripMenuItem;
+        private ToolStripMenuItem selectAllToolStripMenuItem;
+        private ToolStripMenuItem clearAllToolStripMenuItem;
     }
 }
