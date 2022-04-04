@@ -89,6 +89,10 @@ namespace serialog
                 form2Highlight.Top = this.Location.Y + 100;
                 form2Highlight.Show();
             }
+            else
+            {
+                form2Highlight.Focus();
+            }
         }
 
         private void button_run_Click(object sender, EventArgs e)
