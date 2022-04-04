@@ -46,6 +46,7 @@
             this.highlightsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_hiderest = new System.Windows.Forms.ToolStripMenuItem();
             this.addTimestampsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.button_run = new System.Windows.Forms.Button();
             this.comboBox_port = new System.Windows.Forms.ComboBox();
@@ -64,7 +65,6 @@
             this.label_processinfo = new System.Windows.Forms.Label();
             this.timer_updatesysinfo = new System.Windows.Forms.Timer(this.components);
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
-            this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -82,7 +82,7 @@
             this.listView1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.listView1.Name = "listView1";
             this.listView1.ShowGroups = false;
-            this.listView1.Size = new System.Drawing.Size(1097, 958);
+            this.listView1.Size = new System.Drawing.Size(1154, 856);
             this.listView1.TabIndex = 12;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -92,7 +92,7 @@
             // column1
             // 
             this.column1.Text = "";
-            this.column1.Width = 930;
+            this.column1.Width = 780;
             // 
             // menuStrip1
             // 
@@ -104,7 +104,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(7, 3, 0, 3);
-            this.menuStrip1.Size = new System.Drawing.Size(1125, 30);
+            this.menuStrip1.Size = new System.Drawing.Size(1182, 30);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -221,6 +221,13 @@
             this.addTimestampsToolStripMenuItem.Size = new System.Drawing.Size(237, 26);
             this.addTimestampsToolStripMenuItem.Text = "Add Timestamps";
             // 
+            // fontToolStripMenuItem
+            // 
+            this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
+            this.fontToolStripMenuItem.Size = new System.Drawing.Size(237, 26);
+            this.fontToolStripMenuItem.Text = "Font";
+            this.fontToolStripMenuItem.Click += new System.EventHandler(this.fontToolStripMenuItem_Click);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -279,7 +286,7 @@
             this.checkBox1.AutoSize = true;
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(452, 46);
+            this.checkBox1.Location = new System.Drawing.Point(453, 46);
             this.checkBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(72, 24);
@@ -310,7 +317,7 @@
             // 
             this.button_findnext.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button_findnext.ForeColor = System.Drawing.Color.Black;
-            this.button_findnext.Location = new System.Drawing.Point(741, 43);
+            this.button_findnext.Location = new System.Drawing.Point(748, 43);
             this.button_findnext.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_findnext.Name = "button_findnext";
             this.button_findnext.Size = new System.Drawing.Size(38, 31);
@@ -323,7 +330,7 @@
             // 
             this.button_findprev.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button_findprev.ForeColor = System.Drawing.Color.Black;
-            this.button_findprev.Location = new System.Drawing.Point(698, 43);
+            this.button_findprev.Location = new System.Drawing.Point(705, 43);
             this.button_findprev.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_findprev.Name = "button_findprev";
             this.button_findprev.Size = new System.Drawing.Size(38, 31);
@@ -335,7 +342,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(532, 48);
+            this.label3.Location = new System.Drawing.Point(539, 48);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(40, 20);
             this.label3.TabIndex = 18;
@@ -343,7 +350,7 @@
             // 
             // textBox_find
             // 
-            this.textBox_find.Location = new System.Drawing.Point(576, 45);
+            this.textBox_find.Location = new System.Drawing.Point(583, 45);
             this.textBox_find.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_find.Name = "textBox_find";
             this.textBox_find.Size = new System.Drawing.Size(114, 27);
@@ -353,7 +360,7 @@
             // 
             this.button_findall.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button_findall.ForeColor = System.Drawing.Color.Black;
-            this.button_findall.Location = new System.Drawing.Point(784, 43);
+            this.button_findall.Location = new System.Drawing.Point(791, 43);
             this.button_findall.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_findall.Name = "button_findall";
             this.button_findall.Size = new System.Drawing.Size(38, 31);
@@ -365,11 +372,11 @@
             // label_processinfo
             // 
             this.label_processinfo.AutoSize = true;
-            this.label_processinfo.Location = new System.Drawing.Point(840, 48);
+            this.label_processinfo.Location = new System.Drawing.Point(849, 48);
             this.label_processinfo.Name = "label_processinfo";
-            this.label_processinfo.Size = new System.Drawing.Size(50, 20);
+            this.label_processinfo.Size = new System.Drawing.Size(35, 20);
             this.label_processinfo.TabIndex = 0;
-            this.label_processinfo.Text = "label4";
+            this.label_processinfo.Text = "Info";
             // 
             // timer_updatesysinfo
             // 
@@ -377,18 +384,11 @@
             this.timer_updatesysinfo.Interval = 1000;
             this.timer_updatesysinfo.Tick += new System.EventHandler(this.timer_updatesysinfo_Tick);
             // 
-            // fontToolStripMenuItem
-            // 
-            this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
-            this.fontToolStripMenuItem.Size = new System.Drawing.Size(237, 26);
-            this.fontToolStripMenuItem.Text = "Font";
-            this.fontToolStripMenuItem.Click += new System.EventHandler(this.fontToolStripMenuItem_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1125, 1055);
+            this.ClientSize = new System.Drawing.Size(1182, 953);
             this.Controls.Add(this.label_processinfo);
             this.Controls.Add(this.button_findall);
             this.Controls.Add(this.textBox_find);
@@ -408,7 +408,7 @@
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MinimumSize = new System.Drawing.Size(895, 384);
+            this.MinimumSize = new System.Drawing.Size(850, 400);
             this.Name = "Form1";
             this.Text = "serialog";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);

@@ -674,13 +674,13 @@ namespace serialog
             var up = upTime.Elapsed;
             string ups = "";
             if (up.Hours > 0) ups += up.Hours.ToString() + ":";
-            if (up.Minutes > 0) ups += up.Hours.ToString() + ":";
+            if (up.Minutes > 0) ups += up.Minutes.ToString() + ":";
             if (up.Seconds > 0) ups += up.Seconds.ToString();
 
             var run = runTime.Elapsed;
             string runs = "";
             if (run.Hours > 0) runs += run.Hours.ToString() + ":";
-            if (run.Minutes > 0) runs += run.Hours.ToString() + ":";
+            if (run.Minutes > 0) runs += run.Minutes.ToString() + ":";
             if (run.Seconds > 0) runs += run.Seconds.ToString();
 
             // So that saved file size will be the same as the one in the label subtract one byte (last newline)
