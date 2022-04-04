@@ -32,8 +32,6 @@ namespace serialog
             _serialcomStopped = true;
             button_stop.Enabled = false;
 
-            Form2_Highlight.InitializeHighlightSettings();
-
             upTime.Start();
         }
 

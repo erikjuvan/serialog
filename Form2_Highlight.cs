@@ -92,13 +92,6 @@ namespace serialog
             }
         }
 
-        static public void InitializeHighlightSettings()
-        {
-            // Init highlightSettings from a file saved somewhere
-
-
-        }
-
         private void button_add_Click(object sender, EventArgs e)
         {
             // No text in textbox
