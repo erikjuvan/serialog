@@ -694,23 +694,49 @@ namespace serialog
 
         private void ReloadAllListViewItems()
         {
+            Form3_progressbar form3 = new Form3_progressbar("Reloading...");
+            form3.StartPosition = FormStartPosition.Manual;
+            form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
+            form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
+            form3.Show();
+            form3.ProgressBarSetup(listView1.Items.Count, 1);
+            Thread.Sleep(100);
             // must use for since foreach doesn't allow changes to its items
             for (int i = 0; i < listView1.Items.Count; i++)
             {
                 listView1.Items[i] = CreateHighlightedListItem(listView1.Items[i].Text);
+                form3.ProgressBarIncrement();
                 //listView1.Items.Insert(item.Index + 1, CreateHighlightedListItem(item.Text));
                 //listView1.Items.Remove(item);
             }
+
+            form3.ProgressBarIncrement();
+            Thread.Sleep(200);
+            form3.Close();
+
+
         }
 
         private void ReloadSelectedListViewItems(ListView.SelectedListViewItemCollection selectedItems)
         {
+            Form3_progressbar form3 = new Form3_progressbar("Reloading...");
+            form3.StartPosition = FormStartPosition.Manual;
+            form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
+            form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
+            form3.Show();
+            form3.ProgressBarSetup(selectedItems.Count, 1);
+            Thread.Sleep(100);
             foreach (ListViewItem item in selectedItems)
             {
                 listView1.Items[item.Index] = CreateHighlightedListItem(item.Text);
+                form3.ProgressBarIncrement();
                 //listView1.Items.Insert(item.Index + 1, CreateHighlightedListItem(item.Text));
                 //listView1.Items.Remove(item);
             }
+
+            form3.ProgressBarIncrement();
+            Thread.Sleep(200);
+            form3.Close();
         }
 
         private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
