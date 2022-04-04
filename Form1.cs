@@ -219,7 +219,8 @@ namespace serialog
                     // hide
                     if (highlightEntry.hide)
                     {
-                        item.Text = "";                        
+                        item.ForeColor = Color.Transparent;
+                        item.BackColor = Color.Transparent;
                     }
                     else
                     {
