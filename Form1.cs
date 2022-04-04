@@ -3,6 +3,7 @@ namespace serialog
     public partial class Form1 : Form
     {
         private static bool _serialcomStopped = new bool();
+        private bool serialcomStoppedHandleEvent = new bool();
         private static SerialCom _serialCom = new SerialCom();
         private static List<string> _serialDataList = new List<string>();
         private int _serialDataListCountAddedToTable = 0;
@@ -116,6 +117,8 @@ namespace serialog
                 comboBox_port.Enabled = false;
                 comboBox_baud.Enabled = false;
 
+                listView1.Items.Add("ACQUISITION STARTED " + DateTime.Now.ToString("dddd dd/MM/yyyy hh:mm:ss"));
+
                 serialReadThread = new Thread(SerialRead);
                 serialReadThread.Start();
             }
@@ -123,13 +126,18 @@ namespace serialog
 
         private void button_stop_Click(object sender, EventArgs e)
         {
-            _serialcomStopped = true;
-            serialReadThread.Join();
+            if (!_serialcomStopped)
+            {
+                _serialcomStopped = true;
+                serialReadThread.Join();
 
-            _serialCom.Close();
+                _serialCom.Close();
 
-            comboBox_port.Enabled = true;
-            comboBox_baud.Enabled = true;
+                comboBox_port.Enabled = true;
+                comboBox_baud.Enabled = true;
+
+                serialcomStoppedHandleEvent = true;
+            }
         }
 
         private void comboBox_port_DropDown(object sender, EventArgs e)
@@ -258,6 +266,12 @@ namespace serialog
         private void timer1_Tick(object sender, EventArgs e)
         {
             AddEntry();
+
+            if (serialcomStoppedHandleEvent)
+            {
+                serialcomStoppedHandleEvent = false;
+                listView1.Items.Add("ACQUISITION STOPPED " + DateTime.Now.ToString("dddd dd/MM/yyyy hh:mm:ss"));
+            }            
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
