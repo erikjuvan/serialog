@@ -735,10 +735,25 @@ namespace serialog
             if (run.Seconds > 0) runs += run.Seconds.ToString("00");
 
             // So that saved file size will be the same as the one in the label subtract one byte (last newline)
-            int size = _listviewSizeBytes > 0 ? _listviewSizeBytes - 1 : 0;
+            double size = _listviewSizeBytes > 0 ? _listviewSizeBytes - 1 : 0;
+            string sizeStr;
+            if (size > 1024.0 * 1024.0)
+            {
+                size /= 1024.0 * 1024.0;
+                sizeStr = size.ToString("0.00") + " MB";
+            }
+            else if (size > 1024.0)
+            {
+                size /= 1024.0;
+                sizeStr = size.ToString("0.00") + " KB";
+            }
+            else
+            {
+                sizeStr = Convert.ToInt32(size).ToString() + " B";
+            }
 
             label_processinfo.Text = "Alive: " + ups +
-                " Running: " + runs + " Data: " + size + " B";
+                " Running: " + runs + " Data: " + sizeStr;
         }
 
         private void fontToolStripMenuItem_Click(object sender, EventArgs e)
