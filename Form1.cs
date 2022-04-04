@@ -373,6 +373,9 @@ namespace serialog
             var stream = new MemoryStream();
             var writer = new StreamWriter(stream);
 
+            if (items.Count == 0)
+                return null;
+
             // for instead of foreach so that we can control last item and not add "\n" at the end so that we 
             // do not introduce an extra item in list
             for (int i = 0; i < items.Count - 1; i++)
@@ -390,6 +393,9 @@ namespace serialog
         {
             var stream = new MemoryStream();
             var writer = new StreamWriter(stream);
+
+            if (items.Count == 0)
+                return null;
 
             // for instead of foreach so that we can control last item and not add "\n" at the end so that we 
             // do not introduce an extra item in list
@@ -417,11 +423,23 @@ namespace serialog
             {
                 if ((myStream = saveFileDialog1.OpenFile()) != null)
                 {
+                    Form3_progressbar form3 = new Form3_progressbar("Saving to file...");
+                    form3.StartPosition = FormStartPosition.Manual;
+                    form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
+                    form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
+                    form3.Show();
+                    form3.ProgressBarSetup(1, 1);
+                    Thread.Sleep(200);
                     // Code to write the stream goes here.
                     using (var stream = GenerateStreamFromListOfItems(listView1.Items))
                     {
-                        stream.CopyTo(myStream);
+                        if (stream != null)
+                            stream.CopyTo(myStream);
                     }
+
+                    form3.ProgressBarIncrement();
+                    Thread.Sleep(300);
+                    form3.Close();
 
                     myStream.Close();
                 }
@@ -452,13 +470,23 @@ namespace serialog
 
                 using (StreamReader reader = new StreamReader(fileStream))
                 {
+                    Form3_progressbar form3 = new Form3_progressbar("Opening file...");
+                    form3.StartPosition = FormStartPosition.Manual;
+                    form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
+                    form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
+                    form3.Show();
                     fileContent = reader.ReadToEnd();
-                    var list_of_lines = fileContent.Split('\n').ToList();
-                    foreach (var line in list_of_lines)
+                    var listOfLines = fileContent.Split('\n').ToList();
+                    form3.ProgressBarSetup(listOfLines.Count, 1);
+                    for (int i = 0, size = listOfLines.Count; i < size; i++)
                     {
+                        var line = listOfLines[i];
                         _listviewSizeBytes += line.Length + 1;
                         listView1.Items.Add(CreateHighlightedListItem(line));
+                        form3.ProgressBarIncrement();
                     }
+
+                    form3.Close();
 
                     listView1.Items[listView1.Items.Count - 1].EnsureVisible();
                 }
@@ -490,11 +518,23 @@ namespace serialog
             {
                 if ((myStream = saveFileDialog1.OpenFile()) != null)
                 {
+                    Form3_progressbar form3 = new Form3_progressbar("Saving to file...");
+                    form3.StartPosition = FormStartPosition.Manual;
+                    form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
+                    form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
+                    form3.Show();
+                    form3.ProgressBarSetup(1, 1);
+                    Thread.Sleep(200);
                     // Code to write the stream goes here.
                     using (var stream = GenerateStreamFromListOfItems(listView1.SelectedItems))
                     {
-                        stream.CopyTo(myStream);
+                        if (stream != null)
+                            stream.CopyTo(myStream);
                     }
+
+                    form3.ProgressBarIncrement();
+                    Thread.Sleep(300);
+                    form3.Close();
 
                     myStream.Close();
                 }
