@@ -416,6 +416,10 @@ namespace serialog
                 //Get the path of specified file
                 filePath = openFileDialog1.FileName;
 
+                string openFileInfo = "Opening file: " + filePath;
+                listView1.Items.Add(openFileInfo);
+                _listviewSizeBytes += openFileInfo.Length + 1;                
+
                 //Read the contents of the file into a stream
                 var fileStream = openFileDialog1.OpenFile();
 
@@ -425,6 +429,7 @@ namespace serialog
                     var list_of_lines = fileContent.Split('\n').ToList();
                     foreach (var line in list_of_lines)
                     {
+                        _listviewSizeBytes += line.Length + 1;
                         listView1.Items.Add(CreateHighlightedListItem(line));
                     }
 
@@ -432,6 +437,10 @@ namespace serialog
                 }
 
                 fileStream.Close();
+
+                string endOfFileInfo = "End of file: " + filePath;
+                listView1.Items.Add(endOfFileInfo);
+                _listviewSizeBytes += endOfFileInfo.Length + 1;
             }
         }
 
