@@ -326,7 +326,8 @@ namespace serialog
                 {
                     text += item.Text + "\n";
                 }
-                Clipboard.SetText(text);
+                if (text.Length > 0)
+                    Clipboard.SetText(text);
             }
             else if (e.Control && e.KeyCode == Keys.A)
             {
