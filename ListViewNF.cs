@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace serialog
+﻿namespace serialog
 {
     // List View No Flicker
     // https://stackoverflow.com/questions/442817/c-sharp-flickering-listview-on-update
@@ -19,8 +13,8 @@ namespace serialog
             // Windows messages before they get to the form's WndProc
             this.SetStyle(ControlStyles.EnableNotifyMessage, true);
 
-        }  
-        
+        }
+
         public event EventHandler<EventArgs> Scrolled;
         protected override void WndProc(ref Message m)
         {

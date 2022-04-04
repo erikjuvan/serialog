@@ -713,8 +713,6 @@ namespace serialog
             form3.ProgressBarIncrement();
             Thread.Sleep(200);
             form3.Close();
-
-
         }
 
         private void ReloadSelectedListViewItems(ListView.SelectedListViewItemCollection selectedItems)
