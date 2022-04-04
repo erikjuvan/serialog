@@ -30,6 +30,7 @@ namespace serialog
             comboBox_baud.SelectedItem = "1000000";
 
             _serialcomStopped = true;
+            button_stop.Enabled = false;
 
             Form2_Highlight.InitializeHighlightSettings();
 
@@ -116,6 +117,8 @@ namespace serialog
                 }
 
                 _serialcomStopped = false;
+                button_stop.Enabled = true;
+                button_run.Enabled = false;
 
                 comboBox_port.Enabled = false;
                 comboBox_baud.Enabled = false;
@@ -144,6 +147,8 @@ namespace serialog
 
                 _serialCom.Close();
 
+                button_stop.Enabled = false;
+                button_run.Enabled = true;
                 comboBox_port.Enabled = true;
                 comboBox_baud.Enabled = true;
 
