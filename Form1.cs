@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace serialog
 {
     public partial class Form1 : Form
@@ -6,9 +8,13 @@ namespace serialog
         private bool serialcomStoppedHandleEvent = new bool();
         private static SerialCom _serialCom = new SerialCom();
         private static List<string> _serialDataList = new List<string>();
+        private static int _listviewSizeBytes = 0;
         private int _serialDataListCountAddedToTable = 0;
         private static Mutex mtx = new Mutex();
         private Thread serialReadThread = null;
+
+        private Stopwatch runTime = new Stopwatch();
+        private Stopwatch upTime = new Stopwatch();
 
         private Form2_Highlight form2Highlight = null;
 
@@ -26,6 +32,8 @@ namespace serialog
             _serialcomStopped = true;
 
             Form2_Highlight.InitializeHighlightSettings();
+
+            upTime.Start();
         }
         
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -117,10 +125,18 @@ namespace serialog
                 comboBox_port.Enabled = false;
                 comboBox_baud.Enabled = false;
 
-                listView1.Items.Add("ACQUISITION STARTED " + DateTime.Now.ToString("dddd dd/MM/yyyy hh:mm:ss"));
+                if (addTimestampsToolStripMenuItem.Checked)
+                {
+                    string dateTimeString = "ACQUISITION STARTED " + DateTime.Now.ToString("dddd dd/MM/yyyy hh:mm:ss");
+                    listView1.Items.Add(dateTimeString);
+                    _listviewSizeBytes += dateTimeString.Length + 1;
+                }
 
                 serialReadThread = new Thread(SerialRead);
                 serialReadThread.Start();
+
+                runTime = Stopwatch.StartNew();
+                runTime.Start();
             }
         }
 
@@ -137,6 +153,8 @@ namespace serialog
                 comboBox_baud.Enabled = true;
 
                 serialcomStoppedHandleEvent = true;
+
+                runTime.Stop();
             }
         }
 
@@ -252,6 +270,7 @@ namespace serialog
                 for (int i = _serialDataListCountAddedToTable; i < _serialDataList.Count; i++)
                 {
                     string line = _serialDataList[i];
+                    _listviewSizeBytes += line.Length + 1; // 1 for \n
 
                     listView1.Items.Add(CreateHighlightedListItem(line));
                 }
@@ -270,7 +289,13 @@ namespace serialog
             if (serialcomStoppedHandleEvent)
             {
                 serialcomStoppedHandleEvent = false;
-                listView1.Items.Add("ACQUISITION STOPPED " + DateTime.Now.ToString("dddd dd/MM/yyyy hh:mm:ss"));
+
+                if (addTimestampsToolStripMenuItem.Checked)
+                {
+                    string dateTimeString = "ACQUISITION STOPPED " + DateTime.Now.ToString("dddd dd/MM/yyyy hh:mm:ss");
+                    listView1.Items.Add(dateTimeString);
+                    _listviewSizeBytes += dateTimeString.Length + 1;
+                }
             }            
         }
 
@@ -294,10 +319,6 @@ namespace serialog
                 }
                 Clipboard.SetText(text);
             }
-            else if (e.Control && e.KeyCode == Keys.W)
-            {
-                listView1.Items.Clear();
-            }
             else if (e.Control && e.KeyCode == Keys.A)
             {
                 foreach (ListViewItem item in listView1.Items)
@@ -317,6 +338,7 @@ namespace serialog
                     foreach (ListViewItem item in listView1.SelectedItems)
                     {
                         idx = item.Index;
+                        _listviewSizeBytes -= item.Text.Length + 1;
                         listView1.Items.Remove(item);
                     }
                     //listView1.Items[idx].Selected = true; // no need to select item
@@ -629,6 +651,7 @@ namespace serialog
         private void clearAllToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             listView1.Items.Clear();
+            _listviewSizeBytes = 0;
         }
 
         private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
@@ -639,6 +662,27 @@ namespace serialog
                 //listView1.Items.Insert(item.Index + 1, CreateHighlightedListItem(item.Text));
                 //listView1.Items.Remove(item);
             }
+        }
+
+        private void timer_updatesysinfo_Tick(object sender, EventArgs e)
+        {
+            var up = upTime.Elapsed;
+            string ups = "";
+            if (up.Hours > 0) ups += up.Hours.ToString() + ":";
+            if (up.Minutes > 0) ups += up.Hours.ToString() + ":";
+            if (up.Seconds > 0) ups += up.Seconds.ToString();
+
+            var run = runTime.Elapsed;
+            string runs = "";
+            if (run.Hours > 0) runs += run.Hours.ToString() + ":";
+            if (run.Minutes > 0) runs += run.Hours.ToString() + ":";
+            if (run.Seconds > 0) runs += run.Seconds.ToString();
+
+            // So that saved file size will be the same as the one in the label subtract one byte (last newline)
+            int size = _listviewSizeBytes > 0 ? _listviewSizeBytes - 1 : 0;
+
+            label_processinfo.Text = "Alive: " + ups +
+                " Running: " + runs + " Data: " + size + " B";
         }
     }
 }
