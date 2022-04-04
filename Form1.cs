@@ -384,42 +384,6 @@ namespace serialog
             return stream;
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Stream myStream;
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-
-            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            saveFileDialog1.FilterIndex = 1;
-            saveFileDialog1.RestoreDirectory = true;
-
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                if ((myStream = saveFileDialog1.OpenFile()) != null)
-                {
-                    Form3_progressbar form3 = new Form3_progressbar("Saving to file...");
-                    form3.StartPosition = FormStartPosition.Manual;
-                    form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
-                    form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
-                    form3.Show();
-                    form3.ProgressBarSetup(1, 1);
-                    Thread.Sleep(200);
-                    // Code to write the stream goes here.
-                    using (var stream = GenerateStreamFromListOfItems(listView1.Items))
-                    {
-                        if (stream != null)
-                            stream.CopyTo(myStream);
-                    }
-
-                    form3.ProgressBarIncrement();
-                    Thread.Sleep(300);
-                    form3.Close();
-
-                    myStream.Close();
-                }
-            }
-        }
-
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var fileContent = string.Empty;
@@ -470,6 +434,42 @@ namespace serialog
                 string endOfFileInfo = "End of file: " + filePath;
                 listView1.Items.Add(endOfFileInfo);
                 _listviewSizeBytes += endOfFileInfo.Length + 1;
+            }
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Stream myStream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    Form3_progressbar form3 = new Form3_progressbar("Saving to file...");
+                    form3.StartPosition = FormStartPosition.Manual;
+                    form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
+                    form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
+                    form3.Show();
+                    form3.ProgressBarSetup(1, 1);
+                    Thread.Sleep(200);
+                    // Code to write the stream goes here.
+                    using (var stream = GenerateStreamFromListOfItems(listView1.Items))
+                    {
+                        if (stream != null)
+                            stream.CopyTo(myStream);
+                    }
+
+                    form3.ProgressBarIncrement();
+                    Thread.Sleep(300);
+                    form3.Close();
+
+                    myStream.Close();
+                }
             }
         }
 
