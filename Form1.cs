@@ -245,6 +245,14 @@ namespace serialog
                     // This break implements that the higher entries have priority since it breaks as soon as it finds first match
                     break;
                 }
+                else
+                {
+                    if (toolStripMenuItem_hiderest.Checked)
+                    {
+                        item.ForeColor = Color.Transparent;
+                        item.BackColor = Color.Transparent;
+                    }
+                }
             }
 
             return item;
@@ -627,18 +635,6 @@ namespace serialog
             string text = textBox_find.Text;
 
             FindAllString(text);
-        }
-
-        private void toolStripMenuItem_hiderest_Click(object sender, EventArgs e)
-        {
-            if (toolStripMenuItem_hiderest.Checked)
-            {
-                // Hide non matching entries
-            }
-            else
-            {
-                // Show non matching entries
-            }
         }
 
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
