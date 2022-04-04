@@ -1,3 +1,2 @@
 - When deleting from the end it takes a really long time if list is long
 - hide rest
-- stop following on search

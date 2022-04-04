@@ -52,7 +52,7 @@
             this.comboBox_port = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.button_stop = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBox_follow = new System.Windows.Forms.CheckBox();
             this.timer_addtolist = new System.Windows.Forms.Timer(this.components);
             this.comboBox_baud = new System.Windows.Forms.ComboBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
@@ -165,8 +165,7 @@
             // selectAllToolStripMenuItem
             // 
             this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-            this.selectAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(206, 26);
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.selectAllToolStripMenuItem.Text = "Select All";
             this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
             // 
@@ -174,7 +173,7 @@
             // 
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
             this.clearAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(206, 26);
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.clearAllToolStripMenuItem.Text = "Clear All";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click_1);
             // 
@@ -182,7 +181,7 @@
             // 
             this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
             this.reloadToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(206, 26);
+            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.reloadToolStripMenuItem.Text = "Reload";
             this.reloadToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
             // 
@@ -209,7 +208,6 @@
             // 
             this.toolStripMenuItem_hiderest.CheckOnClick = true;
             this.toolStripMenuItem_hiderest.Name = "toolStripMenuItem_hiderest";
-            this.toolStripMenuItem_hiderest.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.toolStripMenuItem_hiderest.Size = new System.Drawing.Size(237, 26);
             this.toolStripMenuItem_hiderest.Text = "Hide Rest";
             this.toolStripMenuItem_hiderest.Click += new System.EventHandler(this.toolStripMenuItem_hiderest_Click);
@@ -281,18 +279,18 @@
             this.button_stop.UseVisualStyleBackColor = true;
             this.button_stop.Click += new System.EventHandler(this.button_stop_Click);
             // 
-            // checkBox1
+            // checkBox_follow
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(453, 46);
-            this.checkBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(72, 24);
-            this.checkBox1.TabIndex = 6;
-            this.checkBox1.Text = "Follow";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox_follow.AutoSize = true;
+            this.checkBox_follow.Checked = true;
+            this.checkBox_follow.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_follow.Location = new System.Drawing.Point(453, 46);
+            this.checkBox_follow.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.checkBox_follow.Name = "checkBox_follow";
+            this.checkBox_follow.Size = new System.Drawing.Size(72, 24);
+            this.checkBox_follow.TabIndex = 6;
+            this.checkBox_follow.Text = "Follow";
+            this.checkBox_follow.UseVisualStyleBackColor = true;
             // 
             // timer_addtolist
             // 
@@ -355,6 +353,7 @@
             this.textBox_find.Name = "textBox_find";
             this.textBox_find.Size = new System.Drawing.Size(114, 27);
             this.textBox_find.TabIndex = 7;
+            this.textBox_find.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_find_KeyDown);
             // 
             // button_findall
             // 
@@ -397,7 +396,7 @@
             this.Controls.Add(this.button_findnext);
             this.Controls.Add(this.comboBox_baud);
             this.Controls.Add(this.listView1);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.checkBox_follow);
             this.Controls.Add(this.button_stop);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.comboBox_port);
@@ -434,7 +433,7 @@
         private Label label2;
         private Button button_stop;
         private ToolStripMenuItem highlightsToolStripMenuItem;
-        private CheckBox checkBox1;
+        private CheckBox checkBox_follow;
         private System.Windows.Forms.Timer timer_addtolist;
         private ColumnHeader column1;
         private ListViewNF listView1;

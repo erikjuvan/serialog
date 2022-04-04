@@ -43,23 +43,6 @@ namespace serialog
                 textBox_find.Select();
             }
 
-            if (textBox_find.Focused)
-            {
-                if (e.KeyCode == Keys.Enter)
-                {
-                    string text = textBox_find.Text;
-
-                    if (e.Shift)
-                    {                        
-                        FindPrevString(text);
-                    }
-                    else
-                    {
-                        FindNextString(text);
-                    }
-                }
-            }
-
             if (e.Shift && e.KeyCode == Keys.F3)
             {
                 FindPrevString(textBox_find.Text);
@@ -276,7 +259,7 @@ namespace serialog
                 }
                 _serialDataListCountAddedToTable = _serialDataList.Count;
 
-                if (checkBox1.Checked)
+                if (checkBox_follow.Checked)
                     listView1.Items[listView1.Items.Count - 1].EnsureVisible();
             }
             mtx.ReleaseMutex();
@@ -355,7 +338,7 @@ namespace serialog
 
         private void listView1_Scrolled(object sender, EventArgs e)
         {
-            checkBox1.Checked = false;
+            checkBox_follow.Checked = false;
         }
 
         public static Stream GenerateStreamFromListOfItems(ListView.ListViewItemCollection items)
@@ -498,6 +481,7 @@ namespace serialog
                 if (listView1.Items[i].Text.Contains(text))
                 {
                     //listView1.Select();
+                    checkBox_follow.Checked = false;
                     listView1.SelectedItems.Clear();                    
                     listView1.Items[i].Selected = true;
                     listView1.Items[i].EnsureVisible();
@@ -521,6 +505,7 @@ namespace serialog
             {
                 if (listView1.Items[i].Text.Contains(text))
                 {
+                    checkBox_follow.Checked = false;
                     //listView1.Select();
                     listView1.SelectedItems.Clear();
                     listView1.Items[i].Selected = true;
@@ -539,6 +524,7 @@ namespace serialog
             {
                 if (listView1.Items[i].Text.Contains(text))
                 {
+                    checkBox_follow.Checked = false;
                     //listView1.Select();
                     listView1.SelectedItems.Clear();
                     listView1.Items[i].Selected = true;
@@ -557,6 +543,7 @@ namespace serialog
             {
                 if (listView1.Items[i].Text.Contains(text))
                 {
+                    checkBox_follow.Checked = false;
                     //listView1.Select();
                     listView1.SelectedItems.Clear();
                     listView1.Items[i].Selected = true;
@@ -588,6 +575,7 @@ namespace serialog
 
             if (foundText)
             {
+                checkBox_follow.Checked = false;
                 listView1.Items[listView1.SelectedIndices[listView1.SelectedIndices.Count-1]].EnsureVisible();
             }
         }
@@ -645,7 +633,6 @@ namespace serialog
             {
                 item.Selected = true;
             }
-            listView1.Focus();
         }
 
         private void clearAllToolStripMenuItem_Click_1(object sender, EventArgs e)
@@ -674,14 +661,14 @@ namespace serialog
             var up = upTime.Elapsed;
             string ups = "";
             if (up.Hours > 0) ups += up.Hours.ToString() + ":";
-            if (up.Minutes > 0) ups += up.Minutes.ToString() + ":";
-            if (up.Seconds > 0) ups += up.Seconds.ToString();
+            if (up.Minutes > 0) ups += up.Minutes.ToString("00") + ":";
+            if (up.Seconds > 0) ups += up.Seconds.ToString("00");
 
             var run = runTime.Elapsed;
             string runs = "";
             if (run.Hours > 0) runs += run.Hours.ToString() + ":";
-            if (run.Minutes > 0) runs += run.Minutes.ToString() + ":";
-            if (run.Seconds > 0) runs += run.Seconds.ToString();
+            if (run.Minutes > 0) runs += run.Minutes.ToString("00") + ":";
+            if (run.Seconds > 0) runs += run.Seconds.ToString("00");
 
             // So that saved file size will be the same as the one in the label subtract one byte (last newline)
             int size = _listviewSizeBytes > 0 ? _listviewSizeBytes - 1 : 0;
@@ -711,6 +698,23 @@ namespace serialog
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     ReloadListViewItems();
+                }
+            }
+        }
+
+        private void textBox_find_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string text = textBox_find.Text;
+
+                if (e.Shift)
+                {
+                    FindPrevString(text);
+                }
+                else
+                {
+                    FindNextString(text);
                 }
             }
         }
