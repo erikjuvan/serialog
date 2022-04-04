@@ -2,7 +2,6 @@ namespace serialog
 {
     public partial class Form1 : Form
     {
-        private static bool _serialcomPaused = new bool();
         private static bool _serialcomStopped = new bool();
         private static SerialCom _serialCom = new SerialCom();
         private static List<string> _serialDataList = new List<string>();
@@ -24,7 +23,6 @@ namespace serialog
             comboBox_baud.SelectedItem = "1000000";
 
             _serialcomStopped = true;
-            _serialcomPaused = true;
 
             Form2_Highlight.InitializeHighlightSettings();
         }
@@ -113,7 +111,6 @@ namespace serialog
 
                 _serialCom.Open(comboBox_port.GetItemText(comboBox_port.SelectedItem), baud);
 
-                _serialcomPaused = false;
                 _serialcomStopped = false;
 
                 comboBox_port.Enabled = false;
@@ -122,16 +119,8 @@ namespace serialog
                 serialReadThread = new Thread(SerialRead);
                 serialReadThread.Start();
             }
-            else if (_serialcomPaused)
-            {
-                _serialcomPaused = false;
-            }
         }
 
-        private void button_pause_Click(object sender, EventArgs e)
-        {
-            _serialcomPaused = true;
-        }
         private void button_stop_Click(object sender, EventArgs e)
         {
             _serialcomStopped = true;
@@ -155,27 +144,22 @@ namespace serialog
         {
             while (!_serialcomStopped)
             {
-                if (!_serialcomPaused)
-                {
-                    var line = "";
+                var line = "";
                     
-                    try
-                    {
-                        line = _serialCom.ReadLine();                        
-                    }
-                    catch (TimeoutException) 
-                    {
-                    }                    
-
-                    if (line.Length > 0)
-                    {
-                        mtx.WaitOne();
-                        _serialDataList.Add(line);
-                        mtx.ReleaseMutex();
-                    }                    
-
-                    //Thread.Sleep(100);
+                try
+                {
+                    line = _serialCom.ReadLine();                        
                 }
+                catch (TimeoutException) 
+                {
+                }                    
+
+                if (line.Length > 0)
+                {
+                    mtx.WaitOne();
+                    _serialDataList.Add(line);
+                    mtx.ReleaseMutex();
+                }                    
             }            
         }
 
