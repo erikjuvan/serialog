@@ -105,7 +105,15 @@ namespace serialog
                 if (!success)
                     return;
 
-                _serialCom.Open(comboBox_port.GetItemText(comboBox_port.SelectedItem), baud);
+                try
+                {
+                    _serialCom.Open(comboBox_port.Text, baud);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return;
+                }
 
                 _serialcomStopped = false;
 
