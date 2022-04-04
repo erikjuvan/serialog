@@ -185,6 +185,8 @@
             // comboBox_bgcolor
             // 
             this.comboBox_bgcolor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.comboBox_bgcolor.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.comboBox_bgcolor.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBox_bgcolor.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox_bgcolor.FormattingEnabled = true;
             this.comboBox_bgcolor.Location = new System.Drawing.Point(194, 321);
@@ -210,6 +212,8 @@
             // comboBox_fgcolor
             // 
             this.comboBox_fgcolor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.comboBox_fgcolor.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.comboBox_fgcolor.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBox_fgcolor.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox_fgcolor.FormattingEnabled = true;
             this.comboBox_fgcolor.Location = new System.Drawing.Point(12, 321);
