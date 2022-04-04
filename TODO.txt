@@ -1,3 +1,2 @@
 - reloading a long list takes a long time, mogoce vedno highlight-ej samo vidne item-e
-- implement AND for highlight matching e.g. TX&02
 - optional line cnt

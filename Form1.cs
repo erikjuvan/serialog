@@ -196,16 +196,29 @@ namespace serialog
             foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightEntries.Items)
             {
                 // text
-                string text = highlightEntry.text;
+                string highlightText = highlightEntry.text;
 
                 // ignoreCase
                 if (highlightEntry.ignoreCase)
                 {
                     line = line.ToLower();
-                    text = text.ToLower();
+                    highlightText = highlightText.ToLower();
                 }
 
-                if (line.Contains(text))
+                // AND &
+                var tokens = highlightText.Split("&");
+                int numOfTokens = tokens.Length;
+                int numOfFoundTokens = 0;
+
+                foreach (var token in tokens)
+                {
+                    if (line.Contains(token))
+                    {
+                        numOfFoundTokens++;
+                    }
+                }
+
+                if (numOfFoundTokens == numOfTokens)
                 {
                     // hide
                     if (highlightEntry.hide)
