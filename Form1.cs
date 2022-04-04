@@ -35,7 +35,7 @@ namespace serialog
 
             upTime.Start();
         }
-        
+
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.F)
@@ -51,7 +51,7 @@ namespace serialog
             {
                 FindNextString(textBox_find.Text);
             }
-            
+
         }
 
         private string[] GetSortedPorts()
@@ -166,22 +166,22 @@ namespace serialog
             while (!_serialcomStopped)
             {
                 var line = "";
-                    
+
                 try
                 {
-                    line = _serialCom.ReadLine();                        
+                    line = _serialCom.ReadLine();
                 }
-                catch (TimeoutException) 
+                catch (TimeoutException)
                 {
-                }                    
+                }
 
                 if (line.Length > 0)
                 {
                     mtx.WaitOne();
                     _serialDataList.Add(line);
                     mtx.ReleaseMutex();
-                }                    
-            }            
+                }
+            }
         }
 
         private Color GetForeColor(string line)
@@ -211,7 +211,7 @@ namespace serialog
         }
 
         private ListViewItem CreateHighlightedListItem(string line)
-        {            
+        {
             ListViewItem item = new ListViewItem(line);
 
             foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightEntries.Items)
@@ -300,7 +300,7 @@ namespace serialog
                     listView1.Items.Add(dateTimeString);
                     _listviewSizeBytes += dateTimeString.Length + 1;
                 }
-            }            
+            }
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -328,14 +328,14 @@ namespace serialog
                 foreach (ListViewItem item in listView1.Items)
                 {
                     item.Selected = true;
-                }                
+                }
             }
             else if (e.KeyCode == Keys.Delete)
             {
                 if (listView1.SelectedItems.Count == 0)
                     return;
 
-                if (MessageBox.Show("Delete selected text? You can't get it back!", "Careful...", 
+                if (MessageBox.Show("Delete selected text? You can't get it back!", "Careful...",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     int idx = 0;
@@ -353,7 +353,7 @@ namespace serialog
                     }
                     catch (Exception ex)
                     { }
-                }                
+                }
             }
         }
 
@@ -369,12 +369,12 @@ namespace serialog
 
             // for instead of foreach so that we can control last item and not add "\n" at the end so that we 
             // do not introduce an extra item in list
-            for (int i = 0; i < items.Count-1; i++)
+            for (int i = 0; i < items.Count - 1; i++)
             {
                 writer.Write(items[i].Text + '\n');
             }
             writer.Write(items[items.Count - 1].Text);
-            
+
             writer.Flush();
             stream.Position = 0;
             return stream;
@@ -392,7 +392,7 @@ namespace serialog
                 writer.Write(items[i].Text + '\n');
             }
             writer.Write(items[items.Count - 1].Text);
-            
+
             writer.Flush();
             stream.Position = 0;
             return stream;
@@ -439,7 +439,7 @@ namespace serialog
 
                 string openFileInfo = "Opening file: " + filePath;
                 listView1.Items.Add(openFileInfo);
-                _listviewSizeBytes += openFileInfo.Length + 1;                
+                _listviewSizeBytes += openFileInfo.Length + 1;
 
                 //Read the contents of the file into a stream
                 var fileStream = openFileDialog1.OpenFile();
@@ -502,7 +502,7 @@ namespace serialog
 
             var selected = listView1.SelectedIndices;
             int searchFromIndex = 0;
-            
+
             if (selected.Count > 0)
                 searchFromIndex = selected[selected.Count - 1] + 1;
 
@@ -512,7 +512,7 @@ namespace serialog
                 {
                     //listView1.Select();
                     checkBox_follow.Checked = false;
-                    listView1.SelectedItems.Clear();                    
+                    listView1.SelectedItems.Clear();
                     listView1.Items[i].Selected = true;
                     listView1.Items[i].EnsureVisible();
                     break;
@@ -569,7 +569,7 @@ namespace serialog
             if (text == "")
                 return;
 
-            for (int i = listView1.Items.Count-1; i >= 0; i--)
+            for (int i = listView1.Items.Count - 1; i >= 0; i--)
             {
                 if (listView1.Items[i].Text.Contains(text))
                 {
@@ -598,15 +598,15 @@ namespace serialog
                         foundText = true;
                         listView1.Select();
                         listView1.SelectedItems.Clear();
-                    }                    
-                    listView1.Items[i].Selected = true;                    
+                    }
+                    listView1.Items[i].Selected = true;
                 }
             }
 
             if (foundText)
             {
                 checkBox_follow.Checked = false;
-                listView1.Items[listView1.SelectedIndices[listView1.SelectedIndices.Count-1]].EnsureVisible();
+                listView1.Items[listView1.SelectedIndices[listView1.SelectedIndices.Count - 1]].EnsureVisible();
             }
         }
 
@@ -712,7 +712,7 @@ namespace serialog
                 listView1.Font.Dispose();
                 listView1.Font = fontDialog1.Font;
 
-                if (MessageBox.Show("Reload highlight settings?", "Reload?", 
+                if (MessageBox.Show("Reload highlight settings?", "Reload?",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     ReloadListViewItems();

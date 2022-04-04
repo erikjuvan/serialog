@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Data;
 
 namespace serialog
 {
@@ -127,7 +119,7 @@ namespace serialog
 
             HighlightEntry highlightEntry = new HighlightEntry(textBox_string.Text,
                 fgcol, bgcol,
-                checkBox_ignorecase.Checked, checkBox_bold.Checked, 
+                checkBox_ignorecase.Checked, checkBox_bold.Checked,
                 checkBox_italic.Checked, checkBox_hide.Checked);
 
             // Check if same text already exists and ask to replace with existing - REMOVED IT!!!
@@ -201,7 +193,7 @@ namespace serialog
                 {
                     comboBox_fgcolor.SelectedIndex = comboBox_fgcolor.FindString(colorDialog1.Color.Name);
                 }
-            }                
+            }
         }
 
         private void button_bgcolor_Click(object sender, EventArgs e)
@@ -423,7 +415,7 @@ namespace serialog
                 return;
 
             string filename = ".settings/" + comboBox_preset.Text + ".highlight";
-            
+
             if (!System.IO.File.Exists(filename))
             {
                 MessageBox.Show("Preset '" + comboBox_preset.Text + "' doesn't exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -486,5 +478,5 @@ namespace serialog
         }
     }
 
-    
+
 }
