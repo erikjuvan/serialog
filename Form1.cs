@@ -189,32 +189,6 @@ namespace serialog
             }
         }
 
-        private Color GetForeColor(string line)
-        {
-            foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightEntries.Items)
-            {
-                if (line.Contains(highlightEntry.text))
-                {
-                    return highlightEntry.foreColor;
-                }
-            }
-
-            return Color.Black;
-        }
-
-        private Color GetBackColor(string line)
-        {
-            foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightEntries.Items)
-            {
-                if (line.Contains(highlightEntry.text))
-                {
-                    return highlightEntry.backColor;
-                }
-            }
-
-            return Color.White;
-        }
-
         private ListViewItem CreateHighlightedListItem(string line)
         {
             ListViewItem item = new ListViewItem(line);
