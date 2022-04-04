@@ -247,11 +247,11 @@ namespace serialog
 
                         // Font (bold, italic)
                         if (highlightEntry.bold && highlightEntry.italic)
-                            item.Font = new Font("Courier New", 10, FontStyle.Bold | FontStyle.Italic);
+                            item.Font = new Font(listView1.Font, FontStyle.Bold | FontStyle.Italic);
                         else if (highlightEntry.bold)
-                            item.Font = new Font("Courier New", 10, FontStyle.Bold);
+                            item.Font = new Font(listView1.Font, FontStyle.Bold);
                         else if (highlightEntry.italic)
-                            item.Font = new Font("Courier New", 10, FontStyle.Italic);
+                            item.Font = new Font(listView1.Font, FontStyle.Italic);
                     }
 
                     // This break implements that the higher entries have priority since it breaks as soon as it finds first match
@@ -456,7 +456,7 @@ namespace serialog
         {
             if (listView1.SelectedItems.Count == 0)
             {
-                MessageBox.Show("Please select lines to save.");
+                MessageBox.Show("Please select lines to save.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -654,7 +654,7 @@ namespace serialog
             _listviewSizeBytes = 0;
         }
 
-        private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ReloadListViewItems()
         {
             for (int i = 0; i < listView1.Items.Count; i++)
             {
@@ -662,6 +662,11 @@ namespace serialog
                 //listView1.Items.Insert(item.Index + 1, CreateHighlightedListItem(item.Text));
                 //listView1.Items.Remove(item);
             }
+        }
+
+        private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ReloadListViewItems();
         }
 
         private void timer_updatesysinfo_Tick(object sender, EventArgs e)
@@ -683,6 +688,31 @@ namespace serialog
 
             label_processinfo.Text = "Alive: " + ups +
                 " Running: " + runs + " Data: " + size + " B";
+        }
+
+        private void fontToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fontDialog1.ShowColor = true;
+            fontDialog1.ShowApply = true;
+            fontDialog1.ShowEffects = true;
+            fontDialog1.ShowHelp = true;
+
+            fontDialog1.MinSize = 6;
+            fontDialog1.MaxSize = 20;
+
+            fontDialog1.Font = listView1.Font;
+
+            if (fontDialog1.ShowDialog() == DialogResult.OK)
+            {
+                listView1.Font.Dispose();
+                listView1.Font = fontDialog1.Font;
+
+                if (MessageBox.Show("Reload highlight settings?", "Reload?", 
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    ReloadListViewItems();
+                }
+            }
         }
     }
 }

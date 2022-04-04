@@ -1,3 +1,1 @@
 - When deleting from the end it takes a really long time if list is long
-- izbira velikosti font-a in velikost okna v nekih fajl nastavitvah (.settings/serialog.conf)
-- add font menustrip in settings
