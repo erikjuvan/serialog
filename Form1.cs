@@ -679,8 +679,9 @@ namespace serialog
             _listviewSizeBytes = 0;
         }
 
-        private void ReloadListViewItems()
+        private void ReloadAllListViewItems()
         {
+            // must use for since foreach doesn't allow changes to its items
             for (int i = 0; i < listView1.Items.Count; i++)
             {
                 listView1.Items[i] = CreateHighlightedListItem(listView1.Items[i].Text);
@@ -689,9 +690,22 @@ namespace serialog
             }
         }
 
+        private void ReloadSelectedListViewItems(ListView.SelectedListViewItemCollection selectedItems)
+        {
+            foreach (ListViewItem item in selectedItems)
+            {
+                listView1.Items[item.Index] = CreateHighlightedListItem(item.Text);
+                //listView1.Items.Insert(item.Index + 1, CreateHighlightedListItem(item.Text));
+                //listView1.Items.Remove(item);
+            }
+        }
+
         private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ReloadListViewItems();
+            if (listView1.SelectedItems.Count == 0)
+                ReloadAllListViewItems();
+            else
+                ReloadSelectedListViewItems(listView1.SelectedItems);
         }
 
         private void timer_updatesysinfo_Tick(object sender, EventArgs e)
@@ -750,7 +764,7 @@ namespace serialog
                 if (MessageBox.Show("Reload highlight settings?", "Reload?",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    ReloadListViewItems();
+                    ReloadAllListViewItems();
                 }
             }
         }
