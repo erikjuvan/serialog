@@ -123,7 +123,7 @@ namespace serialog
 
                 if (addTimestampsToolStripMenuItem.Checked)
                 {
-                    string dateTimeString = "ACQUISITION STARTED " + DateTime.Now.ToString("dddd dd/MM/yyyy hh:mm:ss");
+                    string dateTimeString = "ACQUISITION STARTED " + DateTime.Now.ToString("dddd dd/MM/yyyy HH:mm:ss");
                     listView1.Items.Add(dateTimeString);
                     _listviewSizeBytes += dateTimeString.Length + 1;
                 }
@@ -308,7 +308,7 @@ namespace serialog
 
                 if (addTimestampsToolStripMenuItem.Checked)
                 {
-                    string dateTimeString = "ACQUISITION STOPPED " + DateTime.Now.ToString("dddd dd/MM/yyyy hh:mm:ss");
+                    string dateTimeString = "ACQUISITION STOPPED " + DateTime.Now.ToString("dddd dd/MM/yyyy HH:mm:ss");
                     listView1.Items.Add(dateTimeString);
                     _listviewSizeBytes += dateTimeString.Length + 1;
                 }
