@@ -276,13 +276,13 @@ namespace serialog
             {
                 for (int i = _serialDataListCountAddedToTable; i < _serialDataList.Count; i++)
                 {
-                    string line = _serialDataList[i];
-                    _listviewSizeBytes += line.Length + 1; // 1 for \n
+                    string line = _serialDataList[i];                    
 
                     ListViewItem item = CreateHighlightedListItem(line);
                     if (item != null)
                     {
                         listView1.Items.Add(item);
+                        _listviewSizeBytes += line.Length + 1; // 1 for \n
                     }
                 }
                 _serialDataListCountAddedToTable = _serialDataList.Count;
@@ -451,13 +451,13 @@ namespace serialog
                     form3.ProgressBarSetup(listOfLines.Count, 1);
                     for (int i = 0, size = listOfLines.Count; i < size; i++)
                     {
-                        var line = listOfLines[i];
-                        _listviewSizeBytes += line.Length + 1;
+                        var line = listOfLines[i];                        
 
                         ListViewItem item = CreateHighlightedListItem(line);
                         if (item != null)
                         {
                             listView1.Items.Add(item);
+                            _listviewSizeBytes += line.Length + 1;
                         }
 
                         form3.ProgressBarIncrement();
