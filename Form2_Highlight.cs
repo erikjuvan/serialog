@@ -45,6 +45,11 @@ namespace serialog
             else
                 item.SubItems.Add("");
 
+            if (highlightEntry.remove)
+                item.SubItems.Add("*");
+            else
+                item.SubItems.Add("");
+
             if (highlightEntry.bold && highlightEntry.italic)
                 item.Font = new Font("Courier New", 10, FontStyle.Bold | FontStyle.Italic);
             else if (highlightEntry.bold)
@@ -69,6 +74,11 @@ namespace serialog
                 item.SubItems.Add("");
 
             if (highlightEntry.hide)
+                item.SubItems.Add("*");
+            else
+                item.SubItems.Add("");
+
+            if (highlightEntry.remove)
                 item.SubItems.Add("*");
             else
                 item.SubItems.Add("");
@@ -113,28 +123,7 @@ namespace serialog
             HighlightEntry highlightEntry = new HighlightEntry(textBox_string.Text,
                 fgcol, bgcol,
                 checkBox_ignorecase.Checked, checkBox_bold.Checked,
-                checkBox_italic.Checked, checkBox_hide.Checked);
-
-            // Check if same text already exists and ask to replace with existing - REMOVED IT!!!
-            // I think its actually ok to have multiple same texts, since it anyways matches just the first one
-            /*
-            foreach (ListViewItem item in listView1.Items)
-            {
-                if (highlightEntry.text == item.Text)
-                {
-                    if (MessageBox.Show("Replace existing item with this one?", "Replace?", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        int index = item.Index;
-                        listView1.Items.RemoveAt(item.Index);
-                        InsertHighlightEntryToListView(ref listView1, index, highlightEntry);
-                        tempHighlightEntires.RemoveAt(index);
-                        tempHighlightEntires.Insert(index, highlightEntry);
-                    }
-
-                    return;
-                }
-            }
-            */
+                checkBox_italic.Checked, checkBox_hide.Checked, checkBox_remove.Checked);
 
             tempHighlightEntires.Add(highlightEntry);
             AddHighlightEntryToListView(ref listView1, highlightEntry);
@@ -334,6 +323,7 @@ namespace serialog
             checkBox_bold.Checked = entry.bold;
             checkBox_italic.Checked = entry.italic;
             checkBox_hide.Checked = entry.hide;
+            checkBox_remove.Checked = entry.remove;
         }
 
         private void Populate_comboBox_preset()
@@ -394,7 +384,8 @@ namespace serialog
                         item.ignoreCase.ToString() + "," +
                         item.bold.ToString() + "," +
                         item.italic.ToString() + "," +
-                        item.hide.ToString()
+                        item.hide.ToString() + "," +
+                        item.remove.ToString()
                         );
                 }
 
@@ -422,7 +413,7 @@ namespace serialog
             {
                 var items = line.Split(",");
 
-                if (items.Length != 7)
+                if (items.Length != 8)
                 {
                     MessageBox.Show("Error in preset '" + comboBox_preset.Text + "'!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -442,7 +433,8 @@ namespace serialog
                 HighlightEntry entry = new HighlightEntry(items[0],
                     fgCol, bgCol,
                     Convert.ToBoolean(items[3]), Convert.ToBoolean(items[4]),
-                    Convert.ToBoolean(items[5]), Convert.ToBoolean(items[6]));
+                    Convert.ToBoolean(items[5]), Convert.ToBoolean(items[6]),
+                    Convert.ToBoolean(items[7]));
 
                 tempHighlightEntires.Add(entry);
                 AddHighlightEntryToListView(ref listView1, entry);

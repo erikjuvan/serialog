@@ -216,54 +216,53 @@ namespace serialog
                     }
                 }
 
-                if (numOfFoundTokens == numOfTokens)
+                bool foundMatch = numOfFoundTokens == numOfTokens;
+                if (foundMatch)
                 {
+                    // remove
+                    if (highlightEntry.remove)
+                    {
+                        return null;
+                    }
+
                     // hide
                     if (highlightEntry.hide)
                     {
-                        if (alsoRemoveToolStripMenuItem.Checked)
-                        {
-                            return null;
-                        }
-                        else
-                        {
-                            item.ForeColor = Color.Transparent;
-                            item.BackColor = Color.Transparent;
-                        }
-                    }
-                    else
-                    {
-                        // foreColor
-                        item.ForeColor = highlightEntry.foreColor;
-                        // backColor
-                        item.BackColor = highlightEntry.backColor;
+                        item.ForeColor = Color.Transparent;
+                        item.BackColor = Color.Transparent;
 
-                        // Font (bold, italic)
-                        if (highlightEntry.bold && highlightEntry.italic)
-                            item.Font = new Font(listView1.Font, FontStyle.Bold | FontStyle.Italic);
-                        else if (highlightEntry.bold)
-                            item.Font = new Font(listView1.Font, FontStyle.Bold);
-                        else if (highlightEntry.italic)
-                            item.Font = new Font(listView1.Font, FontStyle.Italic);
+                        return item;
                     }
 
-                    // This break implements that the higher entries have priority since it breaks as soon as it finds first match
-                    break;
+                    // foreColor
+                    item.ForeColor = highlightEntry.foreColor;
+                    // backColor
+                    item.BackColor = highlightEntry.backColor;
+
+                    // Font (bold, italic)
+                    if (highlightEntry.bold && highlightEntry.italic)
+                        item.Font = new Font(listView1.Font, FontStyle.Bold | FontStyle.Italic);
+                    else if (highlightEntry.bold)
+                        item.Font = new Font(listView1.Font, FontStyle.Bold);
+                    else if (highlightEntry.italic)
+                        item.Font = new Font(listView1.Font, FontStyle.Italic);
+
+                    // This return implements that the higher entries have priority since it returns as soon as it finds first match
+                    return item;
+                }
+            }
+
+            // No match found
+            if (toolStripMenuItem_hiderest.Checked)
+            {
+                if (alsoRemoveToolStripMenuItem.Checked)
+                {
+                    return null;
                 }
                 else
                 {
-                    if (toolStripMenuItem_hiderest.Checked)
-                    {
-                        if (alsoRemoveToolStripMenuItem.Checked)
-                        {
-                            return null;
-                        }
-                        else
-                        {
-                            item.ForeColor = Color.Transparent;
-                            item.BackColor = Color.Transparent;
-                        }
-                    }
+                    item.ForeColor = Color.Transparent;
+                    item.BackColor = Color.Transparent;
                 }
             }
 

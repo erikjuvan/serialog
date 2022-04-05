@@ -9,6 +9,7 @@
         public bool bold = false;
         public bool italic = false;
         public bool hide = false;
+        public bool remove = false;
 
         public HighlightEntry(string text)
         {
@@ -55,12 +56,24 @@
             this.hide = hide;
         }
 
+        public HighlightEntry(string text, Color foreColor, Color backColor, bool ignoreCase, bool bold, bool italic, bool hide, bool remove)
+        {
+            this.text = text;
+            this.foreColor = foreColor;
+            this.backColor = backColor;
+            this.ignoreCase = ignoreCase;
+            this.bold = bold;
+            this.italic = italic;
+            this.hide = hide;
+            this.remove = remove;
+        }
+
         public HighlightEntry(ListViewItem listViewItem)
         {
             text = listViewItem.Text;
             foreColor = listViewItem.ForeColor;
             backColor = listViewItem.BackColor;
-            if (listViewItem.SubItems.Count == 2)
+            if (listViewItem.SubItems.Count == 3)
             {
                 if (listViewItem.SubItems[0].Text.Contains("*"))
                 {
@@ -70,6 +83,11 @@
                 if (listViewItem.SubItems[1].Text.Contains("*"))
                 {
                     hide = true;
+                }
+
+                if (listViewItem.SubItems[2].Text.Contains("*"))
+                {
+                    remove = true;
                 }
             }
             if (listViewItem.Font.Style == FontStyle.Bold)
