@@ -121,7 +121,7 @@ namespace serialog
                 comboBox_port.Enabled = false;
                 comboBox_baud.Enabled = false;
 
-                if (addTimestampsToolStripMenuItem.Checked)
+                if (addStartStopTimestampToolStripMenuItem.Checked)
                 {
                     string dateTimeString = "ACQUISITION STARTED " + DateTime.Now.ToString("dddd dd/MM/yyyy HH:mm:ss");
                     listView1.Items.Add(dateTimeString);
@@ -306,7 +306,7 @@ namespace serialog
             {
                 serialcomStoppedHandleEvent = false;
 
-                if (addTimestampsToolStripMenuItem.Checked)
+                if (addStartStopTimestampToolStripMenuItem.Checked)
                 {
                     string dateTimeString = "ACQUISITION STOPPED " + DateTime.Now.ToString("dddd dd/MM/yyyy HH:mm:ss");
                     listView1.Items.Add(dateTimeString);

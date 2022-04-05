@@ -46,7 +46,7 @@
             this.highlightsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_hiderest = new System.Windows.Forms.ToolStripMenuItem();
             this.alsoRemoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addTimestampsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addStartStopTimestampToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.button_run = new System.Windows.Forms.Button();
@@ -190,7 +190,7 @@
             this.highlightsToolStripMenuItem,
             this.toolStripMenuItem_hiderest,
             this.alsoRemoveToolStripMenuItem,
-            this.addTimestampsToolStripMenuItem,
+            this.addStartStopTimestampToolStripMenuItem,
             this.fontToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
@@ -200,34 +200,35 @@
             // 
             this.highlightsToolStripMenuItem.Name = "highlightsToolStripMenuItem";
             this.highlightsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
-            this.highlightsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.highlightsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.highlightsToolStripMenuItem.Text = "Highlighting...";
             this.highlightsToolStripMenuItem.Click += new System.EventHandler(this.highlightsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem_hiderest
             // 
             this.toolStripMenuItem_hiderest.Name = "toolStripMenuItem_hiderest";
-            this.toolStripMenuItem_hiderest.Size = new System.Drawing.Size(193, 22);
+            this.toolStripMenuItem_hiderest.Size = new System.Drawing.Size(214, 22);
             this.toolStripMenuItem_hiderest.Text = "Hide Unhighlighted";
             this.toolStripMenuItem_hiderest.Click += new System.EventHandler(this.toolStripMenuItem_hiderest_Click);
             // 
             // alsoRemoveToolStripMenuItem
             // 
             this.alsoRemoveToolStripMenuItem.Name = "alsoRemoveToolStripMenuItem";
-            this.alsoRemoveToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.alsoRemoveToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.alsoRemoveToolStripMenuItem.Text = "    ↪ Also Remove";
             this.alsoRemoveToolStripMenuItem.Click += new System.EventHandler(this.alsoRemoveToolStripMenuItem_Click);
             // 
-            // addTimestampsToolStripMenuItem
+            // addStartStopTimestampToolStripMenuItem
             // 
-            this.addTimestampsToolStripMenuItem.Name = "addTimestampsToolStripMenuItem";
-            this.addTimestampsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.addTimestampsToolStripMenuItem.Text = "Add Timestamps";
+            this.addStartStopTimestampToolStripMenuItem.CheckOnClick = true;
+            this.addStartStopTimestampToolStripMenuItem.Name = "addStartStopTimestampToolStripMenuItem";
+            this.addStartStopTimestampToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.addStartStopTimestampToolStripMenuItem.Text = "Add Start/Stop Timestamp";
             // 
             // fontToolStripMenuItem
             // 
             this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
-            this.fontToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.fontToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.fontToolStripMenuItem.Text = "Font...";
             this.fontToolStripMenuItem.Click += new System.EventHandler(this.fontToolStripMenuItem_Click);
             // 
@@ -448,7 +449,7 @@
         private ToolStripMenuItem reloadToolStripMenuItem;
         private Label label_processinfo;
         private System.Windows.Forms.Timer timer_updatesysinfo;
-        private ToolStripMenuItem addTimestampsToolStripMenuItem;
+        private ToolStripMenuItem addStartStopTimestampToolStripMenuItem;
         private FontDialog fontDialog1;
         private ToolStripMenuItem fontToolStripMenuItem;
         private ToolStripMenuItem alsoRemoveToolStripMenuItem;
