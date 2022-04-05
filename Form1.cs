@@ -288,7 +288,12 @@ namespace serialog
                 _serialDataListCountAddedToTable = _serialDataList.Count;
 
                 if (checkBox_follow.Checked)
-                    listView1.Items[listView1.Items.Count - 1].EnsureVisible();
+                {
+                    if (listView1.Items.Count > 0)
+                    {
+                        listView1.Items[listView1.Items.Count - 1].EnsureVisible();
+                    }
+                }
             }
             mtx.ReleaseMutex();
         }
