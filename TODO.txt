@@ -1,2 +1,1 @@
 - reloading a long list takes a long time, mogoce vedno highlight-ej samo vidne item-e
-- add option to remove (not just hide) unmatched items

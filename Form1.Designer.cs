@@ -45,6 +45,7 @@
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.highlightsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_hiderest = new System.Windows.Forms.ToolStripMenuItem();
+            this.alsoRemoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addTimestampsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
@@ -188,6 +189,7 @@
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.highlightsToolStripMenuItem,
             this.toolStripMenuItem_hiderest,
+            this.alsoRemoveToolStripMenuItem,
             this.addTimestampsToolStripMenuItem,
             this.fontToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
@@ -204,14 +206,20 @@
             // 
             // toolStripMenuItem_hiderest
             // 
-            this.toolStripMenuItem_hiderest.CheckOnClick = true;
             this.toolStripMenuItem_hiderest.Name = "toolStripMenuItem_hiderest";
             this.toolStripMenuItem_hiderest.Size = new System.Drawing.Size(193, 22);
             this.toolStripMenuItem_hiderest.Text = "Hide Unhighlighted";
+            this.toolStripMenuItem_hiderest.Click += new System.EventHandler(this.toolStripMenuItem_hiderest_Click);
+            // 
+            // alsoRemoveToolStripMenuItem
+            // 
+            this.alsoRemoveToolStripMenuItem.Name = "alsoRemoveToolStripMenuItem";
+            this.alsoRemoveToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.alsoRemoveToolStripMenuItem.Text = "    ↪ Also Remove";
+            this.alsoRemoveToolStripMenuItem.Click += new System.EventHandler(this.alsoRemoveToolStripMenuItem_Click);
             // 
             // addTimestampsToolStripMenuItem
             // 
-            this.addTimestampsToolStripMenuItem.CheckOnClick = true;
             this.addTimestampsToolStripMenuItem.Name = "addTimestampsToolStripMenuItem";
             this.addTimestampsToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.addTimestampsToolStripMenuItem.Text = "Add Timestamps";
@@ -443,5 +451,6 @@
         private ToolStripMenuItem addTimestampsToolStripMenuItem;
         private FontDialog fontDialog1;
         private ToolStripMenuItem fontToolStripMenuItem;
+        private ToolStripMenuItem alsoRemoveToolStripMenuItem;
     }
 }

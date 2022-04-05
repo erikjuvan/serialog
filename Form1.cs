@@ -221,8 +221,15 @@ namespace serialog
                     // hide
                     if (highlightEntry.hide)
                     {
-                        item.ForeColor = Color.Transparent;
-                        item.BackColor = Color.Transparent;
+                        if (alsoRemoveToolStripMenuItem.Checked)
+                        {
+                            return null;
+                        }
+                        else
+                        {
+                            item.ForeColor = Color.Transparent;
+                            item.BackColor = Color.Transparent;
+                        }
                     }
                     else
                     {
@@ -247,8 +254,15 @@ namespace serialog
                 {
                     if (toolStripMenuItem_hiderest.Checked)
                     {
-                        item.ForeColor = Color.Transparent;
-                        item.BackColor = Color.Transparent;
+                        if (alsoRemoveToolStripMenuItem.Checked)
+                        {
+                            return null;
+                        }
+                        else
+                        {
+                            item.ForeColor = Color.Transparent;
+                            item.BackColor = Color.Transparent;
+                        }
                     }
                 }
             }
@@ -266,7 +280,11 @@ namespace serialog
                     string line = _serialDataList[i];
                     _listviewSizeBytes += line.Length + 1; // 1 for \n
 
-                    listView1.Items.Add(CreateHighlightedListItem(line));
+                    ListViewItem item = CreateHighlightedListItem(line);
+                    if (item != null)
+                    {
+                        listView1.Items.Add(item);
+                    }
                 }
                 _serialDataListCountAddedToTable = _serialDataList.Count;
 
@@ -431,7 +449,13 @@ namespace serialog
                     {
                         var line = listOfLines[i];
                         _listviewSizeBytes += line.Length + 1;
-                        listView1.Items.Add(CreateHighlightedListItem(line));
+
+                        ListViewItem item = CreateHighlightedListItem(line);
+                        if (item != null)
+                        {
+                            listView1.Items.Add(item);
+                        }
+
                         form3.ProgressBarIncrement();
                     }
 
@@ -702,7 +726,17 @@ namespace serialog
             // must use for since foreach doesn't allow changes to its items
             for (int i = 0; i < listView1.Items.Count; i++)
             {
-                listView1.Items[i] = CreateHighlightedListItem(listView1.Items[i].Text);
+                var item = CreateHighlightedListItem(listView1.Items[i].Text);
+                if (item == null)
+                {
+                    listView1.Items[i].Remove();
+                    i--;
+                }
+                else
+                {
+                    listView1.Items[i] = item;
+                }
+
                 form3.ProgressBarIncrement();
                 //listView1.Items.Insert(item.Index + 1, CreateHighlightedListItem(item.Text));
                 //listView1.Items.Remove(item);
@@ -724,7 +758,15 @@ namespace serialog
             Thread.Sleep(100);
             foreach (ListViewItem item in selectedItems)
             {
-                listView1.Items[item.Index] = CreateHighlightedListItem(item.Text);
+                var highItem = CreateHighlightedListItem(item.Text);
+                if (highItem == null)
+                {
+                    item.Remove();
+                }
+                else
+                {
+                    listView1.Items[item.Index] = highItem;
+                }
                 form3.ProgressBarIncrement();
                 //listView1.Items.Insert(item.Index + 1, CreateHighlightedListItem(item.Text));
                 //listView1.Items.Remove(item);
@@ -819,6 +861,20 @@ namespace serialog
                     FindNextString(text);
                 }
             }
+        }
+
+        private void toolStripMenuItem_hiderest_Click(object sender, EventArgs e)
+        {
+            toolStripMenuItem_hiderest.Checked = !toolStripMenuItem_hiderest.Checked;
+            if (!toolStripMenuItem_hiderest.Checked)
+                alsoRemoveToolStripMenuItem.Checked = false;
+        }
+
+        private void alsoRemoveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            alsoRemoveToolStripMenuItem.Checked = !alsoRemoveToolStripMenuItem.Checked;
+            if (alsoRemoveToolStripMenuItem.Checked)
+                toolStripMenuItem_hiderest.Checked = true;
         }
     }
 }
