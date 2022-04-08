@@ -206,20 +206,48 @@ namespace serialog
                     highlightText = highlightText.ToLower();
                 }
 
-                // AND &
-                var tokens = highlightText.Split("&");
-                int numOfTokens = tokens.Length;
-                int numOfFoundTokens = 0;
+                bool foundMatch = false;
 
-                foreach (var token in tokens)
+                if (line.Contains(highlightText))
                 {
-                    if (line.Contains(token))
+                    foundMatch = true;
+                }
+                // AND &
+                else if (highlightText.Contains("&"))
+                {
+                    var tokens = highlightText.Split("&");
+                    int numOfTokens = tokens.Length;
+
+                    int numOfFoundTokens = 0;
+
+                    foreach (var token in tokens)
                     {
-                        numOfFoundTokens++;
+                        if (line.Contains(token))
+                        {
+                            numOfFoundTokens++;
+                        }
+                    }
+
+                    foundMatch = numOfFoundTokens == numOfTokens;
+                }
+                // OR |
+                else if (highlightText.Contains("|"))
+                {
+                    var tokens = highlightText.Split("|");
+                    int numOfTokens = tokens.Length;
+
+                    int numOfFoundTokens = 0;
+
+                    foreach (var token in tokens)
+                    {
+                        if (line.Contains(token))
+                        {
+                            foundMatch = true;
+                            break;
+                        }
                     }
                 }
 
-                bool foundMatch = numOfFoundTokens == numOfTokens;
                 if (foundMatch)
                 {
                     // remove
