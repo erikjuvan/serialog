@@ -2,6 +2,7 @@
 {
     public class HighlightEntry
     {
+        public bool enabled = true;
         public string text;
         public Color foreColor = Color.Black;
         public Color backColor = Color.White;
@@ -13,21 +14,31 @@
 
         public HighlightEntry(string text)
         {
+            this.enabled = true;
             this.text = text;
         }
-        public HighlightEntry(string text, Color foreColor)
+
+        public HighlightEntry(bool enabled, string text)
         {
+            this.enabled = enabled;
+            this.text = text;
+        }
+        public HighlightEntry(bool enabled, string text, Color foreColor)
+        {
+            this.enabled = enabled;
             this.text = text;
             this.foreColor = foreColor;
         }
-        public HighlightEntry(string text, Color foreColor, Color backColor)
+        public HighlightEntry(bool enabled, string text, Color foreColor, Color backColor)
         {
+            this.enabled = enabled;
             this.text = text;
             this.foreColor = foreColor;
             this.backColor = backColor;
         }
-        public HighlightEntry(string text, Color foreColor, Color backColor, bool ignoreCase, bool bold)
+        public HighlightEntry(bool enabled, string text, Color foreColor, Color backColor, bool ignoreCase, bool bold)
         {
+            this.enabled = enabled;
             this.text = text;
             this.foreColor = foreColor;
             this.backColor = backColor;
@@ -35,8 +46,9 @@
             this.ignoreCase = ignoreCase;
         }
 
-        public HighlightEntry(string text, Color foreColor, Color backColor, bool ignoreCase, bool bold, bool hide)
+        public HighlightEntry(bool enabled, string text, Color foreColor, Color backColor, bool ignoreCase, bool bold, bool hide)
         {
+            this.enabled = enabled;
             this.text = text;
             this.foreColor = foreColor;
             this.backColor = backColor;
@@ -45,8 +57,9 @@
             this.hide = hide;
         }
 
-        public HighlightEntry(string text, Color foreColor, Color backColor, bool ignoreCase, bool bold, bool italic, bool hide)
+        public HighlightEntry(bool enabled, string text, Color foreColor, Color backColor, bool ignoreCase, bool bold, bool italic, bool hide)
         {
+            this.enabled = enabled;
             this.text = text;
             this.foreColor = foreColor;
             this.backColor = backColor;
@@ -56,8 +69,9 @@
             this.hide = hide;
         }
 
-        public HighlightEntry(string text, Color foreColor, Color backColor, bool ignoreCase, bool bold, bool italic, bool hide, bool remove)
+        public HighlightEntry(bool enabled, string text, Color foreColor, Color backColor, bool ignoreCase, bool bold, bool italic, bool hide, bool remove)
         {
+            this.enabled = enabled;
             this.text = text;
             this.foreColor = foreColor;
             this.backColor = backColor;
@@ -70,6 +84,7 @@
 
         public HighlightEntry(ListViewItem listViewItem)
         {
+            enabled = listViewItem.Checked;
             text = listViewItem.Text;
             foreColor = listViewItem.ForeColor;
             backColor = listViewItem.BackColor;

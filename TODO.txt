@@ -1,1 +1,3 @@
-- reloading a long list takes a long time, mogoce vedno highlight-ej samo vidne item-e
+- reloading a long list takes a long time, mogoce vedno highlight-ej samo vidne item-e (virtualization)
+- speed up (readall instead of readline)
+- edit highlight item entry

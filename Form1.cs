@@ -193,6 +193,9 @@ namespace serialog
 
             foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightEntries.Items)
             {
+                if (!highlightEntry.enabled)
+                    continue;
+
                 // text
                 string highlightText = highlightEntry.text;
 

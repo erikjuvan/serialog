@@ -31,6 +31,7 @@ namespace serialog
         private void AddHighlightEntryToListView(ref ListView listView, HighlightEntry highlightEntry)
         {
             ListViewItem item = new ListViewItem();
+            item.Checked = highlightEntry.enabled;
             item.Text = highlightEntry.text;
             item.ForeColor = highlightEntry.foreColor;
             item.BackColor = highlightEntry.backColor;
@@ -64,6 +65,7 @@ namespace serialog
         private void InsertHighlightEntryToListView(ref ListView listView, int index, HighlightEntry highlightEntry)
         {
             ListViewItem item = new ListViewItem();
+            item.Checked = highlightEntry.enabled;
             item.Text = highlightEntry.text;
             item.ForeColor = highlightEntry.foreColor;
             item.BackColor = highlightEntry.backColor;
@@ -120,8 +122,8 @@ namespace serialog
             else
                 fgcol = Color.FromName(comboBox_fgcolor.Text);
 
-            HighlightEntry highlightEntry = new HighlightEntry(textBox_string.Text,
-                fgcol, bgcol,
+            HighlightEntry highlightEntry = new HighlightEntry(
+                true, textBox_string.Text, fgcol, bgcol,
                 checkBox_ignorecase.Checked, checkBox_bold.Checked,
                 checkBox_italic.Checked, checkBox_hide.Checked, checkBox_remove.Checked);
 
@@ -378,7 +380,9 @@ namespace serialog
                     public bool italic = false;
                     public bool hide = false;
                     */
-                    items.Add(item.text + "," +
+                    items.Add(
+                        item.enabled.ToString() + "," +
+                        item.text + "," +
                         item.foreColor.ToString() + "," +
                         item.backColor.ToString() + "," +
                         item.ignoreCase.ToString() + "," +
@@ -413,28 +417,27 @@ namespace serialog
             {
                 var items = line.Split(",");
 
-                if (items.Length != 8)
+                if (items.Length != 9)
                 {
                     MessageBox.Show("Error in preset '" + comboBox_preset.Text + "'!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
                 // Extract color from string that is more than just color name: "Color [Black]"
-                string fgColText = items[1];
+                string fgColText = items[2];
                 int from = fgColText.IndexOf("[") + "[".Length;
                 int to = fgColText.IndexOf("]");
                 Color fgCol = Color.FromName(fgColText.Substring(from, to - from));
 
-                string bgColText = items[2];
+                string bgColText = items[3];
                 from = bgColText.IndexOf("[") + "[".Length;
                 to = bgColText.IndexOf("]");
                 Color bgCol = Color.FromName(bgColText.Substring(from, to - from));
 
-                HighlightEntry entry = new HighlightEntry(items[0],
-                    fgCol, bgCol,
-                    Convert.ToBoolean(items[3]), Convert.ToBoolean(items[4]),
-                    Convert.ToBoolean(items[5]), Convert.ToBoolean(items[6]),
-                    Convert.ToBoolean(items[7]));
+                HighlightEntry entry = new HighlightEntry(Convert.ToBoolean(items[0]), items[1], fgCol, bgCol,
+                    Convert.ToBoolean(items[4]), Convert.ToBoolean(items[5]),
+                    Convert.ToBoolean(items[6]), Convert.ToBoolean(items[7]),
+                    Convert.ToBoolean(items[8]));
 
                 tempHighlightEntires.Add(entry);
                 AddHighlightEntryToListView(ref listView1, entry);
@@ -460,6 +463,11 @@ namespace serialog
         private void comboBox_preset_DropDown(object sender, EventArgs e)
         {
             Populate_comboBox_preset();
+        }
+
+        private void listView1_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            tempHighlightEntires.Items[e.Item.Index].enabled = e.Item.Checked;
         }
     }
 
