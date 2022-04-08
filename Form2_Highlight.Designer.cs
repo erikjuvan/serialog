@@ -104,7 +104,7 @@
             this.listView1.View = System.Windows.Forms.View.Details;
             this.listView1.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listView1_ItemChecked);
             this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
-            this.listView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseDoubleClick);
+            this.listView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
             // 
             // columnHeader1
             // 
@@ -247,6 +247,7 @@
             this.textBox_string.Name = "textBox_string";
             this.textBox_string.Size = new System.Drawing.Size(360, 23);
             this.textBox_string.TabIndex = 1;
+            this.textBox_string.TextChanged += new System.EventHandler(this.textBox_string_TextChanged);
             this.textBox_string.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_string_KeyDown);
             // 
             // checkBox_ignorecase
@@ -259,6 +260,7 @@
             this.checkBox_ignorecase.TabIndex = 4;
             this.checkBox_ignorecase.Text = "Ignore Case";
             this.checkBox_ignorecase.UseVisualStyleBackColor = true;
+            this.checkBox_ignorecase.CheckedChanged += new System.EventHandler(this.checkBox_ignorecase_CheckedChanged);
             // 
             // checkBox_bold
             // 
@@ -270,6 +272,7 @@
             this.checkBox_bold.TabIndex = 5;
             this.checkBox_bold.Text = "Bold";
             this.checkBox_bold.UseVisualStyleBackColor = true;
+            this.checkBox_bold.CheckedChanged += new System.EventHandler(this.checkBox_bold_CheckedChanged);
             // 
             // button_bgcolor
             // 
@@ -338,6 +341,7 @@
             this.checkBox_hide.TabIndex = 7;
             this.checkBox_hide.Text = "Hide";
             this.checkBox_hide.UseVisualStyleBackColor = true;
+            this.checkBox_hide.CheckedChanged += new System.EventHandler(this.checkBox_hide_CheckedChanged);
             // 
             // checkBox_italic
             // 
@@ -349,6 +353,7 @@
             this.checkBox_italic.TabIndex = 6;
             this.checkBox_italic.Text = "Italic";
             this.checkBox_italic.UseVisualStyleBackColor = true;
+            this.checkBox_italic.CheckedChanged += new System.EventHandler(this.checkBox_italic_CheckedChanged);
             // 
             // button_apply
             // 
@@ -382,6 +387,7 @@
             this.checkBox_remove.TabIndex = 26;
             this.checkBox_remove.Text = "Remove";
             this.checkBox_remove.UseVisualStyleBackColor = true;
+            this.checkBox_remove.CheckedChanged += new System.EventHandler(this.checkBox_remove_CheckedChanged);
             // 
             // Form2_Highlight
             // 
