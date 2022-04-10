@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Linq;
 
 namespace serialog
 {
@@ -10,7 +11,8 @@ namespace serialog
         private static List<string> _serialDataList = new List<string>();
         private static int _listviewSizeBytes = 0;
         private int _serialDataListCountAddedToTable = 0;
-        private static Mutex mtx = new Mutex();
+        private static Mutex mtx1 = new Mutex();
+        private static Mutex mtx2 = new Mutex();
         private Thread serialReadThread = null;
 
         private Stopwatch runTime = new Stopwatch();
@@ -166,23 +168,35 @@ namespace serialog
 
         private static void SerialRead()
         {
+            string serialString = new string("");
             while (!_serialcomStopped)
             {
-                var line = "";
-
                 try
                 {
-                    line = _serialCom.ReadLine();
+                    serialString += _serialCom.ReadExisting();
                 }
                 catch (TimeoutException)
                 {
                 }
 
-                if (line.Length > 0)
+                if (serialString.Length > 0)
                 {
-                    mtx.WaitOne();
-                    _serialDataList.Add(line);
-                    mtx.ReleaseMutex();
+                    int idx = serialString.LastIndexOf('\n');
+                    if (idx >= 0)
+                    {
+                        string subStr = serialString.Substring(0, idx);
+                        if (idx == serialString.Length - 1) // newline at the end of string
+                            serialString = "";
+                        else
+                        {
+                            serialString = serialString.Substring(idx + 1, serialString.Length - idx - 1);
+                        }                        
+                        _listviewSizeBytes += subStr.Length;
+                        var list = subStr.Split("\n").ToList();          
+                        mtx1.WaitOne();
+                        _serialDataList.AddRange(list);
+                        mtx1.ReleaseMutex();
+                    }                    
                 }
             }
         }
@@ -302,7 +316,7 @@ namespace serialog
 
         private void AddEntry()
         {
-            mtx.WaitOne();
+            mtx2.WaitOne();
             if (_serialDataListCountAddedToTable < _serialDataList.Count)
             {
                 for (int i = _serialDataListCountAddedToTable; i < _serialDataList.Count; i++)
@@ -326,7 +340,7 @@ namespace serialog
                     }
                 }
             }
-            mtx.ReleaseMutex();
+            mtx2.ReleaseMutex();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -743,10 +757,16 @@ namespace serialog
             }
         }
 
-        private void clearAllToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            mtx1.WaitOne();
+            mtx2.WaitOne();
+            _serialDataList.Clear();
+            _serialDataListCountAddedToTable = 0;
             listView1.Items.Clear();
             _listviewSizeBytes = 0;
+            mtx2.ReleaseMutex();
+            mtx1.ReleaseMutex();
         }
 
         private void ReloadAllListViewItems()
