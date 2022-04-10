@@ -31,6 +31,7 @@ namespace serialog
         private void AddHighlightEntryToListView(ref ListView listView, HighlightEntry highlightEntry)
         {
             ListViewItem item = new ListViewItem();
+            item.Checked = highlightEntry.enabled;
             item.Text = highlightEntry.text;
             item.ForeColor = highlightEntry.foreColor;
             item.BackColor = highlightEntry.backColor;
@@ -41,6 +42,11 @@ namespace serialog
                 item.SubItems.Add("");
 
             if (highlightEntry.hide)
+                item.SubItems.Add("*");
+            else
+                item.SubItems.Add("");
+
+            if (highlightEntry.remove)
                 item.SubItems.Add("*");
             else
                 item.SubItems.Add("");
@@ -59,6 +65,7 @@ namespace serialog
         private void InsertHighlightEntryToListView(ref ListView listView, int index, HighlightEntry highlightEntry)
         {
             ListViewItem item = new ListViewItem();
+            item.Checked = highlightEntry.enabled;
             item.Text = highlightEntry.text;
             item.ForeColor = highlightEntry.foreColor;
             item.BackColor = highlightEntry.backColor;
@@ -69,6 +76,11 @@ namespace serialog
                 item.SubItems.Add("");
 
             if (highlightEntry.hide)
+                item.SubItems.Add("*");
+            else
+                item.SubItems.Add("");
+
+            if (highlightEntry.remove)
                 item.SubItems.Add("*");
             else
                 item.SubItems.Add("");
@@ -92,13 +104,6 @@ namespace serialog
             }
         }
 
-        static public void InitializeHighlightSettings()
-        {
-            // Init highlightSettings from a file saved somewhere
-
-
-        }
-
         private void button_add_Click(object sender, EventArgs e)
         {
             // No text in textbox
@@ -117,31 +122,10 @@ namespace serialog
             else
                 fgcol = Color.FromName(comboBox_fgcolor.Text);
 
-            HighlightEntry highlightEntry = new HighlightEntry(textBox_string.Text,
-                fgcol, bgcol,
+            HighlightEntry highlightEntry = new HighlightEntry(
+                true, textBox_string.Text, fgcol, bgcol,
                 checkBox_ignorecase.Checked, checkBox_bold.Checked,
-                checkBox_italic.Checked, checkBox_hide.Checked);
-
-            // Check if same text already exists and ask to replace with existing - REMOVED IT!!!
-            // I think its actually ok to have multiple same texts, since it anyways matches just the first one
-            /*
-            foreach (ListViewItem item in listView1.Items)
-            {
-                if (highlightEntry.text == item.Text)
-                {
-                    if (MessageBox.Show("Replace existing item with this one?", "Replace?", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        int index = item.Index;
-                        listView1.Items.RemoveAt(item.Index);
-                        InsertHighlightEntryToListView(ref listView1, index, highlightEntry);
-                        tempHighlightEntires.RemoveAt(index);
-                        tempHighlightEntires.Insert(index, highlightEntry);
-                    }
-
-                    return;
-                }
-            }
-            */
+                checkBox_italic.Checked, checkBox_hide.Checked, checkBox_remove.Checked);
 
             tempHighlightEntires.Add(highlightEntry);
             AddHighlightEntryToListView(ref listView1, highlightEntry);
@@ -308,39 +292,53 @@ namespace serialog
 
         private void comboBox_fgcolor_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
             {
-                button_add_Click(sender, e);
+                if (listView1.SelectedItems.Count <= 0)
+                {
+                    return;
+                }
+
+                Color fgcol;
+                if (comboBox_fgcolor.Text.Length == 0)
+                    fgcol = Color.Black;
+                else
+                    fgcol = Color.FromName(comboBox_fgcolor.Text);
+
+                foreach (ListViewItem item in listView1.SelectedItems)
+                {
+                    item.ForeColor = fgcol;
+                    tempHighlightEntires.Items[item.Index].foreColor = fgcol;
+                }
             }
         }
 
         private void comboBox_bgcolor_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
             {
-                button_add_Click(sender, e);
+                if (listView1.SelectedItems.Count <= 0)
+                {
+                    return;
+                }
+
+                Color bgcol;
+                if (comboBox_bgcolor.Text.Length == 0)
+                    bgcol = Color.White;
+                else
+                    bgcol = Color.FromName(comboBox_bgcolor.Text);
+
+                foreach (ListViewItem item in listView1.SelectedItems)
+                {
+                    item.BackColor = bgcol;
+                    tempHighlightEntires.Items[item.Index].backColor = bgcol;
+                }
             }
         }
 
         private void button_apply_Click(object sender, EventArgs e)
         {
             highlightEntries = new HighlightEntires(tempHighlightEntires);
-        }
-
-        private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (listView1.SelectedItems.Count != 1)
-                return;
-
-            var entry = tempHighlightEntires.Items[listView1.SelectedIndices[0]];
-
-            textBox_string.Text = entry.text;
-            comboBox_fgcolor.Text = entry.foreColor.Name;
-            comboBox_bgcolor.Text = entry.backColor.Name;
-            checkBox_ignorecase.Checked = entry.ignoreCase;
-            checkBox_bold.Checked = entry.bold;
-            checkBox_italic.Checked = entry.italic;
-            checkBox_hide.Checked = entry.hide;
         }
 
         private void Populate_comboBox_preset()
@@ -395,13 +393,16 @@ namespace serialog
                     public bool italic = false;
                     public bool hide = false;
                     */
-                    items.Add(item.text + "," +
+                    items.Add(
+                        item.enabled.ToString() + "," +
+                        item.text + "," +
                         item.foreColor.ToString() + "," +
                         item.backColor.ToString() + "," +
                         item.ignoreCase.ToString() + "," +
                         item.bold.ToString() + "," +
                         item.italic.ToString() + "," +
-                        item.hide.ToString()
+                        item.hide.ToString() + "," +
+                        item.remove.ToString()
                         );
                 }
 
@@ -429,27 +430,27 @@ namespace serialog
             {
                 var items = line.Split(",");
 
-                if (items.Length != 7)
+                if (items.Length != 9)
                 {
                     MessageBox.Show("Error in preset '" + comboBox_preset.Text + "'!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
                 // Extract color from string that is more than just color name: "Color [Black]"
-                string fgColText = items[1];
+                string fgColText = items[2];
                 int from = fgColText.IndexOf("[") + "[".Length;
                 int to = fgColText.IndexOf("]");
                 Color fgCol = Color.FromName(fgColText.Substring(from, to - from));
 
-                string bgColText = items[2];
+                string bgColText = items[3];
                 from = bgColText.IndexOf("[") + "[".Length;
                 to = bgColText.IndexOf("]");
                 Color bgCol = Color.FromName(bgColText.Substring(from, to - from));
 
-                HighlightEntry entry = new HighlightEntry(items[0],
-                    fgCol, bgCol,
-                    Convert.ToBoolean(items[3]), Convert.ToBoolean(items[4]),
-                    Convert.ToBoolean(items[5]), Convert.ToBoolean(items[6]));
+                HighlightEntry entry = new HighlightEntry(Convert.ToBoolean(items[0]), items[1], fgCol, bgCol,
+                    Convert.ToBoolean(items[4]), Convert.ToBoolean(items[5]),
+                    Convert.ToBoolean(items[6]), Convert.ToBoolean(items[7]),
+                    Convert.ToBoolean(items[8]));
 
                 tempHighlightEntires.Add(entry);
                 AddHighlightEntryToListView(ref listView1, entry);
@@ -475,6 +476,152 @@ namespace serialog
         private void comboBox_preset_DropDown(object sender, EventArgs e)
         {
             Populate_comboBox_preset();
+        }
+
+        private void listView1_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            tempHighlightEntires.Items[e.Item.Index].enabled = e.Item.Checked;
+        }
+
+        private void listView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (listView1.SelectedItems.Count != 1)
+                return;
+
+            var entry = tempHighlightEntires.Items[listView1.SelectedIndices[0]];
+
+            textBox_string.Text = entry.text;
+            comboBox_fgcolor.Text = entry.foreColor.Name;
+            comboBox_bgcolor.Text = entry.backColor.Name;
+            checkBox_ignorecase.Checked = entry.ignoreCase;
+            checkBox_bold.Checked = entry.bold;
+            checkBox_italic.Checked = entry.italic;
+            checkBox_hide.Checked = entry.hide;
+            checkBox_remove.Checked = entry.remove;
+        }
+
+        private void textBox_string_TextChanged(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count <= 0)
+            {
+                return;
+            }
+
+            foreach (ListViewItem item in listView1.SelectedItems)
+            {
+                item.Text = textBox_string.Text;
+                tempHighlightEntires.Items[item.Index].text = item.Text;
+            }
+        }
+
+        private void checkBox_bold_CheckedChanged(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count <= 0)
+            {
+                return;
+            }
+
+            foreach (ListViewItem item in listView1.SelectedItems)
+            {
+                if (checkBox_bold.Checked)
+                {
+                    item.Font = new Font(listView1.Font, FontStyle.Bold);
+                    tempHighlightEntires.Items[item.Index].bold = true;
+                }                
+                else
+                {
+                    item.Font = new Font(listView1.Font, FontStyle.Regular);
+                    tempHighlightEntires.Items[item.Index].bold = false;
+                }
+            }
+        }
+
+        private void checkBox_italic_CheckedChanged(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count <= 0)
+            {
+                return;
+            }
+
+            foreach (ListViewItem item in listView1.SelectedItems)
+            {
+                if (checkBox_italic.Checked)
+                {
+                    item.Font = new Font(listView1.Font, FontStyle.Italic);
+                    tempHighlightEntires.Items[item.Index].italic = true;
+                }
+                else
+                {
+                    item.Font = new Font(listView1.Font, FontStyle.Regular);
+                    tempHighlightEntires.Items[item.Index].italic = false;
+                }
+            }
+        }
+
+        private void checkBox_ignorecase_CheckedChanged(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count <= 0)
+            {
+                return;
+            }
+
+            foreach (ListViewItem item in listView1.SelectedItems)
+            {
+                if (checkBox_ignorecase.Checked)
+                {
+                    item.SubItems[1].Text = "*";
+                    tempHighlightEntires.Items[item.Index].ignoreCase = true;
+                }
+                else
+                {
+                    item.SubItems[1].Text = "";
+                    tempHighlightEntires.Items[item.Index].ignoreCase = false;
+                }
+            }
+        }
+
+        private void checkBox_hide_CheckedChanged(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count <= 0)
+            {
+                return;
+            }
+
+            foreach (ListViewItem item in listView1.SelectedItems)
+            {
+                if (checkBox_hide.Checked)
+                {
+                    item.SubItems[2].Text = "*";
+                    tempHighlightEntires.Items[item.Index].hide = true;
+                }
+                else
+                {
+                    item.SubItems[2].Text = "";
+                    tempHighlightEntires.Items[item.Index].hide = false;
+                }
+            }
+        }
+
+        private void checkBox_remove_CheckedChanged(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count <= 0)
+            {
+                return;
+            }
+
+            foreach (ListViewItem item in listView1.SelectedItems)
+            {
+                if (checkBox_remove.Checked)
+                {
+                    item.SubItems[3].Text = "*";
+                    tempHighlightEntires.Items[item.Index].remove = true;
+                }
+                else
+                {
+                    item.SubItems[3].Text = "";
+                    tempHighlightEntires.Items[item.Index].remove = false;
+                }
+            }
         }
     }
 

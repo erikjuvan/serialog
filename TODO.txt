@@ -1,1 +1,2 @@
-- When deleting from the end it takes a really long time if list is long
+- reloading a long list takes a long time, mogoce vedno highlight-ej samo vidne item-e (virtualization)
+- speed up (readall instead of readline)

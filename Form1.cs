@@ -30,8 +30,7 @@ namespace serialog
             comboBox_baud.SelectedItem = "1000000";
 
             _serialcomStopped = true;
-
-            Form2_Highlight.InitializeHighlightSettings();
+            button_stop.Enabled = false;
 
             upTime.Start();
         }
@@ -116,13 +115,15 @@ namespace serialog
                 }
 
                 _serialcomStopped = false;
+                button_stop.Enabled = true;
+                button_run.Enabled = false;
 
                 comboBox_port.Enabled = false;
                 comboBox_baud.Enabled = false;
 
-                if (addTimestampsToolStripMenuItem.Checked)
+                if (addStartStopTimestampToolStripMenuItem.Checked)
                 {
-                    string dateTimeString = "ACQUISITION STARTED " + DateTime.Now.ToString("dddd dd/MM/yyyy hh:mm:ss");
+                    string dateTimeString = "ACQUISITION STARTED " + DateTime.Now.ToString("dddd dd/MM/yyyy HH:mm:ss");
                     listView1.Items.Add(dateTimeString);
                     _listviewSizeBytes += dateTimeString.Length + 1;
                 }
@@ -144,6 +145,8 @@ namespace serialog
 
                 _serialCom.Close();
 
+                button_stop.Enabled = false;
+                button_run.Enabled = true;
                 comboBox_port.Enabled = true;
                 comboBox_baud.Enabled = true;
 
@@ -184,82 +187,113 @@ namespace serialog
             }
         }
 
-        private Color GetForeColor(string line)
-        {
-            foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightEntries.Items)
-            {
-                if (line.Contains(highlightEntry.text))
-                {
-                    return highlightEntry.foreColor;
-                }
-            }
-
-            return Color.Black;
-        }
-
-        private Color GetBackColor(string line)
-        {
-            foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightEntries.Items)
-            {
-                if (line.Contains(highlightEntry.text))
-                {
-                    return highlightEntry.backColor;
-                }
-            }
-
-            return Color.White;
-        }
-
         private ListViewItem CreateHighlightedListItem(string line)
         {
             ListViewItem item = new ListViewItem(line);
 
             foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightEntries.Items)
             {
+                if (!highlightEntry.enabled)
+                    continue;
+
                 // text
-                string text = highlightEntry.text;
+                string highlightText = highlightEntry.text;
 
                 // ignoreCase
                 if (highlightEntry.ignoreCase)
                 {
                     line = line.ToLower();
-                    text = text.ToLower();
+                    highlightText = highlightText.ToLower();
                 }
 
-                if (line.Contains(text))
+                bool foundMatch = false;
+
+                if (line.Contains(highlightText))
                 {
+                    foundMatch = true;
+                }
+                // AND &
+                else if (highlightText.Contains("&"))
+                {
+                    var tokens = highlightText.Split("&");
+                    int numOfTokens = tokens.Length;
+
+                    int numOfFoundTokens = 0;
+
+                    foreach (var token in tokens)
+                    {
+                        if (line.Contains(token))
+                        {
+                            numOfFoundTokens++;
+                        }
+                    }
+
+                    foundMatch = numOfFoundTokens == numOfTokens;
+                }
+                // OR |
+                else if (highlightText.Contains("|"))
+                {
+                    var tokens = highlightText.Split("|");
+                    int numOfTokens = tokens.Length;
+
+                    int numOfFoundTokens = 0;
+
+                    foreach (var token in tokens)
+                    {
+                        if (line.Contains(token))
+                        {
+                            foundMatch = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (foundMatch)
+                {
+                    // remove
+                    if (highlightEntry.remove)
+                    {
+                        return null;
+                    }
+
                     // hide
                     if (highlightEntry.hide)
                     {
                         item.ForeColor = Color.Transparent;
                         item.BackColor = Color.Transparent;
-                    }
-                    else
-                    {
-                        // foreColor
-                        item.ForeColor = highlightEntry.foreColor;
-                        // backColor
-                        item.BackColor = highlightEntry.backColor;
 
-                        // Font (bold, italic)
-                        if (highlightEntry.bold && highlightEntry.italic)
-                            item.Font = new Font(listView1.Font, FontStyle.Bold | FontStyle.Italic);
-                        else if (highlightEntry.bold)
-                            item.Font = new Font(listView1.Font, FontStyle.Bold);
-                        else if (highlightEntry.italic)
-                            item.Font = new Font(listView1.Font, FontStyle.Italic);
+                        return item;
                     }
 
-                    // This break implements that the higher entries have priority since it breaks as soon as it finds first match
-                    break;
+                    // foreColor
+                    item.ForeColor = highlightEntry.foreColor;
+                    // backColor
+                    item.BackColor = highlightEntry.backColor;
+
+                    // Font (bold, italic)
+                    if (highlightEntry.bold && highlightEntry.italic)
+                        item.Font = new Font(listView1.Font, FontStyle.Bold | FontStyle.Italic);
+                    else if (highlightEntry.bold)
+                        item.Font = new Font(listView1.Font, FontStyle.Bold);
+                    else if (highlightEntry.italic)
+                        item.Font = new Font(listView1.Font, FontStyle.Italic);
+
+                    // This return implements that the higher entries have priority since it returns as soon as it finds first match
+                    return item;
+                }
+            }
+
+            // No match found
+            if (toolStripMenuItem_hiderest.Checked)
+            {
+                if (alsoRemoveToolStripMenuItem.Checked)
+                {
+                    return null;
                 }
                 else
                 {
-                    if (toolStripMenuItem_hiderest.Checked)
-                    {
-                        item.ForeColor = Color.Transparent;
-                        item.BackColor = Color.Transparent;
-                    }
+                    item.ForeColor = Color.Transparent;
+                    item.BackColor = Color.Transparent;
                 }
             }
 
@@ -273,15 +307,24 @@ namespace serialog
             {
                 for (int i = _serialDataListCountAddedToTable; i < _serialDataList.Count; i++)
                 {
-                    string line = _serialDataList[i];
-                    _listviewSizeBytes += line.Length + 1; // 1 for \n
+                    string line = _serialDataList[i];                    
 
-                    listView1.Items.Add(CreateHighlightedListItem(line));
+                    ListViewItem item = CreateHighlightedListItem(line);
+                    if (item != null)
+                    {
+                        listView1.Items.Add(item);
+                        _listviewSizeBytes += line.Length + 1; // 1 for \n
+                    }
                 }
                 _serialDataListCountAddedToTable = _serialDataList.Count;
 
                 if (checkBox_follow.Checked)
-                    listView1.Items[listView1.Items.Count - 1].EnsureVisible();
+                {
+                    if (listView1.Items.Count > 0)
+                    {
+                        listView1.Items[listView1.Items.Count - 1].EnsureVisible();
+                    }
+                }
             }
             mtx.ReleaseMutex();
         }
@@ -294,9 +337,9 @@ namespace serialog
             {
                 serialcomStoppedHandleEvent = false;
 
-                if (addTimestampsToolStripMenuItem.Checked)
+                if (addStartStopTimestampToolStripMenuItem.Checked)
                 {
-                    string dateTimeString = "ACQUISITION STOPPED " + DateTime.Now.ToString("dddd dd/MM/yyyy hh:mm:ss");
+                    string dateTimeString = "ACQUISITION STOPPED " + DateTime.Now.ToString("dddd dd/MM/yyyy HH:mm:ss");
                     listView1.Items.Add(dateTimeString);
                     _listviewSizeBytes += dateTimeString.Length + 1;
                 }
@@ -321,7 +364,8 @@ namespace serialog
                 {
                     text += item.Text + "\n";
                 }
-                Clipboard.SetText(text);
+                if (text.Length > 0)
+                    Clipboard.SetText(text);
             }
             else if (e.Control && e.KeyCode == Keys.A)
             {
@@ -367,6 +411,9 @@ namespace serialog
             var stream = new MemoryStream();
             var writer = new StreamWriter(stream);
 
+            if (items.Count == 0)
+                return null;
+
             // for instead of foreach so that we can control last item and not add "\n" at the end so that we 
             // do not introduce an extra item in list
             for (int i = 0; i < items.Count - 1; i++)
@@ -385,6 +432,9 @@ namespace serialog
             var stream = new MemoryStream();
             var writer = new StreamWriter(stream);
 
+            if (items.Count == 0)
+                return null;
+
             // for instead of foreach so that we can control last item and not add "\n" at the end so that we 
             // do not introduce an extra item in list
             for (int i = 0; i < items.Count - 1; i++)
@@ -396,30 +446,6 @@ namespace serialog
             writer.Flush();
             stream.Position = 0;
             return stream;
-        }
-
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Stream myStream;
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-
-            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            saveFileDialog1.FilterIndex = 1;
-            saveFileDialog1.RestoreDirectory = true;
-
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                if ((myStream = saveFileDialog1.OpenFile()) != null)
-                {
-                    // Code to write the stream goes here.
-                    using (var stream = GenerateStreamFromListOfItems(listView1.Items))
-                    {
-                        stream.CopyTo(myStream);
-                    }
-
-                    myStream.Close();
-                }
-            }
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -446,13 +472,29 @@ namespace serialog
 
                 using (StreamReader reader = new StreamReader(fileStream))
                 {
+                    Form3_progressbar form3 = new Form3_progressbar("Opening file...");
+                    form3.StartPosition = FormStartPosition.Manual;
+                    form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
+                    form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
+                    form3.Show();
                     fileContent = reader.ReadToEnd();
-                    var list_of_lines = fileContent.Split('\n').ToList();
-                    foreach (var line in list_of_lines)
+                    var listOfLines = fileContent.Split('\n').ToList();
+                    form3.ProgressBarSetup(listOfLines.Count, 1);
+                    for (int i = 0, size = listOfLines.Count; i < size; i++)
                     {
-                        _listviewSizeBytes += line.Length + 1;
-                        listView1.Items.Add(CreateHighlightedListItem(line));
+                        var line = listOfLines[i];                        
+
+                        ListViewItem item = CreateHighlightedListItem(line);
+                        if (item != null)
+                        {
+                            listView1.Items.Add(item);
+                            _listviewSizeBytes += line.Length + 1;
+                        }
+
+                        form3.ProgressBarIncrement();
                     }
+
+                    form3.Close();
 
                     listView1.Items[listView1.Items.Count - 1].EnsureVisible();
                 }
@@ -462,6 +504,42 @@ namespace serialog
                 string endOfFileInfo = "End of file: " + filePath;
                 listView1.Items.Add(endOfFileInfo);
                 _listviewSizeBytes += endOfFileInfo.Length + 1;
+            }
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Stream myStream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    Form3_progressbar form3 = new Form3_progressbar("Saving to file...");
+                    form3.StartPosition = FormStartPosition.Manual;
+                    form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
+                    form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
+                    form3.Show();
+                    form3.ProgressBarSetup(1, 1);
+                    Thread.Sleep(200);
+                    // Code to write the stream goes here.
+                    using (var stream = GenerateStreamFromListOfItems(listView1.Items))
+                    {
+                        if (stream != null)
+                            stream.CopyTo(myStream);
+                    }
+
+                    form3.ProgressBarIncrement();
+                    Thread.Sleep(300);
+                    form3.Close();
+
+                    myStream.Close();
+                }
             }
         }
 
@@ -484,11 +562,23 @@ namespace serialog
             {
                 if ((myStream = saveFileDialog1.OpenFile()) != null)
                 {
+                    Form3_progressbar form3 = new Form3_progressbar("Saving to file...");
+                    form3.StartPosition = FormStartPosition.Manual;
+                    form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
+                    form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
+                    form3.Show();
+                    form3.ProgressBarSetup(1, 1);
+                    Thread.Sleep(200);
                     // Code to write the stream goes here.
                     using (var stream = GenerateStreamFromListOfItems(listView1.SelectedItems))
                     {
-                        stream.CopyTo(myStream);
+                        if (stream != null)
+                            stream.CopyTo(myStream);
                     }
+
+                    form3.ProgressBarIncrement();
+                    Thread.Sleep(300);
+                    form3.Close();
 
                     myStream.Close();
                 }
@@ -659,19 +749,75 @@ namespace serialog
             _listviewSizeBytes = 0;
         }
 
-        private void ReloadListViewItems()
+        private void ReloadAllListViewItems()
         {
+            Form3_progressbar form3 = new Form3_progressbar("Reloading...");
+            form3.StartPosition = FormStartPosition.Manual;
+            form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
+            form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
+            form3.Show();
+            form3.ProgressBarSetup(listView1.Items.Count, 1);
+            Thread.Sleep(100);
+            // must use for since foreach doesn't allow changes to its items
             for (int i = 0; i < listView1.Items.Count; i++)
             {
-                listView1.Items[i] = CreateHighlightedListItem(listView1.Items[i].Text);
+                var item = CreateHighlightedListItem(listView1.Items[i].Text);
+                if (item == null)
+                {
+                    listView1.Items[i].Remove();
+                    i--;
+                }
+                else
+                {
+                    listView1.Items[i] = item;
+                }
+
+                form3.ProgressBarIncrement();
                 //listView1.Items.Insert(item.Index + 1, CreateHighlightedListItem(item.Text));
                 //listView1.Items.Remove(item);
             }
+
+            form3.ProgressBarIncrement();
+            Thread.Sleep(200);
+            form3.Close();
+        }
+
+        private void ReloadSelectedListViewItems(ListView.SelectedListViewItemCollection selectedItems)
+        {
+            Form3_progressbar form3 = new Form3_progressbar("Reloading...");
+            form3.StartPosition = FormStartPosition.Manual;
+            form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
+            form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
+            form3.Show();
+            form3.ProgressBarSetup(selectedItems.Count, 1);
+            Thread.Sleep(100);
+            foreach (ListViewItem item in selectedItems)
+            {
+                var highItem = CreateHighlightedListItem(item.Text);
+                if (highItem == null)
+                {
+                    item.Remove();
+                }
+                else
+                {
+                    listView1.Items[item.Index] = highItem;
+                }
+                form3.ProgressBarIncrement();
+                //listView1.Items.Insert(item.Index + 1, CreateHighlightedListItem(item.Text));
+                //listView1.Items.Remove(item);
+            }
+
+            form3.ProgressBarIncrement();
+            Thread.Sleep(200);
+            form3.Close();
         }
 
         private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ReloadListViewItems();
+            if (listView1.SelectedItems.Count == 0)
+                ReloadAllListViewItems();
+            else
+                ReloadSelectedListViewItems(listView1.SelectedItems);
         }
 
         private void timer_updatesysinfo_Tick(object sender, EventArgs e)
@@ -689,10 +835,25 @@ namespace serialog
             if (run.Seconds > 0) runs += run.Seconds.ToString("00");
 
             // So that saved file size will be the same as the one in the label subtract one byte (last newline)
-            int size = _listviewSizeBytes > 0 ? _listviewSizeBytes - 1 : 0;
+            double size = _listviewSizeBytes > 0 ? _listviewSizeBytes - 1 : 0;
+            string sizeStr;
+            if (size > 1024.0 * 1024.0)
+            {
+                size /= 1024.0 * 1024.0;
+                sizeStr = size.ToString("0.00") + " MB";
+            }
+            else if (size > 1024.0)
+            {
+                size /= 1024.0;
+                sizeStr = size.ToString("0.00") + " KB";
+            }
+            else
+            {
+                sizeStr = Convert.ToInt32(size).ToString() + " B";
+            }
 
             label_processinfo.Text = "Alive: " + ups +
-                " Running: " + runs + " Data: " + size + " B";
+                " Running: " + runs + " Data: " + sizeStr;
         }
 
         private void fontToolStripMenuItem_Click(object sender, EventArgs e)
@@ -715,7 +876,7 @@ namespace serialog
                 if (MessageBox.Show("Reload highlight settings?", "Reload?",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    ReloadListViewItems();
+                    ReloadAllListViewItems();
                 }
             }
         }
@@ -735,6 +896,20 @@ namespace serialog
                     FindNextString(text);
                 }
             }
+        }
+
+        private void toolStripMenuItem_hiderest_Click(object sender, EventArgs e)
+        {
+            toolStripMenuItem_hiderest.Checked = !toolStripMenuItem_hiderest.Checked;
+            if (!toolStripMenuItem_hiderest.Checked)
+                alsoRemoveToolStripMenuItem.Checked = false;
+        }
+
+        private void alsoRemoveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            alsoRemoveToolStripMenuItem.Checked = !alsoRemoveToolStripMenuItem.Checked;
+            if (alsoRemoveToolStripMenuItem.Checked)
+                toolStripMenuItem_hiderest.Checked = true;
         }
     }
 }
