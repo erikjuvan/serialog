@@ -144,7 +144,10 @@ namespace serialog
                 return;
 
             if (res == DialogResult.Yes)
-                highlightEntries = new HighlightEntires(tempHighlightEntires);
+            {
+                highlightEntries.Clear();
+                highlightEntries = new HighlightEntries(tempHighlightEntries);
+            }
             this.Close();
         }
 
@@ -338,7 +341,9 @@ namespace serialog
 
         private void button_apply_Click(object sender, EventArgs e)
         {
-            highlightEntries = new HighlightEntires(tempHighlightEntires);
+            highlightEntries.Clear();
+
+            highlightEntries = new HighlightEntries(tempHighlightEntries);
         }
 
         private void Populate_comboBox_preset()

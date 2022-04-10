@@ -3,7 +3,7 @@
     public class HighlightEntry
     {
         public bool enabled = true;
-        public string text;
+        public string text = "";
         public Color foreColor = Color.Black;
         public Color backColor = Color.White;
         public bool ignoreCase = false;
@@ -11,6 +11,19 @@
         public bool italic = false;
         public bool hide = false;
         public bool remove = false;
+
+        public HighlightEntry(HighlightEntry entry)
+        {
+            this.enabled = entry.enabled;
+            this.text = entry.text;
+            this.foreColor = entry.foreColor;
+            this.backColor = entry.backColor;
+            this.ignoreCase = entry.ignoreCase;
+            this.bold = entry.bold;
+            this.italic = entry.italic;
+            this.hide = entry.hide;
+            this.remove = entry.remove;
+        }
 
         public HighlightEntry(string text)
         {
@@ -122,25 +135,25 @@
 
         public HighlightEntries()
         {
-            items = new List<HighlightEntry>();
+
         }
 
         public HighlightEntries(HighlightEntries highlightEntires)
         {
             foreach (HighlightEntry item in highlightEntires.items)
             {
-                items.Add(item);
+                items.Add(new HighlightEntry(item));
             }
         }
 
         public void Add(HighlightEntry highlightEntry)
         {
-            items.Add(highlightEntry);
+            items.Add(new HighlightEntry(highlightEntry));
         }
 
         public void Insert(int index, HighlightEntry highlightEntry)
         {
-            items.Insert(index, highlightEntry);
+            items.Insert(index, new HighlightEntry(highlightEntry));
         }
 
         public void Insert(int index, ListViewItem listViewItem)
