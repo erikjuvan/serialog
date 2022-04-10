@@ -116,16 +116,16 @@
         }
     }
 
-    public class HighlightEntires
+    public class HighlightEntries
     {
         private List<HighlightEntry> items = new List<HighlightEntry>();
 
-        public HighlightEntires()
+        public HighlightEntries()
         {
             items = new List<HighlightEntry>();
         }
 
-        public HighlightEntires(HighlightEntires highlightEntires)
+        public HighlightEntries(HighlightEntries highlightEntires)
         {
             foreach (HighlightEntry item in highlightEntires.items)
             {
