@@ -116,52 +116,55 @@
             this.hideHighlightedToolStripMenuItem,
             this.alsoRemoveToolStripMenuItem1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(169, 142);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(180, 142);
             // 
             // selectAllToolStripMenuItem1
             // 
             this.selectAllToolStripMenuItem1.Name = "selectAllToolStripMenuItem1";
-            this.selectAllToolStripMenuItem1.Size = new System.Drawing.Size(168, 22);
+            this.selectAllToolStripMenuItem1.Size = new System.Drawing.Size(179, 22);
             this.selectAllToolStripMenuItem1.Text = "Select All";
             this.selectAllToolStripMenuItem1.Click += new System.EventHandler(this.selectAllToolStripMenuItem1_Click);
             // 
             // clearAllToolStripMenuItem1
             // 
             this.clearAllToolStripMenuItem1.Name = "clearAllToolStripMenuItem1";
-            this.clearAllToolStripMenuItem1.Size = new System.Drawing.Size(168, 22);
+            this.clearAllToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
+            this.clearAllToolStripMenuItem1.Size = new System.Drawing.Size(179, 22);
             this.clearAllToolStripMenuItem1.Text = "Clear All";
             this.clearAllToolStripMenuItem1.Click += new System.EventHandler(this.clearAllToolStripMenuItem1_Click);
             // 
             // reloadToolStripMenuItem1
             // 
             this.reloadToolStripMenuItem1.Name = "reloadToolStripMenuItem1";
-            this.reloadToolStripMenuItem1.Size = new System.Drawing.Size(168, 22);
+            this.reloadToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.reloadToolStripMenuItem1.Size = new System.Drawing.Size(179, 22);
             this.reloadToolStripMenuItem1.Text = "Reload";
             this.reloadToolStripMenuItem1.Click += new System.EventHandler(this.reloadToolStripMenuItem1_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(165, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(176, 6);
             // 
             // highlightToolStripMenuItem
             // 
             this.highlightToolStripMenuItem.Name = "highlightToolStripMenuItem";
-            this.highlightToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.highlightToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
+            this.highlightToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.highlightToolStripMenuItem.Text = "Highlight ...";
             this.highlightToolStripMenuItem.Click += new System.EventHandler(this.highlightToolStripMenuItem_Click);
             // 
             // hideHighlightedToolStripMenuItem
             // 
             this.hideHighlightedToolStripMenuItem.Name = "hideHighlightedToolStripMenuItem";
-            this.hideHighlightedToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.hideHighlightedToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.hideHighlightedToolStripMenuItem.Text = "Hide Highlighted";
             this.hideHighlightedToolStripMenuItem.Click += new System.EventHandler(this.hideHighlightedToolStripMenuItem_Click);
             // 
             // alsoRemoveToolStripMenuItem1
             // 
             this.alsoRemoveToolStripMenuItem1.Name = "alsoRemoveToolStripMenuItem1";
-            this.alsoRemoveToolStripMenuItem1.Size = new System.Drawing.Size(168, 22);
+            this.alsoRemoveToolStripMenuItem1.Size = new System.Drawing.Size(179, 22);
             this.alsoRemoveToolStripMenuItem1.Text = "    ↪ Also Remove";
             this.alsoRemoveToolStripMenuItem1.Click += new System.EventHandler(this.alsoRemoveToolStripMenuItem1_Click);
             // 
