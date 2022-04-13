@@ -7,7 +7,7 @@ namespace serialog
         private static bool _serialcomStopped = new bool();
         private bool serialcomStoppedHandleEvent = new bool();
         private static SerialCom _serialCom = new SerialCom();
-        private static List<string> _serialDataList = new List<string>();
+        private static List<string> _serialDataList = new List<string>(1000000);
         private static int _listviewSizeBytes = 0;
         private int _serialDataListCountAddedToTable = 0;
         private static Mutex mtx = new Mutex();
