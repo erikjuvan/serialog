@@ -743,7 +743,7 @@ namespace serialog
             }
         }
 
-        private void clearAllToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             listView1.Items.Clear();
             _listviewSizeBytes = 0;
@@ -901,15 +901,54 @@ namespace serialog
         private void toolStripMenuItem_hiderest_Click(object sender, EventArgs e)
         {
             toolStripMenuItem_hiderest.Checked = !toolStripMenuItem_hiderest.Checked;
+            hideHighlightedToolStripMenuItem.Checked = toolStripMenuItem_hiderest.Checked;
             if (!toolStripMenuItem_hiderest.Checked)
+            {
                 alsoRemoveToolStripMenuItem.Checked = false;
+                alsoRemoveToolStripMenuItem1.Checked = false;
+            }
+                
         }
 
         private void alsoRemoveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             alsoRemoveToolStripMenuItem.Checked = !alsoRemoveToolStripMenuItem.Checked;
+            alsoRemoveToolStripMenuItem1.Checked = alsoRemoveToolStripMenuItem.Checked;
             if (alsoRemoveToolStripMenuItem.Checked)
+            {
                 toolStripMenuItem_hiderest.Checked = true;
+                hideHighlightedToolStripMenuItem.Checked = true;
+            }
+        }
+
+        private void selectAllToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            selectAllToolStripMenuItem_Click(sender, e);
+        }
+
+        private void clearAllToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            clearAllToolStripMenuItem_Click(sender, e);
+        }
+
+        private void reloadToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            reloadToolStripMenuItem_Click(sender, e);
+        }
+
+        private void highlightToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            highlightsToolStripMenuItem_Click(sender, e);
+        }
+
+        private void hideHighlightedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            toolStripMenuItem_hiderest_Click(sender, e);
+        }
+
+        private void alsoRemoveToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            alsoRemoveToolStripMenuItem_Click(sender, e);
         }
     }
 }
