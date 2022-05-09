@@ -840,20 +840,20 @@ namespace serialog
             if (size > 1024.0 * 1024.0)
             {
                 size /= 1024.0 * 1024.0;
-                sizeStr = size.ToString("0.00") + " MB";
+                sizeStr = size.ToString("0.00") + "MB";
             }
             else if (size > 1024.0)
             {
                 size /= 1024.0;
-                sizeStr = size.ToString("0.00") + " KB";
+                sizeStr = size.ToString("0.00") + "KB";
             }
             else
             {
-                sizeStr = Convert.ToInt32(size).ToString() + " B";
+                sizeStr = Convert.ToInt32(size).ToString() + "B";
             }
 
-            label_processinfo.Text = "Alive: " + ups +
-                " Running: " + runs + " Data: " + sizeStr;
+            label_processinfo.Text = "Avail: " + _serialCom.GetAvailableBytes() + "B" + " Data: " + sizeStr + 
+                " Alive: " + ups + " Running: " + runs;
         }
 
         private void fontToolStripMenuItem_Click(object sender, EventArgs e)
