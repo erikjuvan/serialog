@@ -9,6 +9,9 @@ namespace serialog
         private static SerialCom _serialCom = new SerialCom();
         private static List<string> _serialDataList = new List<string>(1000000);
         private static int _listviewSizeBytes = 0;
+        private static int _prevListviewSizeBytes = 0;
+        private static int _serialDataListSizeBytes = 0;
+        private static int _prevSerialDataListSizeBytes = 0;
         private int _serialDataListCountAddedToTable = 0;
         private static Mutex mtx = new Mutex();
         private Thread serialReadThread = null;
@@ -21,6 +24,8 @@ namespace serialog
         public Form1()
         {
             InitializeComponent();
+
+            label_processinfo.Text = "";
 
             comboBox_port.Items.AddRange(GetSortedPorts());
 
@@ -181,6 +186,7 @@ namespace serialog
                 if (line.Length > 0)
                 {
                     mtx.WaitOne();
+                    _serialDataListSizeBytes += line.Length;
                     _serialDataList.Add(line);
                     mtx.ReleaseMutex();
                 }
@@ -820,6 +826,28 @@ namespace serialog
                 ReloadSelectedListViewItems(listView1.SelectedItems);
         }
 
+        string NumberToBKBMB(double num, string suffix = "")
+        {
+            string str;
+
+            if (num > 1024.0 * 1024.0)
+            {
+                num /= 1024.0 * 1024.0;
+                str = num.ToString("0.00") + " MB" + suffix;
+            }
+            else if (num > 1024.0)
+            {
+                num /= 1024.0;
+                str = num.ToString("0.00") + " KB" + suffix;
+            }
+            else
+            {
+                str = Convert.ToInt32(num).ToString() + " B" + suffix;
+            }
+
+            return str;
+        }
+
         private void timer_updatesysinfo_Tick(object sender, EventArgs e)
         {
             var up = upTime.Elapsed;
@@ -834,26 +862,29 @@ namespace serialog
             if (run.Minutes > 0) runs += run.Minutes.ToString("00") + ":";
             if (run.Seconds > 0) runs += run.Seconds.ToString("00");
 
-            // So that saved file size will be the same as the one in the label subtract one byte (last newline)
-            double size = _listviewSizeBytes > 0 ? _listviewSizeBytes - 1 : 0;
-            string sizeStr;
-            if (size > 1024.0 * 1024.0)
-            {
-                size /= 1024.0 * 1024.0;
-                sizeStr = size.ToString("0.00") + "MB";
-            }
-            else if (size > 1024.0)
-            {
-                size /= 1024.0;
-                sizeStr = size.ToString("0.00") + "KB";
-            }
-            else
-            {
-                sizeStr = Convert.ToInt32(size).ToString() + "B";
-            }
 
-            label_processinfo.Text = "Avail: " + _serialCom.GetAvailableBytes() + "B" + " Data: " + sizeStr + 
-                " Alive: " + ups + " Running: " + runs;
+            string serialSizeStr = NumberToBKBMB(_serialDataListSizeBytes);
+
+            double serialBytesPerSec = (double)(_serialDataListSizeBytes - _prevSerialDataListSizeBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
+            _prevSerialDataListSizeBytes = _serialDataListSizeBytes;
+            string serialSpeedStr = NumberToBKBMB(serialBytesPerSec, "/s");
+
+            // So that saved file size will be the same as the one in the label subtract one byte (last newline)                       
+            double listSize = _listviewSizeBytes > 0 ? _listviewSizeBytes - 1 : 0;
+            string listSizeStr = NumberToBKBMB(listSize);
+           
+            double listBytesPerSec = (double)(_listviewSizeBytes - _prevListviewSizeBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
+            _prevListviewSizeBytes = _listviewSizeBytes;
+            string listSpeedStr = NumberToBKBMB(listBytesPerSec, "/s");            
+
+            string availableBytesStr = NumberToBKBMB(_serialCom.GetAvailableBytes());
+
+            this.Text = "Serialog |" +
+                "   Serial: " + serialSizeStr + " @ " + serialSpeedStr +
+                "   List: " + listSizeStr + " @ " + listSpeedStr +
+                "   Available: " + availableBytesStr +
+                "   Alive: " + ups +
+                "   Running: " + runs;
         }
 
         private void fontToolStripMenuItem_Click(object sender, EventArgs e)
