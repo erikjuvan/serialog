@@ -136,7 +136,6 @@ namespace serialog
                 serialReadThread = new Thread(SerialRead);
                 serialReadThread.Start();
 
-                runTime = Stopwatch.StartNew();
                 runTime.Start();
             }
         }
@@ -873,6 +872,8 @@ namespace serialog
             double serialBytesPerSec = (double)(_serialDataListSizeBytes - _prevSerialDataListSizeBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
             _prevSerialDataListSizeBytes = _serialDataListSizeBytes;
             string serialSpeedStr = NumberToBKBMB(serialBytesPerSec, "/s");
+            double avgSerialBytesPerSec = _serialDataListSizeBytes / (run.TotalSeconds > 0 ? run.TotalSeconds : 1);
+            string avgSerialSpeedStr = NumberToBKBMB(avgSerialBytesPerSec, "/s");
 
             // So that saved file size will be the same as the one in the label subtract one byte (last newline)                       
             double listSize = _listviewSizeBytes > 0 ? _listviewSizeBytes - 1 : 0;
@@ -881,12 +882,14 @@ namespace serialog
             double listBytesPerSec = (double)(_listviewSizeBytes - _prevListviewSizeBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
             _prevListviewSizeBytes = _listviewSizeBytes;
             string listSpeedStr = NumberToBKBMB(listBytesPerSec, "/s");
+            double avgListBytesPerSec = _listviewSizeBytes / (run.TotalSeconds > 0 ? run.TotalSeconds : 1);
+            string avgListSpeedStr = NumberToBKBMB(avgListBytesPerSec, "/s");
 
             string availableBytesStr = NumberToBKBMB(_serialCom.GetAvailableBytes());
 
             this.Text = "Serialog |" +
-                "   Serial: " + serialSizeStr + " @ " + serialSpeedStr +
-                "   List: " + listSizeStr + " @ " + listSpeedStr +
+                "   Serial: " + serialSizeStr + " @ " + serialSpeedStr + " (avg. " + avgSerialSpeedStr + ")" +
+                "   List: " + listSizeStr + " @ " + listSpeedStr + " (avg. " + avgListSpeedStr + ")" +
                 "   Available: " + availableBytesStr +
                 "   Alive: " + ups +
                 "   Running: " + runs;
