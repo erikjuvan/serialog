@@ -313,7 +313,7 @@ namespace serialog
             {
                 for (int i = _serialDataListCountAddedToTable; i < _serialDataList.Count; i++)
                 {
-                    string line = _serialDataList[i];                    
+                    string line = _serialDataList[i];
 
                     ListViewItem item = CreateHighlightedListItem(line);
                     if (item != null)
@@ -488,7 +488,7 @@ namespace serialog
                     form3.ProgressBarSetup(listOfLines.Count, 1);
                     for (int i = 0, size = listOfLines.Count; i < size; i++)
                     {
-                        var line = listOfLines[i];                        
+                        var line = listOfLines[i];
 
                         ListViewItem item = CreateHighlightedListItem(line);
                         if (item != null)
@@ -752,7 +752,12 @@ namespace serialog
         private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             listView1.Items.Clear();
+            _serialDataList.Clear();
             _listviewSizeBytes = 0;
+            _prevListviewSizeBytes = 0;
+            _serialDataListSizeBytes = 0;
+            _prevSerialDataListSizeBytes = 0;
+            _serialDataListCountAddedToTable = 0;
         }
 
         private void ReloadAllListViewItems()
@@ -872,10 +877,10 @@ namespace serialog
             // So that saved file size will be the same as the one in the label subtract one byte (last newline)                       
             double listSize = _listviewSizeBytes > 0 ? _listviewSizeBytes - 1 : 0;
             string listSizeStr = NumberToBKBMB(listSize);
-           
+
             double listBytesPerSec = (double)(_listviewSizeBytes - _prevListviewSizeBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
             _prevListviewSizeBytes = _listviewSizeBytes;
-            string listSpeedStr = NumberToBKBMB(listBytesPerSec, "/s");            
+            string listSpeedStr = NumberToBKBMB(listBytesPerSec, "/s");
 
             string availableBytesStr = NumberToBKBMB(_serialCom.GetAvailableBytes());
 
@@ -938,7 +943,7 @@ namespace serialog
                 alsoRemoveToolStripMenuItem.Checked = false;
                 alsoRemoveToolStripMenuItem1.Checked = false;
             }
-                
+
         }
 
         private void alsoRemoveToolStripMenuItem_Click(object sender, EventArgs e)
