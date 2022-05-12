@@ -532,7 +532,7 @@ namespace serialog
                 {
                     item.Font = new Font(listView1.Font, FontStyle.Bold);
                     tempHighlightEntries.Items[item.Index].bold = true;
-                }                
+                }
                 else
                 {
                     item.Font = new Font(listView1.Font, FontStyle.Regular);
