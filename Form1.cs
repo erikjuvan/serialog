@@ -610,9 +610,10 @@ namespace serialog
                     listView1.SelectedItems.Clear();
                     listView1.Items[i].Selected = true;
                     listView1.Items[i].EnsureVisible();
-                    break;
+                    return;
                 }
             }
+            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void FindPrevString(string text)
@@ -635,9 +636,10 @@ namespace serialog
                     listView1.SelectedItems.Clear();
                     listView1.Items[i].Selected = true;
                     listView1.Items[i].EnsureVisible();
-                    break;
+                    return;
                 }
             }
+            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void FindFirstString(string text)
@@ -654,9 +656,10 @@ namespace serialog
                     listView1.SelectedItems.Clear();
                     listView1.Items[i].Selected = true;
                     listView1.Items[i].EnsureVisible();
-                    break;
+                    return;
                 }
             }
+            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void FindLastString(string text)
@@ -673,9 +676,10 @@ namespace serialog
                     listView1.SelectedItems.Clear();
                     listView1.Items[i].Selected = true;
                     listView1.Items[i].EnsureVisible();
-                    break;
+                    return;
                 }
             }
+            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void FindAllString(string text)
@@ -702,6 +706,10 @@ namespace serialog
             {
                 checkBox_follow.Checked = false;
                 listView1.Items[listView1.SelectedIndices[listView1.SelectedIndices.Count - 1]].EnsureVisible();
+            }
+            else
+            {
+                MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
