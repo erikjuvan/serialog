@@ -757,6 +757,9 @@ namespace serialog
             _serialDataListSizeBytes = 0;
             _prevSerialDataListSizeBytes = 0;
             _serialDataListCountAddedToTable = 0;
+            runTime = new Stopwatch();
+            if (!_serialcomStopped)
+                runTime.Start();
         }
 
         private void ReloadAllListViewItems()
