@@ -469,6 +469,27 @@ namespace serialog
             return stream;
         }
 
+        public static Stream GenerateStreamFromSerialData()
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+
+            if (_serialDataList.Count == 0)
+                return null;
+
+            // for instead of foreach so that we can control last item and not add "\n" at the end so that we 
+            // do not introduce an extra item in list
+            for (int i = 0; i < _serialDataList.Count - 1; i++)
+            {
+                writer.Write(_serialDataList[i].ToString() + '\n');
+            }
+            writer.Write(_serialDataList[_serialDataList.Count - 1].ToString());
+
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
+        }
+
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var fileContent = string.Empty;
@@ -606,6 +627,41 @@ namespace serialog
             }
         }
 
+        private void saveSerialAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Stream myStream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    Form3_progressbar form3 = new Form3_progressbar("Saving Serial data to file...");
+                    form3.StartPosition = FormStartPosition.Manual;
+                    form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
+                    form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
+                    form3.Show();
+                    form3.ProgressBarSetup(1, 1);
+                    Thread.Sleep(200);
+                    // Code to write the stream goes here.
+                    using (var stream = GenerateStreamFromSerialData())
+                    {
+                        if (stream != null)
+                            stream.CopyTo(myStream);
+                    }
+
+                    form3.ProgressBarIncrement();
+                    Thread.Sleep(300);
+                    form3.Close();
+
+                    myStream.Close();
+                }
+            }
+        }
         private void FindNextString(string text)
         {
             if (text == "")
@@ -1016,5 +1072,6 @@ namespace serialog
         {
             alsoRemoveToolStripMenuItem_Click(sender, e);
         }
+
     }
 }

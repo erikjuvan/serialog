@@ -74,6 +74,7 @@
             this.label_processinfo = new System.Windows.Forms.Label();
             this.timer_updatesysinfo = new System.Windows.Forms.Timer(this.components);
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
+            this.saveSerialAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -187,6 +188,7 @@
             this.openToolStripMenuItem,
             this.saveAsToolStripMenuItem,
             this.saveSelectedToolStripMenuItem,
+            this.saveSerialAsToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -454,6 +456,13 @@
             this.timer_updatesysinfo.Interval = 1000;
             this.timer_updatesysinfo.Tick += new System.EventHandler(this.timer_updatesysinfo_Tick);
             // 
+            // saveSerialAsToolStripMenuItem
+            // 
+            this.saveSerialAsToolStripMenuItem.Name = "saveSerialAsToolStripMenuItem";
+            this.saveSerialAsToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
+            this.saveSerialAsToolStripMenuItem.Text = "Save \"Serial\" As ...";
+            this.saveSerialAsToolStripMenuItem.Click += new System.EventHandler(this.saveSerialAsToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -536,5 +545,6 @@
         private ToolStripMenuItem highlightToolStripMenuItem;
         private ToolStripMenuItem hideHighlightedToolStripMenuItem;
         private ToolStripMenuItem alsoRemoveToolStripMenuItem1;
+        private ToolStripMenuItem saveSerialAsToolStripMenuItem;
     }
 }
