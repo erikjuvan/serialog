@@ -21,6 +21,9 @@ namespace serialog
 
         private Form2_Highlight form2Highlight = null;
 
+        private static bool _serialComCriticalException = false;
+        private static string _serialComCriticalExceptionString = "";
+
         public Form1()
         {
             InitializeComponent();
@@ -181,6 +184,12 @@ namespace serialog
                 catch (TimeoutException)
                 {
                 }
+                catch (Exception ex)
+                {
+                    _serialComCriticalExceptionString = ex.Message;
+                    _serialComCriticalException = true;
+                    return;
+                }
 
                 if (line.Length > 0)
                 {
@@ -337,6 +346,13 @@ namespace serialog
         private void timer1_Tick(object sender, EventArgs e)
         {
             AddEntry();
+
+            if (_serialComCriticalException)
+            {
+                _serialComCriticalException = false;
+                button_stop_Click(sender, e);
+                MessageBox.Show(_serialComCriticalExceptionString, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             if (serialcomStoppedHandleEvent)
             {
