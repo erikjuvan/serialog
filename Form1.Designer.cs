@@ -40,6 +40,7 @@
             this.highlightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideHighlightedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.alsoRemoveToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.disableHighlightsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,6 +52,7 @@
             this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addCustomRowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.highlightsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem_hiderest = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,7 +78,7 @@
             this.label_processinfo = new System.Windows.Forms.Label();
             this.timer_updatesysinfo = new System.Windows.Forms.Timer(this.components);
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
-            this.disableHighlightsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.addCustomRowToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -114,13 +116,14 @@
             this.selectAllToolStripMenuItem1,
             this.clearAllToolStripMenuItem1,
             this.reloadToolStripMenuItem1,
+            this.addCustomRowToolStripMenuItem1,
             this.toolStripMenuItem2,
             this.highlightToolStripMenuItem,
             this.hideHighlightedToolStripMenuItem,
             this.alsoRemoveToolStripMenuItem1,
             this.disableHighlightsToolStripMenuItem1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(194, 186);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(194, 208);
             // 
             // selectAllToolStripMenuItem1
             // 
@@ -171,6 +174,13 @@
             this.alsoRemoveToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
             this.alsoRemoveToolStripMenuItem1.Text = "    ↪ Also Remove";
             this.alsoRemoveToolStripMenuItem1.Click += new System.EventHandler(this.alsoRemoveToolStripMenuItem1_Click);
+            // 
+            // disableHighlightsToolStripMenuItem1
+            // 
+            this.disableHighlightsToolStripMenuItem1.Name = "disableHighlightsToolStripMenuItem1";
+            this.disableHighlightsToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
+            this.disableHighlightsToolStripMenuItem1.Text = "Disable Highlighting";
+            this.disableHighlightsToolStripMenuItem1.Click += new System.EventHandler(this.disableHighlightsToolStripMenuItem1_Click);
             // 
             // menuStrip1
             // 
@@ -242,7 +252,8 @@
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectAllToolStripMenuItem,
             this.clearAllToolStripMenuItem,
-            this.reloadToolStripMenuItem});
+            this.reloadToolStripMenuItem,
+            this.addCustomRowToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
@@ -269,6 +280,13 @@
             this.reloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.reloadToolStripMenuItem.Text = "Reload";
             this.reloadToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
+            // 
+            // addCustomRowToolStripMenuItem
+            // 
+            this.addCustomRowToolStripMenuItem.Name = "addCustomRowToolStripMenuItem";
+            this.addCustomRowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addCustomRowToolStripMenuItem.Text = "Add Custom Row...";
+            this.addCustomRowToolStripMenuItem.Click += new System.EventHandler(this.addCustomRowToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
@@ -474,12 +492,12 @@
             this.timer_updatesysinfo.Interval = 1000;
             this.timer_updatesysinfo.Tick += new System.EventHandler(this.timer_updatesysinfo_Tick);
             // 
-            // disableHighlightsToolStripMenuItem1
+            // addCustomRowToolStripMenuItem1
             // 
-            this.disableHighlightsToolStripMenuItem1.Name = "disableHighlightsToolStripMenuItem1";
-            this.disableHighlightsToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
-            this.disableHighlightsToolStripMenuItem1.Text = "Disable Highlighting";
-            this.disableHighlightsToolStripMenuItem1.Click += new System.EventHandler(this.disableHighlightsToolStripMenuItem1_Click);
+            this.addCustomRowToolStripMenuItem1.Name = "addCustomRowToolStripMenuItem1";
+            this.addCustomRowToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
+            this.addCustomRowToolStripMenuItem1.Text = "Add Custom Row...";
+            this.addCustomRowToolStripMenuItem1.Click += new System.EventHandler(this.addCustomRowToolStripMenuItem1_Click);
             // 
             // Form1
             // 
@@ -566,5 +584,7 @@
         private ToolStripMenuItem saveSerialAsToolStripMenuItem;
         private ToolStripMenuItem disableHighlightsToolStripMenuItem;
         private ToolStripMenuItem disableHighlightsToolStripMenuItem1;
+        private ToolStripMenuItem addCustomRowToolStripMenuItem;
+        private ToolStripMenuItem addCustomRowToolStripMenuItem1;
     }
 }
