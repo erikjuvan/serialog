@@ -205,6 +205,11 @@ namespace serialog
         {
             ListViewItem item = new ListViewItem(line);
 
+            if (disableHighlightsToolStripMenuItem.Checked)
+            {
+                return item;
+            }
+
             foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightEntries.Items)
             {
                 if (!highlightEntry.enabled)
@@ -1073,5 +1078,22 @@ namespace serialog
             alsoRemoveToolStripMenuItem_Click(sender, e);
         }
 
+        // This one is the menustrip click function
+        private void disableHighlightsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            disableHighlightsToolStripMenuItem.Checked = !disableHighlightsToolStripMenuItem.Checked;
+            disableHighlightsToolStripMenuItem1.Checked = disableHighlightsToolStripMenuItem.Checked;
+            if (!disableHighlightsToolStripMenuItem.Checked)
+            {
+                disableHighlightsToolStripMenuItem.Checked = false;
+                disableHighlightsToolStripMenuItem1.Checked = false;
+            }
+        }
+
+        // This one is the context click function
+        private void disableHighlightsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            disableHighlightsToolStripMenuItem_Click(sender, e);
+        }
     }
 }
