@@ -682,7 +682,7 @@ namespace serialog
             {
                 if (listView1.Items[i].Text.Contains(text))
                 {
-                    //listView1.Select();
+                    listView1.Select();
                     checkBox_follow.Checked = false;
                     listView1.SelectedItems.Clear();
                     listView1.Items[i].Selected = true;
@@ -709,7 +709,7 @@ namespace serialog
                 if (listView1.Items[i].Text.Contains(text))
                 {
                     checkBox_follow.Checked = false;
-                    //listView1.Select();
+                    listView1.Select();
                     listView1.SelectedItems.Clear();
                     listView1.Items[i].Selected = true;
                     listView1.Items[i].EnsureVisible();
@@ -729,7 +729,7 @@ namespace serialog
                 if (listView1.Items[i].Text.Contains(text))
                 {
                     checkBox_follow.Checked = false;
-                    //listView1.Select();
+                    listView1.Select();
                     listView1.SelectedItems.Clear();
                     listView1.Items[i].Selected = true;
                     listView1.Items[i].EnsureVisible();
@@ -749,7 +749,7 @@ namespace serialog
                 if (listView1.Items[i].Text.Contains(text))
                 {
                     checkBox_follow.Checked = false;
-                    //listView1.Select();
+                    listView1.Select();
                     listView1.SelectedItems.Clear();
                     listView1.Items[i].Selected = true;
                     listView1.Items[i].EnsureVisible();
