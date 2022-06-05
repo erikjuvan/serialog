@@ -79,6 +79,14 @@ namespace serialog
             return SerialPort.GetPortNames();
         }
 
+        public int GetAvailableBytes()
+        {
+            if (serialPort.IsOpen)
+                return serialPort.BytesToRead;
+            else
+                return 0;
+        }
+
         public void SetPortName(string PortName)
         {
             serialPort.PortName = PortName;

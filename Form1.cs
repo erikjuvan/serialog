@@ -7,8 +7,11 @@ namespace serialog
         private static bool _serialcomStopped = new bool();
         private bool serialcomStoppedHandleEvent = new bool();
         private static SerialCom _serialCom = new SerialCom();
-        private static List<string> _serialDataList = new List<string>();
+        private static List<string> _serialDataList = new List<string>(1000000);
         private static int _listviewSizeBytes = 0;
+        private static int _prevListviewSizeBytes = 0;
+        private static int _serialDataListSizeBytes = 0;
+        private static int _prevSerialDataListSizeBytes = 0;
         private int _serialDataListCountAddedToTable = 0;
         private static Mutex mtx = new Mutex();
         private Thread serialReadThread = null;
@@ -18,9 +21,14 @@ namespace serialog
 
         private Form2_Highlight form2Highlight = null;
 
+        private static bool _serialComCriticalException = false;
+        private static string _serialComCriticalExceptionString = "";
+
         public Form1()
         {
             InitializeComponent();
+
+            label_processinfo.Text = "";
 
             comboBox_port.Items.AddRange(GetSortedPorts());
 
@@ -131,7 +139,6 @@ namespace serialog
                 serialReadThread = new Thread(SerialRead);
                 serialReadThread.Start();
 
-                runTime = Stopwatch.StartNew();
                 runTime.Start();
             }
         }
@@ -177,10 +184,17 @@ namespace serialog
                 catch (TimeoutException)
                 {
                 }
+                catch (Exception ex)
+                {
+                    _serialComCriticalExceptionString = ex.Message;
+                    _serialComCriticalException = true;
+                    return;
+                }
 
                 if (line.Length > 0)
                 {
                     mtx.WaitOne();
+                    _serialDataListSizeBytes += line.Length;
                     _serialDataList.Add(line);
                     mtx.ReleaseMutex();
                 }
@@ -190,6 +204,11 @@ namespace serialog
         private ListViewItem CreateHighlightedListItem(string line)
         {
             ListViewItem item = new ListViewItem(line);
+
+            if (disableHighlightsToolStripMenuItem.Checked)
+            {
+                return item;
+            }
 
             foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightEntries.Items)
             {
@@ -307,7 +326,7 @@ namespace serialog
             {
                 for (int i = _serialDataListCountAddedToTable; i < _serialDataList.Count; i++)
                 {
-                    string line = _serialDataList[i];                    
+                    string line = _serialDataList[i];
 
                     ListViewItem item = CreateHighlightedListItem(line);
                     if (item != null)
@@ -332,6 +351,13 @@ namespace serialog
         private void timer1_Tick(object sender, EventArgs e)
         {
             AddEntry();
+
+            if (_serialComCriticalException)
+            {
+                _serialComCriticalException = false;
+                button_stop_Click(sender, e);
+                MessageBox.Show(_serialComCriticalExceptionString, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             if (serialcomStoppedHandleEvent)
             {
@@ -448,6 +474,27 @@ namespace serialog
             return stream;
         }
 
+        public static Stream GenerateStreamFromSerialData()
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+
+            if (_serialDataList.Count == 0)
+                return null;
+
+            // for instead of foreach so that we can control last item and not add "\n" at the end so that we 
+            // do not introduce an extra item in list
+            for (int i = 0; i < _serialDataList.Count - 1; i++)
+            {
+                writer.Write(_serialDataList[i].ToString() + '\n');
+            }
+            writer.Write(_serialDataList[_serialDataList.Count - 1].ToString());
+
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
+        }
+
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var fileContent = string.Empty;
@@ -482,7 +529,7 @@ namespace serialog
                     form3.ProgressBarSetup(listOfLines.Count, 1);
                     for (int i = 0, size = listOfLines.Count; i < size; i++)
                     {
-                        var line = listOfLines[i];                        
+                        var line = listOfLines[i];
 
                         ListViewItem item = CreateHighlightedListItem(line);
                         if (item != null)
@@ -585,6 +632,41 @@ namespace serialog
             }
         }
 
+        private void saveSerialAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Stream myStream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 1;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    Form3_progressbar form3 = new Form3_progressbar("Saving Serial data to file...");
+                    form3.StartPosition = FormStartPosition.Manual;
+                    form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
+                    form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
+                    form3.Show();
+                    form3.ProgressBarSetup(1, 1);
+                    Thread.Sleep(200);
+                    // Code to write the stream goes here.
+                    using (var stream = GenerateStreamFromSerialData())
+                    {
+                        if (stream != null)
+                            stream.CopyTo(myStream);
+                    }
+
+                    form3.ProgressBarIncrement();
+                    Thread.Sleep(300);
+                    form3.Close();
+
+                    myStream.Close();
+                }
+            }
+        }
         private void FindNextString(string text)
         {
             if (text == "")
@@ -600,14 +682,15 @@ namespace serialog
             {
                 if (listView1.Items[i].Text.Contains(text))
                 {
-                    //listView1.Select();
+                    listView1.Select();
                     checkBox_follow.Checked = false;
                     listView1.SelectedItems.Clear();
                     listView1.Items[i].Selected = true;
                     listView1.Items[i].EnsureVisible();
-                    break;
+                    return;
                 }
             }
+            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void FindPrevString(string text)
@@ -626,13 +709,14 @@ namespace serialog
                 if (listView1.Items[i].Text.Contains(text))
                 {
                     checkBox_follow.Checked = false;
-                    //listView1.Select();
+                    listView1.Select();
                     listView1.SelectedItems.Clear();
                     listView1.Items[i].Selected = true;
                     listView1.Items[i].EnsureVisible();
-                    break;
+                    return;
                 }
             }
+            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void FindFirstString(string text)
@@ -645,13 +729,14 @@ namespace serialog
                 if (listView1.Items[i].Text.Contains(text))
                 {
                     checkBox_follow.Checked = false;
-                    //listView1.Select();
+                    listView1.Select();
                     listView1.SelectedItems.Clear();
                     listView1.Items[i].Selected = true;
                     listView1.Items[i].EnsureVisible();
-                    break;
+                    return;
                 }
             }
+            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void FindLastString(string text)
@@ -664,13 +749,14 @@ namespace serialog
                 if (listView1.Items[i].Text.Contains(text))
                 {
                     checkBox_follow.Checked = false;
-                    //listView1.Select();
+                    listView1.Select();
                     listView1.SelectedItems.Clear();
                     listView1.Items[i].Selected = true;
                     listView1.Items[i].EnsureVisible();
-                    break;
+                    return;
                 }
             }
+            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void FindAllString(string text)
@@ -697,6 +783,10 @@ namespace serialog
             {
                 checkBox_follow.Checked = false;
                 listView1.Items[listView1.SelectedIndices[listView1.SelectedIndices.Count - 1]].EnsureVisible();
+            }
+            else
+            {
+                MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -743,10 +833,18 @@ namespace serialog
             }
         }
 
-        private void clearAllToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             listView1.Items.Clear();
+            _serialDataList.Clear();
             _listviewSizeBytes = 0;
+            _prevListviewSizeBytes = 0;
+            _serialDataListSizeBytes = 0;
+            _prevSerialDataListSizeBytes = 0;
+            _serialDataListCountAddedToTable = 0;
+            runTime = new Stopwatch();
+            if (!_serialcomStopped)
+                runTime.Start();
         }
 
         private void ReloadAllListViewItems()
@@ -820,6 +918,28 @@ namespace serialog
                 ReloadSelectedListViewItems(listView1.SelectedItems);
         }
 
+        string NumberToBKBMB(double num, string suffix = "")
+        {
+            string str;
+
+            if (num > 1024.0 * 1024.0)
+            {
+                num /= 1024.0 * 1024.0;
+                str = num.ToString("0.00") + " MB" + suffix;
+            }
+            else if (num > 1024.0)
+            {
+                num /= 1024.0;
+                str = num.ToString("0.00") + " KB" + suffix;
+            }
+            else
+            {
+                str = Convert.ToInt32(num).ToString() + " B" + suffix;
+            }
+
+            return str;
+        }
+
         private void timer_updatesysinfo_Tick(object sender, EventArgs e)
         {
             var up = upTime.Elapsed;
@@ -834,26 +954,33 @@ namespace serialog
             if (run.Minutes > 0) runs += run.Minutes.ToString("00") + ":";
             if (run.Seconds > 0) runs += run.Seconds.ToString("00");
 
-            // So that saved file size will be the same as the one in the label subtract one byte (last newline)
-            double size = _listviewSizeBytes > 0 ? _listviewSizeBytes - 1 : 0;
-            string sizeStr;
-            if (size > 1024.0 * 1024.0)
-            {
-                size /= 1024.0 * 1024.0;
-                sizeStr = size.ToString("0.00") + " MB";
-            }
-            else if (size > 1024.0)
-            {
-                size /= 1024.0;
-                sizeStr = size.ToString("0.00") + " KB";
-            }
-            else
-            {
-                sizeStr = Convert.ToInt32(size).ToString() + " B";
-            }
 
-            label_processinfo.Text = "Alive: " + ups +
-                " Running: " + runs + " Data: " + sizeStr;
+            string serialSizeStr = NumberToBKBMB(_serialDataListSizeBytes);
+
+            double serialBytesPerSec = (double)(_serialDataListSizeBytes - _prevSerialDataListSizeBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
+            _prevSerialDataListSizeBytes = _serialDataListSizeBytes;
+            string serialSpeedStr = NumberToBKBMB(serialBytesPerSec, "/s");
+            double avgSerialBytesPerSec = _serialDataListSizeBytes / (run.TotalSeconds > 0 ? run.TotalSeconds : 1);
+            string avgSerialSpeedStr = NumberToBKBMB(avgSerialBytesPerSec, "/s");
+
+            // So that saved file size will be the same as the one in the label subtract one byte (last newline)                       
+            double listSize = _listviewSizeBytes > 0 ? _listviewSizeBytes - 1 : 0;
+            string listSizeStr = NumberToBKBMB(listSize);
+
+            double listBytesPerSec = (double)(_listviewSizeBytes - _prevListviewSizeBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
+            _prevListviewSizeBytes = _listviewSizeBytes;
+            string listSpeedStr = NumberToBKBMB(listBytesPerSec, "/s");
+            double avgListBytesPerSec = _listviewSizeBytes / (run.TotalSeconds > 0 ? run.TotalSeconds : 1);
+            string avgListSpeedStr = NumberToBKBMB(avgListBytesPerSec, "/s");
+
+            string availableBytesStr = NumberToBKBMB(_serialCom.GetAvailableBytes());
+
+            this.Text = "Serialog |" +
+                "   Serial: " + serialSizeStr + " @ " + serialSpeedStr + " (avg. " + avgSerialSpeedStr + ")" +
+                "   List: " + listSizeStr + " @ " + listSpeedStr + " (avg. " + avgListSpeedStr + ")" +
+                "   Available: " + availableBytesStr +
+                "   Alive: " + ups +
+                "   Running: " + runs;
         }
 
         private void fontToolStripMenuItem_Click(object sender, EventArgs e)
@@ -901,15 +1028,164 @@ namespace serialog
         private void toolStripMenuItem_hiderest_Click(object sender, EventArgs e)
         {
             toolStripMenuItem_hiderest.Checked = !toolStripMenuItem_hiderest.Checked;
+            hideHighlightedToolStripMenuItem.Checked = toolStripMenuItem_hiderest.Checked;
             if (!toolStripMenuItem_hiderest.Checked)
+            {
                 alsoRemoveToolStripMenuItem.Checked = false;
+                alsoRemoveToolStripMenuItem1.Checked = false;
+            }
+
         }
 
         private void alsoRemoveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             alsoRemoveToolStripMenuItem.Checked = !alsoRemoveToolStripMenuItem.Checked;
+            alsoRemoveToolStripMenuItem1.Checked = alsoRemoveToolStripMenuItem.Checked;
             if (alsoRemoveToolStripMenuItem.Checked)
+            {
                 toolStripMenuItem_hiderest.Checked = true;
+                hideHighlightedToolStripMenuItem.Checked = true;
+            }
+        }
+
+        private void selectAllToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            selectAllToolStripMenuItem_Click(sender, e);
+        }
+
+        private void clearAllToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            clearAllToolStripMenuItem_Click(sender, e);
+        }
+
+        private void reloadToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            reloadToolStripMenuItem_Click(sender, e);
+        }
+
+        private void highlightToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            highlightsToolStripMenuItem_Click(sender, e);
+        }
+
+        private void hideHighlightedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            toolStripMenuItem_hiderest_Click(sender, e);
+        }
+
+        private void alsoRemoveToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            alsoRemoveToolStripMenuItem_Click(sender, e);
+        }
+
+        // This one is the menustrip click function
+        private void disableHighlightsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            disableHighlightsToolStripMenuItem.Checked = !disableHighlightsToolStripMenuItem.Checked;
+            disableHighlightsToolStripMenuItem1.Checked = disableHighlightsToolStripMenuItem.Checked;
+            if (!disableHighlightsToolStripMenuItem.Checked)
+            {
+                disableHighlightsToolStripMenuItem.Checked = false;
+                disableHighlightsToolStripMenuItem1.Checked = false;
+            }
+        }
+
+        // This one is the context click function
+        private void disableHighlightsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            disableHighlightsToolStripMenuItem_Click(sender, e);
+        }
+
+        private static DialogResult ShowInputDialogBox(ref string input, string prompt, string title = "Title", int width = 300, int height = 200)
+        {
+            //This function creates the custom input dialog box by individually creating the different window elements and adding them to the dialog box
+
+            //Specify the size of the window using the parameters passed
+            Size size = new Size(width, height);
+            //Create a new form using a System.Windows Form
+            Form inputBox = new Form();
+
+            inputBox.FormBorderStyle = FormBorderStyle.FixedDialog;
+            inputBox.ClientSize = size;
+            //Set the window title using the parameter passed
+            inputBox.Text = title;
+
+            //Create a new label to hold the prompt
+            Label label = new Label();
+            label.Text = prompt;
+            label.Location = new Point(5, 5);
+            label.Width = size.Width - 10;
+            inputBox.Controls.Add(label);
+
+            //Create a textbox to accept the user's input
+            TextBox textBox = new TextBox();
+            textBox.Size = new Size(size.Width - 10, 23);
+            textBox.Location = new Point(5, label.Location.Y + 25);
+            textBox.Text = input;
+            textBox.BorderStyle = BorderStyle.FixedSingle;
+            inputBox.Controls.Add(textBox);
+
+            //Create an OK Button 
+            Button okButton = new Button();
+            okButton.DialogResult = DialogResult.OK;
+            okButton.Name = "okButton";
+            okButton.Size = new Size(75, 23);
+            okButton.Text = "&OK";
+            okButton.Location = new Point(size.Width - 80 - 80, size.Height - 30);
+            inputBox.Controls.Add(okButton);
+
+            //Create a Cancel Button
+            Button cancelButton = new Button();
+            cancelButton.DialogResult = DialogResult.Cancel;
+            cancelButton.Name = "cancelButton";
+            cancelButton.Size = new Size(75, 23);
+            cancelButton.Text = "&Cancel";
+            cancelButton.Location = new Point(size.Width - 80, size.Height - 30);
+            inputBox.Controls.Add(cancelButton);
+
+            //Set the input box's buttons to the created OK and Cancel Buttons respectively so the window appropriately behaves with the button clicks
+            inputBox.AcceptButton = okButton;
+            inputBox.CancelButton = cancelButton;
+
+            //Show the window dialog box 
+            DialogResult result = inputBox.ShowDialog();
+            input = textBox.Text;
+
+            //After input has been submitted, return the input value
+            return result;
+        }
+
+
+        private void addCustomRowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var selected = listView1.SelectedIndices;
+            int addRowAtIndex = listView1.Items.Count;
+
+            if (selected.Count > 0)
+                addRowAtIndex = selected[selected.Count - 1] + 1;
+
+            string input = "";
+            var result = ShowInputDialogBox(ref input, "Enter text: ", "Custom row entry", 300, 100);
+
+            if (result == DialogResult.OK)
+            {
+                // Add item
+                ListViewItem item = new ListViewItem(input);
+                var ret = listView1.Items.Insert(addRowAtIndex, item);
+
+                // Ensure listview is selected
+                listView1.Select();
+
+                // Select added item
+                listView1.SelectedIndices.Clear();
+                ret.Selected = true;
+                ret.EnsureVisible();
+            }
+        }
+
+        private void addCustomRowToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            addCustomRowToolStripMenuItem_Click(sender, e);
         }
     }
 }
