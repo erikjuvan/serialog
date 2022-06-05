@@ -350,17 +350,23 @@ namespace serialog
         {
             comboBox_preset.Items.Clear();
 
-            string dirPath = ".settings";
             // list of files without the path, just file name
-            var listOfFiles2 = Directory.EnumerateFiles(dirPath, "*", SearchOption.AllDirectories).Select(Path.GetFileName);
-            var listOfPresets = listOfFiles2.Where(text => text.Contains(".highlight"));
-            foreach (var preset in listOfPresets)
+            try
             {
-                int to = preset.IndexOf(".");
+                var listOfFiles = Directory.EnumerateFiles(".settings", "*", SearchOption.AllDirectories).Select(Path.GetFileName);
+                var listOfPresets = listOfFiles.Where(text => text.Contains(".highlight"));
+                foreach (var preset in listOfPresets)
+                {
+                    int to = preset.IndexOf(".");
 
-                var result = preset.Substring(0, to);
+                    var result = preset.Substring(0, to);
 
-                comboBox_preset.Items.Add(result);
+                    comboBox_preset.Items.Add(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
