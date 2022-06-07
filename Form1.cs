@@ -680,7 +680,7 @@ namespace serialog
 
             for (int i = searchFromIndex; i < listView1.Items.Count; i++)
             {
-                if (listView1.Items[i].Text.Contains(text))
+                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
                 {
                     listView1.Select();
                     checkBox_follow.Checked = false;
@@ -706,7 +706,7 @@ namespace serialog
 
             for (int i = searchFromIndex; i >= 0; i--)
             {
-                if (listView1.Items[i].Text.Contains(text))
+                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
                 {
                     checkBox_follow.Checked = false;
                     listView1.Select();
@@ -726,7 +726,7 @@ namespace serialog
 
             for (int i = 0; i < listView1.Items.Count; i++)
             {
-                if (listView1.Items[i].Text.Contains(text))
+                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
                 {
                     checkBox_follow.Checked = false;
                     listView1.Select();
@@ -746,7 +746,7 @@ namespace serialog
 
             for (int i = listView1.Items.Count - 1; i >= 0; i--)
             {
-                if (listView1.Items[i].Text.Contains(text))
+                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
                 {
                     checkBox_follow.Checked = false;
                     listView1.Select();
@@ -767,7 +767,7 @@ namespace serialog
             bool foundText = false;
             for (int i = 0; i < listView1.Items.Count; i++)
             {
-                if (listView1.Items[i].Text.Contains(text))
+                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
                 {
                     if (!foundText)
                     {
