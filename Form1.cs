@@ -28,8 +28,6 @@ namespace serialog
         {
             InitializeComponent();
 
-            label_processinfo.Text = "";
-
             comboBox_port.Items.AddRange(GetSortedPorts());
 
             if (comboBox_port.Items.Count > 0)

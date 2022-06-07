@@ -36,6 +36,7 @@
             this.selectAllToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.clearAllToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.addCustomRowToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.highlightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideHighlightedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,10 +76,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBox_find = new System.Windows.Forms.TextBox();
             this.button_findall = new System.Windows.Forms.Button();
-            this.label_processinfo = new System.Windows.Forms.Label();
             this.timer_updatesysinfo = new System.Windows.Forms.Timer(this.components);
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
-            this.addCustomRowToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -123,7 +122,7 @@
             this.alsoRemoveToolStripMenuItem1,
             this.disableHighlightsToolStripMenuItem1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(194, 208);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(194, 186);
             // 
             // selectAllToolStripMenuItem1
             // 
@@ -147,6 +146,13 @@
             this.reloadToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
             this.reloadToolStripMenuItem1.Text = "Reload";
             this.reloadToolStripMenuItem1.Click += new System.EventHandler(this.reloadToolStripMenuItem1_Click);
+            // 
+            // addCustomRowToolStripMenuItem1
+            // 
+            this.addCustomRowToolStripMenuItem1.Name = "addCustomRowToolStripMenuItem1";
+            this.addCustomRowToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
+            this.addCustomRowToolStripMenuItem1.Text = "Add Custom Row...";
+            this.addCustomRowToolStripMenuItem1.Click += new System.EventHandler(this.addCustomRowToolStripMenuItem1_Click);
             // 
             // toolStripMenuItem2
             // 
@@ -261,7 +267,7 @@
             // selectAllToolStripMenuItem
             // 
             this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.selectAllToolStripMenuItem.Text = "Select All";
             this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
             // 
@@ -269,7 +275,7 @@
             // 
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
             this.clearAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.clearAllToolStripMenuItem.Text = "Clear All";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
             // 
@@ -277,14 +283,14 @@
             // 
             this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
             this.reloadToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.reloadToolStripMenuItem.Text = "Reload";
             this.reloadToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
             // 
             // addCustomRowToolStripMenuItem
             // 
             this.addCustomRowToolStripMenuItem.Name = "addCustomRowToolStripMenuItem";
-            this.addCustomRowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addCustomRowToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.addCustomRowToolStripMenuItem.Text = "Add Custom Row...";
             this.addCustomRowToolStripMenuItem.Click += new System.EventHandler(this.addCustomRowToolStripMenuItem_Click);
             // 
@@ -477,34 +483,17 @@
             this.button_findall.UseVisualStyleBackColor = true;
             this.button_findall.Click += new System.EventHandler(this.button_findall_Click);
             // 
-            // label_processinfo
-            // 
-            this.label_processinfo.AutoSize = true;
-            this.label_processinfo.Location = new System.Drawing.Point(675, 36);
-            this.label_processinfo.Name = "label_processinfo";
-            this.label_processinfo.Size = new System.Drawing.Size(28, 15);
-            this.label_processinfo.TabIndex = 0;
-            this.label_processinfo.Text = "Info";
-            // 
             // timer_updatesysinfo
             // 
             this.timer_updatesysinfo.Enabled = true;
             this.timer_updatesysinfo.Interval = 1000;
             this.timer_updatesysinfo.Tick += new System.EventHandler(this.timer_updatesysinfo_Tick);
             // 
-            // addCustomRowToolStripMenuItem1
-            // 
-            this.addCustomRowToolStripMenuItem1.Name = "addCustomRowToolStripMenuItem1";
-            this.addCustomRowToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
-            this.addCustomRowToolStripMenuItem1.Text = "Add Custom Row...";
-            this.addCustomRowToolStripMenuItem1.Click += new System.EventHandler(this.addCustomRowToolStripMenuItem1_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(934, 961);
-            this.Controls.Add(this.label_processinfo);
             this.Controls.Add(this.button_findall);
             this.Controls.Add(this.textBox_find);
             this.Controls.Add(this.label3);
@@ -567,7 +556,6 @@
         private ToolStripMenuItem selectAllToolStripMenuItem;
         private ToolStripMenuItem clearAllToolStripMenuItem;
         private ToolStripMenuItem reloadToolStripMenuItem;
-        private Label label_processinfo;
         private System.Windows.Forms.Timer timer_updatesysinfo;
         private ToolStripMenuItem addStartStopTimestampToolStripMenuItem;
         private FontDialog fontDialog1;
