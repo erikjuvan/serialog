@@ -1185,5 +1185,99 @@ namespace serialog
         {
             addCustomRowToolStripMenuItem_Click(sender, e);
         }
+
+        private void FindHighlighted(int startIdx, bool reverse = false)
+        {
+            if (reverse)
+            {
+                for (int i = startIdx; i >= 0; --i)
+                {
+                    var itm = listView1.Items[i];
+                    if (itm.ForeColor.Name != "WindowText" || itm.BackColor.Name != "Window")
+                    {
+                        checkBox_follow.Checked = false;
+                        listView1.Select();
+                        listView1.SelectedItems.Clear();
+                        listView1.Items[i].Selected = true;
+                        listView1.Items[i].EnsureVisible();
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = startIdx; i < listView1.Items.Count; ++i)
+                {
+                    var itm = listView1.Items[i];
+                    if (itm.ForeColor.Name != "WindowText" || itm.BackColor.Name != "Window")
+                    {
+                        checkBox_follow.Checked = false;
+                        listView1.Select();
+                        listView1.SelectedItems.Clear();
+                        listView1.Items[i].Selected = true;
+                        listView1.Items[i].EnsureVisible();
+                        return;
+                    }
+                }
+            }
+
+            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void FindFirstHighlightedEntry()
+        {
+            FindHighlighted(0);
+        }
+
+        private void FindPrevHighlightedEntry()
+        {
+            var selected = listView1.SelectedIndices;
+            int searchFromIndex = listView1.Items.Count - 1;
+
+            if (selected.Count > 0)
+                searchFromIndex = selected[0] - 1;
+
+            FindHighlighted(searchFromIndex, true);
+        }
+
+        private void FindLastHighlightedEntry()
+        {
+            FindHighlighted(listView1.Items.Count - 1, true);
+        }
+
+        private void FindNextHighlightedEntry()
+        {
+            var selected = listView1.SelectedIndices;
+            int searchFromIndex = 0;
+
+            if (selected.Count > 0)
+                searchFromIndex = selected[selected.Count - 1] + 1;
+
+            FindHighlighted(searchFromIndex);
+        }
+
+        private void button_prev_highlight_Click(object sender, EventArgs e)
+        {
+            if ((ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                FindFirstHighlightedEntry();
+            }
+            else
+            {
+                FindPrevHighlightedEntry();
+            }
+        }
+
+        private void button_next_highlight_Click(object sender, EventArgs e)
+        {
+            if ((ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                FindLastHighlightedEntry();
+            }
+            else
+            {
+                FindNextHighlightedEntry();
+            }
+        }
     }
 }
