@@ -78,6 +78,8 @@
             this.button_findall = new System.Windows.Forms.Button();
             this.timer_updatesysinfo = new System.Windows.Forms.Timer(this.components);
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
+            this.button_prev_highlight = new System.Windows.Forms.Button();
+            this.button_next_highlight = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -489,11 +491,37 @@
             this.timer_updatesysinfo.Interval = 1000;
             this.timer_updatesysinfo.Tick += new System.EventHandler(this.timer_updatesysinfo_Tick);
             // 
+            // button_prev_highlight
+            // 
+            this.button_prev_highlight.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.button_prev_highlight.ForeColor = System.Drawing.Color.Black;
+            this.button_prev_highlight.Location = new System.Drawing.Point(681, 32);
+            this.button_prev_highlight.Name = "button_prev_highlight";
+            this.button_prev_highlight.Size = new System.Drawing.Size(33, 23);
+            this.button_prev_highlight.TabIndex = 19;
+            this.button_prev_highlight.Text = "<h";
+            this.button_prev_highlight.UseVisualStyleBackColor = true;
+            this.button_prev_highlight.Click += new System.EventHandler(this.button_prev_highlight_Click);
+            // 
+            // button_next_highlight
+            // 
+            this.button_next_highlight.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.button_next_highlight.ForeColor = System.Drawing.Color.Black;
+            this.button_next_highlight.Location = new System.Drawing.Point(718, 32);
+            this.button_next_highlight.Name = "button_next_highlight";
+            this.button_next_highlight.Size = new System.Drawing.Size(33, 23);
+            this.button_next_highlight.TabIndex = 20;
+            this.button_next_highlight.Text = "h>";
+            this.button_next_highlight.UseVisualStyleBackColor = true;
+            this.button_next_highlight.Click += new System.EventHandler(this.button_next_highlight_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(934, 961);
+            this.Controls.Add(this.button_prev_highlight);
+            this.Controls.Add(this.button_next_highlight);
             this.Controls.Add(this.button_findall);
             this.Controls.Add(this.textBox_find);
             this.Controls.Add(this.label3);
@@ -574,5 +602,7 @@
         private ToolStripMenuItem disableHighlightsToolStripMenuItem1;
         private ToolStripMenuItem addCustomRowToolStripMenuItem;
         private ToolStripMenuItem addCustomRowToolStripMenuItem1;
+        private Button button_prev_highlight;
+        private Button button_next_highlight;
     }
 }
