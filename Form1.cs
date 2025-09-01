@@ -33,7 +33,7 @@ namespace serialog
             if (comboBox_port.Items.Count > 0)
                 comboBox_port.SelectedIndex = 0;
 
-            comboBox_baud.SelectedItem = "1000000";
+            comboBox_baud.SelectedItem = "921600";
 
             _serialcomStopped = true;
             button_stop.Enabled = false;
@@ -58,18 +58,39 @@ namespace serialog
             }
 
         }
-
         private string[] GetSortedPorts()
         {
-            var port_names = SerialCom.GetPortNames();
-            try
-            {
-                Array.Sort(port_names, (x, y) => Int32.Parse(x.Substring(3, x.Length - 3)) >
-            Int32.Parse(y.Substring(3, y.Length - 3)) ? 1 : -1);
-            }
-            catch (Exception ex) { }
+            var portNames = SerialCom.GetPortNames();
 
-            return port_names;
+            Array.Sort(portNames, (x, y) =>
+            {
+                int xNum = 0, yNum = 0;
+
+                bool xIsCom = x.StartsWith("COM", StringComparison.OrdinalIgnoreCase) &&
+                              int.TryParse(x.Substring(3), out xNum);
+
+                bool yIsCom = y.StartsWith("COM", StringComparison.OrdinalIgnoreCase) &&
+                              int.TryParse(y.Substring(3), out yNum);
+
+                if (xIsCom && yIsCom)
+                {
+                    return xNum.CompareTo(yNum); // sort numerically
+                }
+                else if (xIsCom)
+                {
+                    return -1; // COM ports first
+                }
+                else if (yIsCom)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return string.Compare(x, y, StringComparison.OrdinalIgnoreCase);
+                }
+            });
+
+            return portNames;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
