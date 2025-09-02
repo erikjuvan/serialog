@@ -222,102 +222,43 @@ namespace serialog
 
         private ListViewItem CreateHighlightedListItem(string line)
         {
-            ListViewItem item = new ListViewItem(line);
+            var item = new ListViewItem(line);
 
             if (disableHighlightsToolStripMenuItem.Checked)
-            {
                 return item;
-            }
 
-            foreach (HighlightEntry highlightEntry in Form2_Highlight.highlightEntries.Items)
+            foreach (HighlightEntry entry in Form2_Highlight.highlightEntries.Items)
             {
-                if (!highlightEntry.enabled)
-                    continue;
+                if (!entry.enabled) continue;
 
-                // text
-                string highlightText = highlightEntry.text;
+                string haystack = entry.ignoreCase ? line.ToLower() : line;
+                string pattern = entry.ignoreCase ? entry.text.ToLower() : entry.text;
 
-                // ignoreCase
-                if (highlightEntry.ignoreCase)
-                {
-                    line = line.ToLower();
-                    highlightText = highlightText.ToLower();
-                }
-
-                bool foundMatch = false;
-
-                if (line.Contains(highlightText))
-                {
-                    foundMatch = true;
-                }
-                // AND &
-                else if (highlightText.Contains("&"))
-                {
-                    var tokens = highlightText.Split("&");
-                    int numOfTokens = tokens.Length;
-
-                    int numOfFoundTokens = 0;
-
-                    foreach (var token in tokens)
-                    {
-                        if (line.Contains(token))
-                        {
-                            numOfFoundTokens++;
-                        }
-                    }
-
-                    foundMatch = numOfFoundTokens == numOfTokens;
-                }
-                // OR |
-                else if (highlightText.Contains("|"))
-                {
-                    var tokens = highlightText.Split("|");
-                    int numOfTokens = tokens.Length;
-
-                    int numOfFoundTokens = 0;
-
-                    foreach (var token in tokens)
-                    {
-                        if (line.Contains(token))
-                        {
-                            foundMatch = true;
-                            break;
-                        }
-                    }
-                }
+                bool foundMatch = MatchesPattern(haystack, pattern);
 
                 if (foundMatch)
                 {
-                    // remove
-                    if (highlightEntry.remove)
-                    {
+                    if (entry.remove)
                         return null;
-                    }
 
-                    // hide
-                    if (highlightEntry.hide)
+                    if (entry.hide)
                     {
                         item.ForeColor = Color.Transparent;
                         item.BackColor = Color.Transparent;
-
                         return item;
                     }
 
-                    // foreColor
-                    item.ForeColor = highlightEntry.foreColor;
-                    // backColor
-                    item.BackColor = highlightEntry.backColor;
+                    item.ForeColor = entry.foreColor;
+                    item.BackColor = entry.backColor;
 
-                    // Font (bold, italic)
-                    if (highlightEntry.bold && highlightEntry.italic)
-                        item.Font = new Font(listView1.Font, FontStyle.Bold | FontStyle.Italic);
-                    else if (highlightEntry.bold)
-                        item.Font = new Font(listView1.Font, FontStyle.Bold);
-                    else if (highlightEntry.italic)
-                        item.Font = new Font(listView1.Font, FontStyle.Italic);
+                    // Font styles
+                    FontStyle style = FontStyle.Regular;
+                    if (entry.bold) style |= FontStyle.Bold;
+                    if (entry.italic) style |= FontStyle.Italic;
+                    if (style != FontStyle.Regular)
+                        item.Font = new Font(listView1.Font, style);
 
-                    // This return implements that the higher entries have priority since it returns as soon as it finds first match
-                    return item;
+                    return item; // first match wins
                 }
             }
 
@@ -325,17 +266,31 @@ namespace serialog
             if (toolStripMenuItem_hiderest.Checked)
             {
                 if (alsoRemoveToolStripMenuItem.Checked)
-                {
                     return null;
-                }
-                else
-                {
-                    item.ForeColor = Color.Transparent;
-                    item.BackColor = Color.Transparent;
-                }
+
+                item.ForeColor = Color.Transparent;
+                item.BackColor = Color.Transparent;
             }
 
             return item;
+        }
+
+        private bool MatchesPattern(string line, string pattern)
+        {
+            if (pattern.Contains("&"))
+            {
+                var tokens = pattern.Split('&');
+                return tokens.All(token => line.Contains(token));
+            }
+            else if (pattern.Contains("|"))
+            {
+                var tokens = pattern.Split('|');
+                return tokens.Any(token => line.Contains(token));
+            }
+            else
+            {
+                return line.Contains(pattern);
+            }
         }
 
         private void AddEntry()

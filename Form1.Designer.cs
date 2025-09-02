@@ -426,6 +426,7 @@
             this.comboBox_baud.Items.AddRange(new object[] {
             "9600",
             "115200",
+            "921600",
             "1000000"});
             this.comboBox_baud.Location = new System.Drawing.Point(174, 32);
             this.comboBox_baud.Name = "comboBox_baud";
