@@ -95,10 +95,11 @@
             this.listView1.ContextMenuStrip = this.contextMenuStrip1;
             this.listView1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.listView1.GridLines = true;
-            this.listView1.Location = new System.Drawing.Point(12, 61);
+            this.listView1.Location = new System.Drawing.Point(17, 102);
+            this.listView1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.listView1.Name = "listView1";
             this.listView1.ShowGroups = false;
-            this.listView1.Size = new System.Drawing.Size(910, 888);
+            this.listView1.Size = new System.Drawing.Size(1299, 1479);
             this.listView1.TabIndex = 12;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -124,12 +125,12 @@
             this.alsoRemoveToolStripMenuItem1,
             this.disableHighlightsToolStripMenuItem1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(194, 186);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(259, 266);
             // 
             // selectAllToolStripMenuItem1
             // 
             this.selectAllToolStripMenuItem1.Name = "selectAllToolStripMenuItem1";
-            this.selectAllToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
+            this.selectAllToolStripMenuItem1.Size = new System.Drawing.Size(258, 32);
             this.selectAllToolStripMenuItem1.Text = "Select All";
             this.selectAllToolStripMenuItem1.Click += new System.EventHandler(this.selectAllToolStripMenuItem1_Click);
             // 
@@ -137,7 +138,7 @@
             // 
             this.clearAllToolStripMenuItem1.Name = "clearAllToolStripMenuItem1";
             this.clearAllToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
-            this.clearAllToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
+            this.clearAllToolStripMenuItem1.Size = new System.Drawing.Size(258, 32);
             this.clearAllToolStripMenuItem1.Text = "Clear All";
             this.clearAllToolStripMenuItem1.Click += new System.EventHandler(this.clearAllToolStripMenuItem1_Click);
             // 
@@ -145,48 +146,48 @@
             // 
             this.reloadToolStripMenuItem1.Name = "reloadToolStripMenuItem1";
             this.reloadToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.reloadToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
+            this.reloadToolStripMenuItem1.Size = new System.Drawing.Size(258, 32);
             this.reloadToolStripMenuItem1.Text = "Reload";
             this.reloadToolStripMenuItem1.Click += new System.EventHandler(this.reloadToolStripMenuItem1_Click);
             // 
             // addCustomRowToolStripMenuItem1
             // 
             this.addCustomRowToolStripMenuItem1.Name = "addCustomRowToolStripMenuItem1";
-            this.addCustomRowToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
+            this.addCustomRowToolStripMenuItem1.Size = new System.Drawing.Size(258, 32);
             this.addCustomRowToolStripMenuItem1.Text = "Add Custom Row...";
             this.addCustomRowToolStripMenuItem1.Click += new System.EventHandler(this.addCustomRowToolStripMenuItem1_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(190, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(255, 6);
             // 
             // highlightToolStripMenuItem
             // 
             this.highlightToolStripMenuItem.Name = "highlightToolStripMenuItem";
             this.highlightToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
-            this.highlightToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.highlightToolStripMenuItem.Size = new System.Drawing.Size(258, 32);
             this.highlightToolStripMenuItem.Text = "Highlighting...";
             this.highlightToolStripMenuItem.Click += new System.EventHandler(this.highlightToolStripMenuItem_Click);
             // 
             // hideHighlightedToolStripMenuItem
             // 
             this.hideHighlightedToolStripMenuItem.Name = "hideHighlightedToolStripMenuItem";
-            this.hideHighlightedToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.hideHighlightedToolStripMenuItem.Size = new System.Drawing.Size(258, 32);
             this.hideHighlightedToolStripMenuItem.Text = "Hide Unhighlighted";
             this.hideHighlightedToolStripMenuItem.Click += new System.EventHandler(this.hideHighlightedToolStripMenuItem_Click);
             // 
             // alsoRemoveToolStripMenuItem1
             // 
             this.alsoRemoveToolStripMenuItem1.Name = "alsoRemoveToolStripMenuItem1";
-            this.alsoRemoveToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
+            this.alsoRemoveToolStripMenuItem1.Size = new System.Drawing.Size(258, 32);
             this.alsoRemoveToolStripMenuItem1.Text = "    ↪ Also Remove";
             this.alsoRemoveToolStripMenuItem1.Click += new System.EventHandler(this.alsoRemoveToolStripMenuItem1_Click);
             // 
             // disableHighlightsToolStripMenuItem1
             // 
             this.disableHighlightsToolStripMenuItem1.Name = "disableHighlightsToolStripMenuItem1";
-            this.disableHighlightsToolStripMenuItem1.Size = new System.Drawing.Size(193, 22);
+            this.disableHighlightsToolStripMenuItem1.Size = new System.Drawing.Size(258, 32);
             this.disableHighlightsToolStripMenuItem1.Text = "Disable Highlighting";
             this.disableHighlightsToolStripMenuItem1.Click += new System.EventHandler(this.disableHighlightsToolStripMenuItem1_Click);
             // 
@@ -199,7 +200,8 @@
             this.settingsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(934, 24);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
+            this.menuStrip1.Size = new System.Drawing.Size(1334, 35);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -212,14 +214,14 @@
             this.saveSerialAsToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(54, 29);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(368, 34);
             this.openToolStripMenuItem.Text = "Open...";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -227,7 +229,7 @@
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(368, 34);
             this.saveAsToolStripMenuItem.Text = "Save As...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
@@ -236,14 +238,14 @@
             this.saveSelectedToolStripMenuItem.Name = "saveSelectedToolStripMenuItem";
             this.saveSelectedToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.S)));
-            this.saveSelectedToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
+            this.saveSelectedToolStripMenuItem.Size = new System.Drawing.Size(368, 34);
             this.saveSelectedToolStripMenuItem.Text = "Save Selected As...";
             this.saveSelectedToolStripMenuItem.Click += new System.EventHandler(this.saveSelectedToolStripMenuItem_Click);
             // 
             // saveSerialAsToolStripMenuItem
             // 
             this.saveSerialAsToolStripMenuItem.Name = "saveSerialAsToolStripMenuItem";
-            this.saveSerialAsToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
+            this.saveSerialAsToolStripMenuItem.Size = new System.Drawing.Size(368, 34);
             this.saveSerialAsToolStripMenuItem.Text = "Save \"Serial\" As ...";
             this.saveSerialAsToolStripMenuItem.Click += new System.EventHandler(this.saveSerialAsToolStripMenuItem_Click);
             // 
@@ -251,7 +253,7 @@
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(368, 34);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -263,13 +265,13 @@
             this.reloadToolStripMenuItem,
             this.addCustomRowToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(58, 29);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // selectAllToolStripMenuItem
             // 
             this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(266, 34);
             this.selectAllToolStripMenuItem.Text = "Select All";
             this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
             // 
@@ -277,7 +279,7 @@
             // 
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
             this.clearAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(266, 34);
             this.clearAllToolStripMenuItem.Text = "Clear All";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
             // 
@@ -285,14 +287,14 @@
             // 
             this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
             this.reloadToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(266, 34);
             this.reloadToolStripMenuItem.Text = "Reload";
             this.reloadToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
             // 
             // addCustomRowToolStripMenuItem
             // 
             this.addCustomRowToolStripMenuItem.Name = "addCustomRowToolStripMenuItem";
-            this.addCustomRowToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.addCustomRowToolStripMenuItem.Size = new System.Drawing.Size(266, 34);
             this.addCustomRowToolStripMenuItem.Text = "Add Custom Row...";
             this.addCustomRowToolStripMenuItem.Click += new System.EventHandler(this.addCustomRowToolStripMenuItem_Click);
             // 
@@ -306,35 +308,35 @@
             this.addStartStopTimestampToolStripMenuItem,
             this.fontToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(92, 29);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // highlightsToolStripMenuItem
             // 
             this.highlightsToolStripMenuItem.Name = "highlightsToolStripMenuItem";
             this.highlightsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
-            this.highlightsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.highlightsToolStripMenuItem.Size = new System.Drawing.Size(326, 34);
             this.highlightsToolStripMenuItem.Text = "Highlighting...";
             this.highlightsToolStripMenuItem.Click += new System.EventHandler(this.highlightsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem_hiderest
             // 
             this.toolStripMenuItem_hiderest.Name = "toolStripMenuItem_hiderest";
-            this.toolStripMenuItem_hiderest.Size = new System.Drawing.Size(214, 22);
+            this.toolStripMenuItem_hiderest.Size = new System.Drawing.Size(326, 34);
             this.toolStripMenuItem_hiderest.Text = "Hide Unhighlighted";
             this.toolStripMenuItem_hiderest.Click += new System.EventHandler(this.toolStripMenuItem_hiderest_Click);
             // 
             // alsoRemoveToolStripMenuItem
             // 
             this.alsoRemoveToolStripMenuItem.Name = "alsoRemoveToolStripMenuItem";
-            this.alsoRemoveToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.alsoRemoveToolStripMenuItem.Size = new System.Drawing.Size(326, 34);
             this.alsoRemoveToolStripMenuItem.Text = "    ↪ Also Remove";
             this.alsoRemoveToolStripMenuItem.Click += new System.EventHandler(this.alsoRemoveToolStripMenuItem_Click);
             // 
             // disableHighlightsToolStripMenuItem
             // 
             this.disableHighlightsToolStripMenuItem.Name = "disableHighlightsToolStripMenuItem";
-            this.disableHighlightsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.disableHighlightsToolStripMenuItem.Size = new System.Drawing.Size(326, 34);
             this.disableHighlightsToolStripMenuItem.Text = "Disable Highlighting";
             this.disableHighlightsToolStripMenuItem.Click += new System.EventHandler(this.disableHighlightsToolStripMenuItem_Click);
             // 
@@ -342,31 +344,33 @@
             // 
             this.addStartStopTimestampToolStripMenuItem.CheckOnClick = true;
             this.addStartStopTimestampToolStripMenuItem.Name = "addStartStopTimestampToolStripMenuItem";
-            this.addStartStopTimestampToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.addStartStopTimestampToolStripMenuItem.Size = new System.Drawing.Size(326, 34);
             this.addStartStopTimestampToolStripMenuItem.Text = "Add Start/Stop Timestamp";
             // 
             // fontToolStripMenuItem
             // 
             this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
-            this.fontToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.fontToolStripMenuItem.Size = new System.Drawing.Size(326, 34);
             this.fontToolStripMenuItem.Text = "Font...";
             this.fontToolStripMenuItem.Click += new System.EventHandler(this.fontToolStripMenuItem_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 36);
+            this.label1.Location = new System.Drawing.Point(17, 60);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(32, 15);
+            this.label1.Size = new System.Drawing.Size(48, 25);
             this.label1.TabIndex = 4;
             this.label1.Text = "Port:";
             // 
             // button_run
             // 
             this.button_run.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.button_run.Location = new System.Drawing.Point(259, 32);
+            this.button_run.Location = new System.Drawing.Point(370, 53);
+            this.button_run.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_run.Name = "button_run";
-            this.button_run.Size = new System.Drawing.Size(33, 23);
+            this.button_run.Size = new System.Drawing.Size(47, 38);
             this.button_run.TabIndex = 3;
             this.button_run.Text = "▶";
             this.button_run.UseVisualStyleBackColor = true;
@@ -376,27 +380,30 @@
             // 
             this.comboBox_port.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox_port.FormattingEnabled = true;
-            this.comboBox_port.Location = new System.Drawing.Point(50, 32);
+            this.comboBox_port.Location = new System.Drawing.Point(71, 53);
+            this.comboBox_port.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.comboBox_port.Name = "comboBox_port";
-            this.comboBox_port.Size = new System.Drawing.Size(66, 23);
+            this.comboBox_port.Size = new System.Drawing.Size(93, 33);
             this.comboBox_port.TabIndex = 1;
             this.comboBox_port.DropDown += new System.EventHandler(this.comboBox_port_DropDown);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(131, 36);
+            this.label2.Location = new System.Drawing.Point(187, 60);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(37, 15);
+            this.label2.Size = new System.Drawing.Size(56, 25);
             this.label2.TabIndex = 7;
             this.label2.Text = "Baud:";
             // 
             // button_stop
             // 
             this.button_stop.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.button_stop.Location = new System.Drawing.Point(298, 32);
+            this.button_stop.Location = new System.Drawing.Point(426, 53);
+            this.button_stop.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_stop.Name = "button_stop";
-            this.button_stop.Size = new System.Drawing.Size(33, 23);
+            this.button_stop.Size = new System.Drawing.Size(47, 38);
             this.button_stop.TabIndex = 5;
             this.button_stop.Text = "■";
             this.button_stop.UseVisualStyleBackColor = true;
@@ -407,9 +414,10 @@
             this.checkBox_follow.AutoSize = true;
             this.checkBox_follow.Checked = true;
             this.checkBox_follow.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_follow.Location = new System.Drawing.Point(341, 34);
+            this.checkBox_follow.Location = new System.Drawing.Point(487, 57);
+            this.checkBox_follow.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_follow.Name = "checkBox_follow";
-            this.checkBox_follow.Size = new System.Drawing.Size(61, 19);
+            this.checkBox_follow.Size = new System.Drawing.Size(90, 29);
             this.checkBox_follow.TabIndex = 6;
             this.checkBox_follow.Text = "Follow";
             this.checkBox_follow.UseVisualStyleBackColor = true;
@@ -428,18 +436,20 @@
             "115200",
             "921600",
             "1000000"});
-            this.comboBox_baud.Location = new System.Drawing.Point(174, 32);
+            this.comboBox_baud.Location = new System.Drawing.Point(249, 53);
+            this.comboBox_baud.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.comboBox_baud.Name = "comboBox_baud";
-            this.comboBox_baud.Size = new System.Drawing.Size(79, 23);
+            this.comboBox_baud.Size = new System.Drawing.Size(111, 33);
             this.comboBox_baud.TabIndex = 2;
             // 
             // button_findnext
             // 
             this.button_findnext.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button_findnext.ForeColor = System.Drawing.Color.Black;
-            this.button_findnext.Location = new System.Drawing.Point(586, 32);
+            this.button_findnext.Location = new System.Drawing.Point(837, 53);
+            this.button_findnext.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_findnext.Name = "button_findnext";
-            this.button_findnext.Size = new System.Drawing.Size(33, 23);
+            this.button_findnext.Size = new System.Drawing.Size(47, 38);
             this.button_findnext.TabIndex = 9;
             this.button_findnext.Text = ">";
             this.button_findnext.UseVisualStyleBackColor = true;
@@ -449,9 +459,10 @@
             // 
             this.button_findprev.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button_findprev.ForeColor = System.Drawing.Color.Black;
-            this.button_findprev.Location = new System.Drawing.Point(549, 32);
+            this.button_findprev.Location = new System.Drawing.Point(784, 53);
+            this.button_findprev.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_findprev.Name = "button_findprev";
-            this.button_findprev.Size = new System.Drawing.Size(33, 23);
+            this.button_findprev.Size = new System.Drawing.Size(47, 38);
             this.button_findprev.TabIndex = 8;
             this.button_findprev.Text = "<";
             this.button_findprev.UseVisualStyleBackColor = true;
@@ -460,17 +471,19 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(404, 36);
+            this.label3.Location = new System.Drawing.Point(577, 60);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(33, 15);
+            this.label3.Size = new System.Drawing.Size(50, 25);
             this.label3.TabIndex = 18;
             this.label3.Text = "Find:";
             // 
             // textBox_find
             // 
-            this.textBox_find.Location = new System.Drawing.Point(442, 32);
+            this.textBox_find.Location = new System.Drawing.Point(631, 53);
+            this.textBox_find.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_find.Name = "textBox_find";
-            this.textBox_find.Size = new System.Drawing.Size(100, 23);
+            this.textBox_find.Size = new System.Drawing.Size(141, 31);
             this.textBox_find.TabIndex = 7;
             this.textBox_find.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_find_KeyDown);
             // 
@@ -478,9 +491,10 @@
             // 
             this.button_findall.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button_findall.ForeColor = System.Drawing.Color.Black;
-            this.button_findall.Location = new System.Drawing.Point(624, 32);
+            this.button_findall.Location = new System.Drawing.Point(891, 53);
+            this.button_findall.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_findall.Name = "button_findall";
-            this.button_findall.Size = new System.Drawing.Size(33, 23);
+            this.button_findall.Size = new System.Drawing.Size(47, 38);
             this.button_findall.TabIndex = 10;
             this.button_findall.Text = "All";
             this.button_findall.UseVisualStyleBackColor = true;
@@ -496,9 +510,10 @@
             // 
             this.button_prev_highlight.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button_prev_highlight.ForeColor = System.Drawing.Color.Black;
-            this.button_prev_highlight.Location = new System.Drawing.Point(681, 32);
+            this.button_prev_highlight.Location = new System.Drawing.Point(973, 53);
+            this.button_prev_highlight.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_prev_highlight.Name = "button_prev_highlight";
-            this.button_prev_highlight.Size = new System.Drawing.Size(33, 23);
+            this.button_prev_highlight.Size = new System.Drawing.Size(47, 38);
             this.button_prev_highlight.TabIndex = 19;
             this.button_prev_highlight.Text = "<h";
             this.button_prev_highlight.UseVisualStyleBackColor = true;
@@ -508,9 +523,10 @@
             // 
             this.button_next_highlight.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button_next_highlight.ForeColor = System.Drawing.Color.Black;
-            this.button_next_highlight.Location = new System.Drawing.Point(718, 32);
+            this.button_next_highlight.Location = new System.Drawing.Point(1026, 53);
+            this.button_next_highlight.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_next_highlight.Name = "button_next_highlight";
-            this.button_next_highlight.Size = new System.Drawing.Size(33, 23);
+            this.button_next_highlight.Size = new System.Drawing.Size(47, 38);
             this.button_next_highlight.TabIndex = 20;
             this.button_next_highlight.Text = "h>";
             this.button_next_highlight.UseVisualStyleBackColor = true;
@@ -518,9 +534,9 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(934, 961);
+            this.ClientSize = new System.Drawing.Size(1334, 1602);
             this.Controls.Add(this.button_prev_highlight);
             this.Controls.Add(this.button_next_highlight);
             this.Controls.Add(this.button_findall);
@@ -540,7 +556,8 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
-            this.MinimumSize = new System.Drawing.Size(685, 400);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.MinimumSize = new System.Drawing.Size(969, 629);
             this.Name = "Form1";
             this.Text = "serialog";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
