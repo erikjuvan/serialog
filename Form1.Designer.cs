@@ -82,6 +82,7 @@
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
             this.button_prev_highlight = new System.Windows.Forms.Button();
             this.button_next_highlight = new System.Windows.Forms.Button();
+            this.sendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -551,6 +552,13 @@
             this.button_next_highlight.UseVisualStyleBackColor = true;
             this.button_next_highlight.Click += new System.EventHandler(this.button_next_highlight_Click);
             // 
+            // sendToolStripMenuItem
+            // 
+            this.sendToolStripMenuItem.Name = "sendToolStripMenuItem";
+            this.sendToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.sendToolStripMenuItem.Text = "Send...";
+            this.sendToolStripMenuItem.Click += new System.EventHandler(this.sendToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
@@ -644,5 +652,6 @@
         private Button button_next_highlight;
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem highlightsToolStripMenuItem1;
+        private ToolStripMenuItem sendToolStripMenuItem;
     }
 }

@@ -50,6 +50,11 @@ namespace serialog
             serialPort.Open();
         }
 
+        public bool IsOpen()
+        {
+            return serialPort.IsOpen;
+        }
+
         public void Close()
         {
             serialPort.Close();
@@ -72,6 +77,12 @@ namespace serialog
         public string ReadExisting()
         {
             return serialPort.ReadExisting();
+        }
+
+        public void Write(byte[] buffer, int offset, int count)
+        {
+            if (serialPort.IsOpen)
+                serialPort.Write(buffer, offset, count);
         }
 
         public static string[] GetPortNames()

@@ -21,6 +21,8 @@ namespace serialog
 
         private Form2_Highlight form2Highlight = null;
         private Form4_Highlights form4Highlights = null;
+        private Form5_Send form5Send = null;
+        
         private static bool _serialComCriticalException = false;
         private static string _serialComCriticalExceptionString = "";
 
@@ -1279,5 +1281,27 @@ namespace serialog
             }
         }
 
+        private void form5Send_Closed(object sender, FormClosedEventArgs e)
+        {
+            form5Send.FormClosed -= form5Send_Closed;
+            form5Send = null;
+        }
+
+        private void sendToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (form5Send== null)
+            {
+                form5Send = new Form5_Send(_serialCom);
+                form5Send.FormClosed += form5Send_Closed;
+                form5Send.StartPosition = FormStartPosition.Manual;
+                form5Send.Left = this.Location.X + this.Width / 2 - form5Send.Width / 2;
+                form5Send.Top = this.Location.Y + this.Height / 2 - form5Send.Height / 2;
+                form5Send.Show();
+            }
+            else
+            {
+                form5Send.Focus();
+            }
+        }
     }
 }
