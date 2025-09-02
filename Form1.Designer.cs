@@ -560,6 +560,7 @@
             this.MinimumSize = new System.Drawing.Size(969, 629);
             this.Name = "Form1";
             this.Text = "serialog";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.contextMenuStrip1.ResumeLayout(false);
