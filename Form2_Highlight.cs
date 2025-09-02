@@ -6,6 +6,8 @@ namespace serialog
     {
         static public HighlightEntries highlightEntries = new HighlightEntries();
         private HighlightEntries tempHighlightEntries;
+        private Color hlBgColor;
+        private Color hlFgColor;
 
         public Form2_Highlight()
         {
@@ -18,14 +20,63 @@ namespace serialog
                 AddHighlightEntryToListView(ref listView1, entry);
             }
 
-            // Fill comboBox_fgcolor and comboBox_bgcolor with color names
-            KnownColor[] colors = (KnownColor[])Enum.GetValues(typeof(KnownColor));
-            foreach (KnownColor knowColor in colors)
+            // Fill colors
+            comboBox_fgcolor.Items.AddRange(Enum.GetNames(typeof(KnownColor)));
+            comboBox_bgcolor.Items.AddRange(Enum.GetNames(typeof(KnownColor)));
+
+            // Add index changed event function
+            comboBox_fgcolor.SelectedIndexChanged += comboBox_fgcolor_SelectedIndexChanged;
+            comboBox_bgcolor.SelectedIndexChanged += comboBox_bgcolor_SelectedIndexChanged;
+        }
+
+        // Handle when user selects a color from the ComboBox
+        private void comboBox_fgcolor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedName = comboBox_fgcolor.SelectedItem.ToString();
+            Color color;
+            if (selectedName.Equals("Transparent", StringComparison.OrdinalIgnoreCase))
             {
-                Color color = Color.FromKnownColor(knowColor);
-                comboBox_bgcolor.Items.Add(color);
-                comboBox_fgcolor.Items.Add(color);
+                // Special handling for transparent
+                color = Color.White; // or some default background color
             }
+            else
+            {
+                color = Color.FromKnownColor((KnownColor)Enum.Parse(typeof(KnownColor), selectedName));
+            }
+            comboBox_fgcolor.ForeColor = color;
+            hlFgColor = color;
+
+            // Delay clearing selection until after the control updates
+            this.BeginInvoke((Action)(() =>
+            {
+                comboBox_fgcolor.SelectionStart = comboBox_fgcolor.Text.Length;
+                comboBox_fgcolor.SelectionLength = 0;
+            }));
+        }
+
+        // Handle when user selects a color from the ComboBox
+        private void comboBox_bgcolor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedName = comboBox_bgcolor.SelectedItem.ToString();
+            Color color;
+            if (selectedName.Equals("Transparent", StringComparison.OrdinalIgnoreCase))
+            {
+                // Special handling for transparent
+                color = Color.White; // or some default background color
+            }
+            else
+            {
+                color = Color.FromKnownColor((KnownColor)Enum.Parse(typeof(KnownColor), selectedName));
+            }
+            comboBox_bgcolor.BackColor = color;
+            hlBgColor = color;
+
+            // Delay clearing selection until after the control updates
+            this.BeginInvoke((Action)(() =>
+            {
+                comboBox_bgcolor.SelectionStart = comboBox_bgcolor.Text.Length;
+                comboBox_bgcolor.SelectionLength = 0;
+            }));
         }
 
         private void AddHighlightEntryToListView(ref ListView listView, HighlightEntry highlightEntry)
@@ -114,16 +165,16 @@ namespace serialog
             if (comboBox_bgcolor.Text.Length == 0)
                 bgcol = Color.White;
             else
-                bgcol = Color.FromName(comboBox_bgcolor.Text);
+                bgcol = hlBgColor;
 
             Color fgcol;
             if (comboBox_fgcolor.Text.Length == 0)
                 fgcol = Color.Black;
             else
-                fgcol = Color.FromName(comboBox_fgcolor.Text);
+                fgcol = hlFgColor;
 
             HighlightEntry highlightEntry = new HighlightEntry(
-                true, textBox_string.Text, fgcol, bgcol,
+                true, textBox_string.Text, hlFgColor, hlBgColor,
                 checkBox_ignorecase.Checked, checkBox_bold.Checked,
                 checkBox_italic.Checked, checkBox_hide.Checked, checkBox_remove.Checked);
 
@@ -167,42 +218,72 @@ namespace serialog
         private void button_fgcolor_Click(object sender, EventArgs e)
         {
             // Keeps the user from selecting a custom color.
-            colorDialog1.AllowFullOpen = false;
-            // Allows the user to get help. (The default is false.)
-            colorDialog1.ShowHelp = true;
-            // Sets the initial color select to the current text color.
-            colorDialog1.Color = Color.Red;
+            colorDialog1.AllowFullOpen = true;
+            colorDialog1.FullOpen = true; // show advanced panel by default
+            colorDialog1.AnyColor = true;
+            colorDialog1.Color = Color.FromArgb(255, 0, 0); // Example: medium red
 
             // Update the text box color if the user clicks OK 
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
-                if (comboBox_fgcolor.Items.Contains(colorDialog1.Color))
+                Color selectedColor = colorDialog1.Color;
+
+                // Save color
+                hlFgColor = selectedColor;
+
+                // Try to find if it's a known color name
+                var knownName = Enum.GetValues(typeof(KnownColor))
+                                    .Cast<KnownColor>()
+                                    .FirstOrDefault(kc => Color.FromKnownColor(kc).ToArgb() == selectedColor.ToArgb());
+
+                if (knownName != 0)
                 {
-                    comboBox_fgcolor.SelectedIndex = comboBox_fgcolor.FindString(colorDialog1.Color.Name);
+                    comboBox_fgcolor.SelectedItem = knownName.ToString();
                 }
+                else
+                {
+                    // If not a known color, just show HEX
+                    comboBox_fgcolor.Text = $"#{selectedColor.R:X2}{selectedColor.G:X2}{selectedColor.B:X2}";
+                }
+
+                // Set Foreground color
+                comboBox_fgcolor.ForeColor = selectedColor;
             }
         }
 
         private void button_bgcolor_Click(object sender, EventArgs e)
         {
             // Keeps the user from selecting a custom color.
-            colorDialog1.AllowFullOpen = false;
-            // Allows the user to get help. (The default is false.)
-            colorDialog1.ShowHelp = true;
-            // Sets the initial color select.
-            colorDialog1.Color = Color.Beige;
+            colorDialog1.AllowFullOpen = true;
+            colorDialog1.FullOpen = true; // show advanced panel by default
+            colorDialog1.AnyColor = true;
+            colorDialog1.Color = Color.FromArgb(255, 180, 180); // Example: medium red
 
             // Update the text box color if the user clicks OK 
             if (colorDialog1.ShowDialog() == DialogResult.OK)
             {
-                if (comboBox_bgcolor.Items.Contains(colorDialog1.Color))
+                Color selectedColor = colorDialog1.Color;
+
+                // Save color
+                hlBgColor = selectedColor;
+
+                // Try to find if it's a known color name
+                var knownName = Enum.GetValues(typeof(KnownColor))
+                                    .Cast<KnownColor>()
+                                    .FirstOrDefault(kc => Color.FromKnownColor(kc).ToArgb() == selectedColor.ToArgb());
+
+                if (knownName != 0)
                 {
-                    comboBox_bgcolor.SelectedIndex = comboBox_bgcolor.FindString(colorDialog1.Color.Name);
+                    comboBox_bgcolor.SelectedItem = knownName.ToString();
                 }
                 else
                 {
-                    comboBox_bgcolor.Items.Add(colorDialog1.Color);
+                    // If not a known color, just show HEX
+                    comboBox_bgcolor.Text = $"#{selectedColor.R:X2}{selectedColor.G:X2}{selectedColor.B:X2}";
                 }
+
+                // Set Background color
+                comboBox_bgcolor.BackColor = selectedColor;
             }
         }
 
