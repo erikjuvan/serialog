@@ -111,8 +111,8 @@ namespace serialog
                 form2Highlight = new Form2_Highlight();
                 form2Highlight.FormClosed += form2Highlight_Closed;
                 form2Highlight.StartPosition = FormStartPosition.Manual;
-                form2Highlight.Left = this.Location.X + this.Width - form2Highlight.Width;
-                form2Highlight.Top = this.Location.Y + 100;
+                form2Highlight.Left = this.Location.X + this.Width / 2 - form2Highlight.Width / 2;
+                form2Highlight.Top = this.Location.Y + this.Height / 2 - form2Highlight.Height / 2;
                 form2Highlight.Show();
             }
             else
