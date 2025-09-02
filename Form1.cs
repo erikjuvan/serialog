@@ -20,7 +20,7 @@ namespace serialog
         private Stopwatch upTime = new Stopwatch();
 
         private Form2_Highlight form2Highlight = null;
-
+        private Form4_Highlights form4Highlights = null;
         private static bool _serialComCriticalException = false;
         private static string _serialComCriticalExceptionString = "";
 
@@ -1255,5 +1255,29 @@ namespace serialog
                 FindNextHighlightedEntry();
             }
         }
+
+        private void form4Highlights_Closed(object sender, FormClosedEventArgs e)
+        {
+            form4Highlights.FormClosed -= form4Highlights_Closed;
+            form4Highlights = null;
+        }
+
+        private void highlightsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (form4Highlights == null)
+            {
+                form4Highlights = new Form4_Highlights();
+                form4Highlights.FormClosed += form4Highlights_Closed;
+                form4Highlights.StartPosition = FormStartPosition.Manual;
+                form4Highlights.Left = this.Location.X + this.Width / 2 - form4Highlights.Width / 2;
+                form4Highlights.Top = this.Location.Y + this.Height / 2 - form4Highlights.Height / 2;
+                form4Highlights.Show();
+            }
+            else
+            {
+                form4Highlights.Focus();
+            }
+        }
+
     }
 }

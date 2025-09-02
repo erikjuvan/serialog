@@ -61,6 +61,8 @@
             this.disableHighlightsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addStartStopTimestampToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.highlightsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.button_run = new System.Windows.Forms.Button();
             this.comboBox_port = new System.Windows.Forms.ComboBox();
@@ -197,7 +199,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
-            this.settingsToolStripMenuItem});
+            this.settingsToolStripMenuItem,
+            this.toolsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
@@ -353,6 +356,22 @@
             this.fontToolStripMenuItem.Size = new System.Drawing.Size(326, 34);
             this.fontToolStripMenuItem.Text = "Font...";
             this.fontToolStripMenuItem.Click += new System.EventHandler(this.fontToolStripMenuItem_Click);
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.highlightsToolStripMenuItem1,
+            this.sendToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(69, 29);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // highlightsToolStripMenuItem1
+            // 
+            this.highlightsToolStripMenuItem1.Name = "highlightsToolStripMenuItem1";
+            this.highlightsToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
+            this.highlightsToolStripMenuItem1.Text = "Highlights...";
+            this.highlightsToolStripMenuItem1.Click += new System.EventHandler(this.highlightsToolStripMenuItem1_Click);
             // 
             // label1
             // 
@@ -623,5 +642,7 @@
         private ToolStripMenuItem addCustomRowToolStripMenuItem1;
         private Button button_prev_highlight;
         private Button button_next_highlight;
+        private ToolStripMenuItem toolsToolStripMenuItem;
+        private ToolStripMenuItem highlightsToolStripMenuItem1;
     }
 }
