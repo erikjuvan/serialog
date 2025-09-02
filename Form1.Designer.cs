@@ -63,6 +63,7 @@
             this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.highlightsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.button_run = new System.Windows.Forms.Button();
             this.comboBox_port = new System.Windows.Forms.ComboBox();
@@ -82,7 +83,6 @@
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
             this.button_prev_highlight = new System.Windows.Forms.Button();
             this.button_next_highlight = new System.Windows.Forms.Button();
-            this.sendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -105,14 +105,14 @@
             this.listView1.Size = new System.Drawing.Size(1299, 1479);
             this.listView1.TabIndex = 12;
             this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.View = System.Windows.Forms.View.List;
             this.listView1.Scrolled += new System.EventHandler<System.EventArgs>(this.listView1_Scrolled);
             this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
             // 
             // column1
             // 
             this.column1.Text = "";
-            this.column1.Width = 870;
+            this.column1.Width = -1;
             // 
             // contextMenuStrip1
             // 
@@ -370,9 +370,16 @@
             // highlightsToolStripMenuItem1
             // 
             this.highlightsToolStripMenuItem1.Name = "highlightsToolStripMenuItem1";
-            this.highlightsToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
+            this.highlightsToolStripMenuItem1.Size = new System.Drawing.Size(207, 34);
             this.highlightsToolStripMenuItem1.Text = "Highlights...";
             this.highlightsToolStripMenuItem1.Click += new System.EventHandler(this.highlightsToolStripMenuItem1_Click);
+            // 
+            // sendToolStripMenuItem
+            // 
+            this.sendToolStripMenuItem.Name = "sendToolStripMenuItem";
+            this.sendToolStripMenuItem.Size = new System.Drawing.Size(207, 34);
+            this.sendToolStripMenuItem.Text = "Send...";
+            this.sendToolStripMenuItem.Click += new System.EventHandler(this.sendToolStripMenuItem_Click);
             // 
             // label1
             // 
@@ -552,13 +559,6 @@
             this.button_next_highlight.UseVisualStyleBackColor = true;
             this.button_next_highlight.Click += new System.EventHandler(this.button_next_highlight_Click);
             // 
-            // sendToolStripMenuItem
-            // 
-            this.sendToolStripMenuItem.Name = "sendToolStripMenuItem";
-            this.sendToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.sendToolStripMenuItem.Text = "Send...";
-            this.sendToolStripMenuItem.Click += new System.EventHandler(this.sendToolStripMenuItem_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
@@ -615,7 +615,6 @@
         private CheckBox checkBox_follow;
         private System.Windows.Forms.Timer timer_addtolist;
         private ColumnHeader column1;
-        private ListViewNF listView1;
         private ComboBox comboBox_baud;
         private SaveFileDialog saveFileDialog1;
         private OpenFileDialog openFileDialog1;
@@ -653,5 +652,6 @@
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem highlightsToolStripMenuItem1;
         private ToolStripMenuItem sendToolStripMenuItem;
+        public ListViewNF listView1;
     }
 }

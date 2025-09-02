@@ -151,7 +151,7 @@ namespace serialog
         {
             if (e.KeyCode == Keys.Escape)
             {
-                this.Close();
+                this.Hide();
             }
         }
 
@@ -184,7 +184,7 @@ namespace serialog
 
         private void button_cancel_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Hide();
         }
 
         private void button_ok_Click(object sender, EventArgs e)
@@ -199,7 +199,7 @@ namespace serialog
                 highlightEntries.Clear();
                 highlightEntries = new HighlightEntries(tempHighlightEntries);
             }
-            this.Close();
+            this.Hide();
         }
 
         private void button_delete_Click(object sender, EventArgs e)
@@ -716,6 +716,4 @@ namespace serialog
             }
         }
     }
-
-
 }

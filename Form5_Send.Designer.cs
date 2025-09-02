@@ -32,6 +32,11 @@
             this.button2_send = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.listView1 = new System.Windows.Forms.ListView();
+            this.button_file_delete = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.button_file_load = new System.Windows.Forms.Button();
+            this.button_file_save = new System.Windows.Forms.Button();
+            this.comboBox_file = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // button1_add
@@ -64,24 +69,92 @@
             // 
             // listView1
             // 
+            this.listView1.GridLines = true;
             this.listView1.Location = new System.Drawing.Point(12, 52);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(776, 444);
+            this.listView1.Size = new System.Drawing.Size(776, 684);
             this.listView1.TabIndex = 5;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.List;
+            this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
+            // 
+            // button_file_delete
+            // 
+            this.button_file_delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button_file_delete.Location = new System.Drawing.Point(172, 818);
+            this.button_file_delete.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_file_delete.Name = "button_file_delete";
+            this.button_file_delete.Size = new System.Drawing.Size(71, 38);
+            this.button_file_delete.TabIndex = 30;
+            this.button_file_delete.Text = "Delete";
+            this.button_file_delete.UseVisualStyleBackColor = true;
+            this.button_file_delete.Click += new System.EventHandler(this.button_file_delete_Click);
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(13, 739);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(42, 25);
+            this.label4.TabIndex = 29;
+            this.label4.Text = "File:";
+            // 
+            // button_file_load
+            // 
+            this.button_file_load.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button_file_load.Location = new System.Drawing.Point(93, 818);
+            this.button_file_load.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_file_load.Name = "button_file_load";
+            this.button_file_load.Size = new System.Drawing.Size(71, 38);
+            this.button_file_load.TabIndex = 28;
+            this.button_file_load.Text = "Load";
+            this.button_file_load.UseVisualStyleBackColor = true;
+            this.button_file_load.Click += new System.EventHandler(this.button_file_load_Click);
+            // 
+            // button_file_save
+            // 
+            this.button_file_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button_file_save.Location = new System.Drawing.Point(13, 818);
+            this.button_file_save.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_file_save.Name = "button_file_save";
+            this.button_file_save.Size = new System.Drawing.Size(71, 38);
+            this.button_file_save.TabIndex = 27;
+            this.button_file_save.Text = "Save";
+            this.button_file_save.UseVisualStyleBackColor = true;
+            this.button_file_save.Click += new System.EventHandler(this.button_file_save_Click);
+            // 
+            // comboBox_file
+            // 
+            this.comboBox_file.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.comboBox_file.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBox_file.FormattingEnabled = true;
+            this.comboBox_file.Location = new System.Drawing.Point(13, 769);
+            this.comboBox_file.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.comboBox_file.Name = "comboBox_file";
+            this.comboBox_file.Size = new System.Drawing.Size(228, 33);
+            this.comboBox_file.TabIndex = 26;
+            this.comboBox_file.DropDown += new System.EventHandler(this.comboBox_file_DropDown);
             // 
             // Form5_Send
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 508);
+            this.ClientSize = new System.Drawing.Size(800, 870);
+            this.Controls.Add(this.button_file_delete);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.button_file_load);
+            this.Controls.Add(this.button_file_save);
+            this.Controls.Add(this.comboBox_file);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button2_send);
             this.Controls.Add(this.button1_add);
+            this.KeyPreview = true;
             this.Name = "Form5_Send";
             this.Text = "Form5_Send";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form5_Send_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -92,5 +165,10 @@
         private Button button2_send;
         private TextBox textBox1;
         private ListView listView1;
+        private Button button_file_delete;
+        private Label label4;
+        private Button button_file_load;
+        private Button button_file_save;
+        private ComboBox comboBox_file;
     }
 }

@@ -100,29 +100,6 @@ namespace serialog
             this.Close();
         }
 
-        private void form2Highlight_Closed(object sender, FormClosedEventArgs e)
-        {
-            form2Highlight.FormClosed -= form2Highlight_Closed;
-            form2Highlight = null;
-        }
-
-        private void highlightsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (form2Highlight == null)
-            {
-                form2Highlight = new Form2_Highlight();
-                form2Highlight.FormClosed += form2Highlight_Closed;
-                form2Highlight.StartPosition = FormStartPosition.Manual;
-                form2Highlight.Left = this.Location.X + this.Width / 2 - form2Highlight.Width / 2;
-                form2Highlight.Top = this.Location.Y + this.Height / 2 - form2Highlight.Height / 2;
-                form2Highlight.Show();
-            }
-            else
-            {
-                form2Highlight.Focus();
-            }
-        }
-
         private void button_run_Click(object sender, EventArgs e)
         {
             if (_serialcomStopped)
@@ -1072,7 +1049,7 @@ namespace serialog
             disableHighlightsToolStripMenuItem_Click(sender, e);
         }
 
-        private static DialogResult ShowInputDialogBox(ref string input, string prompt, string title = "Title", int width = 300, int height = 200)
+        private static DialogResult ShowInputDialogBox(ref string input, string prompt, string title = "Title", int width = 300, int height = 120)
         {
             //This function creates the custom input dialog box by individually creating the different window elements and adding them to the dialog box
 
@@ -1105,18 +1082,18 @@ namespace serialog
             Button okButton = new Button();
             okButton.DialogResult = DialogResult.OK;
             okButton.Name = "okButton";
-            okButton.Size = new Size(75, 23);
+            okButton.Size = new Size(71, 38);
             okButton.Text = "&OK";
-            okButton.Location = new Point(size.Width - 80 - 80, size.Height - 30);
+            okButton.Location = new Point(size.Width - 80 - 80, textBox.Bottom + 10);
             inputBox.Controls.Add(okButton);
 
             //Create a Cancel Button
             Button cancelButton = new Button();
             cancelButton.DialogResult = DialogResult.Cancel;
             cancelButton.Name = "cancelButton";
-            cancelButton.Size = new Size(75, 23);
+            cancelButton.Size = new Size(71, 38);
             cancelButton.Text = "&Cancel";
-            cancelButton.Location = new Point(size.Width - 80, size.Height - 30);
+            cancelButton.Location = new Point(size.Width - 80, textBox.Bottom + 10);
             inputBox.Controls.Add(cancelButton);
 
             //Set the input box's buttons to the created OK and Cancel Buttons respectively so the window appropriately behaves with the button clicks
@@ -1141,7 +1118,7 @@ namespace serialog
                 addRowAtIndex = selected[selected.Count - 1] + 1;
 
             string input = "";
-            var result = ShowInputDialogBox(ref input, "Enter text: ", "Custom row entry", 300, 100);
+            var result = ShowInputDialogBox(ref input, "Enter text: ", "Custom row entry");
 
             if (result == DialogResult.OK)
             {
@@ -1258,18 +1235,44 @@ namespace serialog
             }
         }
 
-        private void form4Highlights_Closed(object sender, FormClosedEventArgs e)
+        private void form2Highlight_FormClosing(object sender, FormClosingEventArgs e)
         {
-            form4Highlights.FormClosed -= form4Highlights_Closed;
-            form4Highlights = null;
+            // Cancel the close and just hide the form
+            e.Cancel = true;
+            form2Highlight.Hide();
+        }
+
+        private void highlightsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (form2Highlight == null || form2Highlight.IsDisposed)
+            {
+                form2Highlight = new Form2_Highlight();
+                form2Highlight.FormClosing += form2Highlight_FormClosing;
+                form2Highlight.StartPosition = FormStartPosition.Manual;
+                form2Highlight.Left = this.Location.X + this.Width / 2 - form2Highlight.Width / 2;
+                form2Highlight.Top = this.Location.Y + this.Height / 2 - form2Highlight.Height / 2;
+                form2Highlight.Show();
+            }
+            else
+            {
+                form2Highlight.Show();   // unhide if hidden
+                form2Highlight.Focus();
+            }
+        }
+
+        private void form4Highlights_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Cancel the close and just hide the form
+            e.Cancel = true;
+            form4Highlights.Hide();
         }
 
         private void highlightsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (form4Highlights == null)
+            if (form4Highlights == null || form4Highlights.IsDisposed)
             {
                 form4Highlights = new Form4_Highlights();
-                form4Highlights.FormClosed += form4Highlights_Closed;
+                form4Highlights.FormClosing += form4Highlights_FormClosing;
                 form4Highlights.StartPosition = FormStartPosition.Manual;
                 form4Highlights.Left = this.Location.X + this.Width / 2 - form4Highlights.Width / 2;
                 form4Highlights.Top = this.Location.Y + this.Height / 2 - form4Highlights.Height / 2;
@@ -1277,22 +1280,24 @@ namespace serialog
             }
             else
             {
+                form4Highlights.Show();   // unhide if hidden
                 form4Highlights.Focus();
             }
         }
 
-        private void form5Send_Closed(object sender, FormClosedEventArgs e)
+        private void form5Send_FormClosing(object sender, FormClosingEventArgs e)
         {
-            form5Send.FormClosed -= form5Send_Closed;
-            form5Send = null;
+            // Cancel the close and just hide the form
+            e.Cancel = true;
+            form5Send.Hide();
         }
 
         private void sendToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (form5Send== null)
+            if (form5Send == null || form5Send.IsDisposed)
             {
-                form5Send = new Form5_Send(_serialCom);
-                form5Send.FormClosed += form5Send_Closed;
+                form5Send = new Form5_Send(this, _serialCom);
+                form5Send.FormClosing += form5Send_FormClosing;
                 form5Send.StartPosition = FormStartPosition.Manual;
                 form5Send.Left = this.Location.X + this.Width / 2 - form5Send.Width / 2;
                 form5Send.Top = this.Location.Y + this.Height / 2 - form5Send.Height / 2;
@@ -1300,6 +1305,7 @@ namespace serialog
             }
             else
             {
+                form5Send.Show();   // unhide if hidden
                 form5Send.Focus();
             }
         }

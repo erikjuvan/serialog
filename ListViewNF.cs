@@ -2,7 +2,7 @@
 {
     // List View No Flicker
     // https://stackoverflow.com/questions/442817/c-sharp-flickering-listview-on-update
-    internal class ListViewNF : System.Windows.Forms.ListView
+    public class ListViewNF : System.Windows.Forms.ListView
     {
         public ListViewNF()
         {
