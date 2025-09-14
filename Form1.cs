@@ -13,7 +13,7 @@ namespace serialog
         private static int _serialDataListSizeBytes = 0;
         private static int _prevSerialDataListSizeBytes = 0;
         private int _serialDataListCountAddedToTable = 0;
-        private static Mutex mtx = new Mutex();
+        private static readonly object _serialDataLock = new object();
         private Thread serialReadThread = null;
 
         private Stopwatch runTime = new Stopwatch();
@@ -234,30 +234,32 @@ namespace serialog
 
         private static void SerialRead()
         {
+            string serialBuffer = "";
+
             while (!_serialcomStopped)
             {
-                var line = "";
-
                 try
                 {
-                    line = _serialCom.ReadLine();
+                    serialBuffer += _serialCom.ReadExisting();
                 }
                 catch (TimeoutException)
                 {
-                }
-                catch (Exception ex)
-                {
-                    _serialComCriticalExceptionString = ex.Message;
-                    _serialComCriticalException = true;
-                    return;
+                    // ignore, continue loop
                 }
 
-                if (line.Length > 0)
+                int idx = serialBuffer.LastIndexOf('\n');
+                if (idx >= 0)
                 {
-                    mtx.WaitOne();
-                    _serialDataListSizeBytes += line.Length;
-                    _serialDataList.Add(line);
-                    mtx.ReleaseMutex();
+                    string subStr = serialBuffer.Substring(0, idx);
+                    serialBuffer = idx == serialBuffer.Length - 1 ? "" : serialBuffer.Substring(idx + 1);
+
+                    var list = subStr.Split('\n');
+
+                    lock (_serialDataLock)
+                    {
+                        _serialDataList.AddRange(list);
+                        _listviewSizeBytes += subStr.Length;
+                    }
                 }
             }
         }
@@ -337,31 +339,35 @@ namespace serialog
 
         private void AddEntry()
         {
-            mtx.WaitOne();
-            if (_serialDataListCountAddedToTable < _serialDataList.Count)
+            List<string> newLines;
+
+            // Only lock to read new lines
+            lock (_serialDataLock)
             {
-                for (int i = _serialDataListCountAddedToTable; i < _serialDataList.Count; i++)
-                {
-                    string line = _serialDataList[i];
+                if (_serialDataListCountAddedToTable >= _serialDataList.Count)
+                    return;
 
-                    ListViewItem item = CreateHighlightedListItem(line);
-                    if (item != null)
-                    {
-                        listView1.Items.Add(item);
-                        _listviewSizeBytes += line.Length + 1; // 1 for \n
-                    }
-                }
+                newLines = _serialDataList.Skip(_serialDataListCountAddedToTable).ToList();
+
                 _serialDataListCountAddedToTable = _serialDataList.Count;
+            }
 
-                if (checkBox_follow.Checked)
+            // Add items to ListView outside lock
+            foreach (string line in newLines)
+            {
+                ListViewItem item = CreateHighlightedListItem(line);
+                if (item != null)
                 {
-                    if (listView1.Items.Count > 0)
-                    {
-                        listView1.Items[listView1.Items.Count - 1].EnsureVisible();
-                    }
+                    listView1.Items.Add(item);
+                    _listviewSizeBytes += line.Length + 1; // 1 for \n
                 }
             }
-            mtx.ReleaseMutex();
+
+            // Scroll to last item if follow is enabled
+            if (checkBox_follow.Checked && listView1.Items.Count > 0)
+            {
+                listView1.Items[listView1.Items.Count - 1].EnsureVisible();
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -859,13 +865,20 @@ namespace serialog
 
         private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Clear shared data safely
+            lock (_serialDataLock)
+            {
+                _serialDataList.Clear();
+                _serialDataListCountAddedToTable = 0;
+                _listviewSizeBytes = 0;
+                _prevListviewSizeBytes = 0;
+                _serialDataListSizeBytes = 0;
+                _prevSerialDataListSizeBytes = 0;
+            }
+
+            // Clear ListView safely (UI thread)
             listView1.Items.Clear();
-            _serialDataList.Clear();
-            _listviewSizeBytes = 0;
-            _prevListviewSizeBytes = 0;
-            _serialDataListSizeBytes = 0;
-            _prevSerialDataListSizeBytes = 0;
-            _serialDataListCountAddedToTable = 0;
+
             runTime = new Stopwatch();
             if (!_serialcomStopped)
                 runTime.Start();
