@@ -46,22 +46,22 @@
             this.listView1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.listView1.Name = "listView1";
             this.listView1.ShowGroups = false;
-            this.listView1.Size = new System.Drawing.Size(1308, 1081);
+            this.listView1.Size = new System.Drawing.Size(1552, 916);
             this.listView1.TabIndex = 13;
             this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.List;
+            this.listView1.View = System.Windows.Forms.View.Details;
             this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
             // 
             // column1
             // 
             this.column1.Text = "";
-            this.column1.Width = -1;
+            this.column1.Width = 1500;
             // 
             // Form4_Highlights
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1334, 1109);
+            this.ClientSize = new System.Drawing.Size(1578, 944);
             this.Controls.Add(this.listView1);
             this.KeyPreview = true;
             this.Name = "Form4_Highlights";

@@ -105,14 +105,14 @@
             this.listView1.Size = new System.Drawing.Size(1299, 1479);
             this.listView1.TabIndex = 12;
             this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.List;
+            this.listView1.View = System.Windows.Forms.View.Details;
             this.listView1.Scrolled += new System.EventHandler<System.EventArgs>(this.listView1_Scrolled);
             this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
             // 
             // column1
             // 
             this.column1.Text = "";
-            this.column1.Width = -1;
+            this.column1.Width = 2000;
             // 
             // contextMenuStrip1
             // 

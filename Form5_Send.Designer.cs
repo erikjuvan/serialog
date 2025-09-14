@@ -32,6 +32,7 @@
             this.button2_send = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.listView1 = new System.Windows.Forms.ListView();
+            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.button_file_delete = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.button_file_load = new System.Windows.Forms.Button();
@@ -69,14 +70,21 @@
             // 
             // listView1
             // 
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
             this.listView1.GridLines = true;
             this.listView1.Location = new System.Drawing.Point(12, 52);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(776, 684);
             this.listView1.TabIndex = 5;
             this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.List;
+            this.listView1.View = System.Windows.Forms.View.Details;
             this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Commands";
+            this.columnHeader1.Width = 750;
             // 
             // button_file_delete
             // 
@@ -170,5 +178,6 @@
         private Button button_file_load;
         private Button button_file_save;
         private ComboBox comboBox_file;
+        private ColumnHeader columnHeader1;
     }
 }
