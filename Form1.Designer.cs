@@ -459,8 +459,16 @@
             this.comboBox_baud.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox_baud.FormattingEnabled = true;
             this.comboBox_baud.Items.AddRange(new object[] {
+            "2400",
+            "4800",
             "9600",
+            "14400",
+            "19200",
+            "38400",
+            "57600",
             "115200",
+            "230400",
+            "460800",
             "921600",
             "1000000"});
             this.comboBox_baud.Location = new System.Drawing.Point(249, 53);
