@@ -1,4 +1,6 @@
 ﻿using System.Data;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace serialog
 {
@@ -74,31 +76,31 @@ namespace serialog
         private void AddHighlightEntryToListView(ref ListView listView, HighlightEntry highlightEntry)
         {
             ListViewItem item = new ListViewItem();
-            item.Checked = highlightEntry.enabled;
-            item.Text = highlightEntry.text;
-            item.ForeColor = highlightEntry.foreColor;
-            item.BackColor = highlightEntry.backColor;
+            item.Checked = highlightEntry.Enabled;
+            item.Text = highlightEntry.Text;
+            item.ForeColor = highlightEntry.ForeColor;
+            item.BackColor = highlightEntry.BackColor;
 
-            if (highlightEntry.ignoreCase)
+            if (highlightEntry.IgnoreCase)
                 item.SubItems.Add("*");
             else
                 item.SubItems.Add("");
 
-            if (highlightEntry.hide)
+            if (highlightEntry.Hide)
                 item.SubItems.Add("*");
             else
                 item.SubItems.Add("");
 
-            if (highlightEntry.remove)
+            if (highlightEntry.Remove)
                 item.SubItems.Add("*");
             else
                 item.SubItems.Add("");
 
-            if (highlightEntry.bold && highlightEntry.italic)
+            if (highlightEntry.Bold && highlightEntry.Italic)
                 item.Font = new Font("Courier New", 10, FontStyle.Bold | FontStyle.Italic);
-            else if (highlightEntry.bold)
+            else if (highlightEntry.Bold)
                 item.Font = new Font("Courier New", 10, FontStyle.Bold);
-            else if (highlightEntry.italic)
+            else if (highlightEntry.Italic)
                 item.Font = new Font("Courier New", 10, FontStyle.Italic);
 
             var addedItem = listView.Items.Add(item);
@@ -108,31 +110,31 @@ namespace serialog
         private void InsertHighlightEntryToListView(ref ListView listView, int index, HighlightEntry highlightEntry)
         {
             ListViewItem item = new ListViewItem();
-            item.Checked = highlightEntry.enabled;
-            item.Text = highlightEntry.text;
-            item.ForeColor = highlightEntry.foreColor;
-            item.BackColor = highlightEntry.backColor;
+            item.Checked = highlightEntry.Enabled;
+            item.Text = highlightEntry.Text;
+            item.ForeColor = highlightEntry.ForeColor;
+            item.BackColor = highlightEntry.BackColor;
 
-            if (highlightEntry.ignoreCase)
+            if (highlightEntry.IgnoreCase)
                 item.SubItems.Add("*");
             else
                 item.SubItems.Add("");
 
-            if (highlightEntry.hide)
+            if (highlightEntry.Hide)
                 item.SubItems.Add("*");
             else
                 item.SubItems.Add("");
 
-            if (highlightEntry.remove)
+            if (highlightEntry.Remove)
                 item.SubItems.Add("*");
             else
                 item.SubItems.Add("");
 
-            if (highlightEntry.bold && highlightEntry.italic)
+            if (highlightEntry.Bold && highlightEntry.Italic)
                 item.Font = new Font("Courier New", 10, FontStyle.Bold | FontStyle.Italic);
-            else if (highlightEntry.bold)
+            else if (highlightEntry.Bold)
                 item.Font = new Font("Courier New", 10, FontStyle.Bold);
-            else if (highlightEntry.italic)
+            else if (highlightEntry.Italic)
                 item.Font = new Font("Courier New", 10, FontStyle.Italic);
 
             var addedItem = listView.Items.Insert(index, item);
@@ -165,10 +167,16 @@ namespace serialog
             else
                 fgcol = hlFgColor;
 
-            HighlightEntry highlightEntry = new HighlightEntry(
-                true, textBox_string.Text, hlFgColor, hlBgColor,
-                checkBox_ignorecase.Checked, checkBox_bold.Checked,
-                checkBox_italic.Checked, checkBox_hide.Checked, checkBox_remove.Checked);
+            HighlightEntry highlightEntry = new HighlightEntry();
+            highlightEntry.Enabled = true;
+            highlightEntry.Text = textBox_string.Text;
+            highlightEntry.ForeColor = fgcol;
+            highlightEntry.BackColor = bgcol;
+            highlightEntry.IgnoreCase = checkBox_ignorecase.Checked;
+            highlightEntry.Bold = checkBox_bold.Checked;
+            highlightEntry.Italic = checkBox_italic.Checked;
+            highlightEntry.Hide = checkBox_hide.Checked;
+            highlightEntry.Remove = checkBox_remove.Checked;
 
             highlightEntries.Add(highlightEntry);
             AddHighlightEntryToListView(ref listView1, highlightEntry);
@@ -372,7 +380,7 @@ namespace serialog
                 foreach (ListViewItem item in listView1.SelectedItems)
                 {
                     item.ForeColor = fgcol;
-                    highlightEntries.Items[item.Index].foreColor = fgcol;
+                    highlightEntries.Items[item.Index].ForeColor = fgcol;
                 }
             }
         }
@@ -397,7 +405,7 @@ namespace serialog
                 foreach (ListViewItem item in listView1.SelectedItems)
                 {
                     item.BackColor = bgcol;
-                    highlightEntries.Items[item.Index].backColor = bgcol;
+                    highlightEntries.Items[item.Index].BackColor = bgcol;
                 }
             }
         }
@@ -406,137 +414,136 @@ namespace serialog
         {
             comboBox_preset.Items.Clear();
 
-            // list of files without the path, just file name
             try
             {
-                var listOfFiles = Directory.EnumerateFiles(".settings", "*", SearchOption.AllDirectories).Select(Path.GetFileName);
-                var listOfPresets = listOfFiles.Where(text => text.Contains(".highlight"));
-                foreach (var preset in listOfPresets)
+                string settingsDir = Path.Combine(Application.StartupPath, ".settings");
+
+                if (!Directory.Exists(settingsDir))
+                    return;
+
+                // Only look for .highlight files in .settings (no recursion)
+                var listOfFiles = Directory.EnumerateFiles(settingsDir, "*.highlight", SearchOption.TopDirectoryOnly);
+
+                foreach (var file in listOfFiles)
                 {
-                    int to = preset.IndexOf(".");
-
-                    var result = preset.Substring(0, to);
-
-                    comboBox_preset.Items.Add(result);
+                    string presetName = Path.GetFileNameWithoutExtension(file);
+                    comboBox_preset.Items.Add(presetName);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Could not load presets: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private async void button_preset_save_Click(object sender, EventArgs e)
+        private void button_preset_save_Click(object sender, EventArgs e)
         {
-            if (comboBox_preset.Text.Length == 0)
+            if (string.IsNullOrWhiteSpace(comboBox_preset.Text))
                 return;
 
             string filename = comboBox_preset.Text;
-            string fullpath = ".settings/" + filename + ".highlight";
-            bool write = true;
+            string dir = Path.Combine(Application.StartupPath, ".settings");
+            string fullpath = Path.Combine(dir, filename + ".highlight");
 
-            System.IO.Directory.CreateDirectory(".settings");
+            Directory.CreateDirectory(dir);
 
-            if (System.IO.File.Exists(fullpath))
+            if (File.Exists(fullpath))
             {
-                var ret = MessageBox.Show("Preset '" + comboBox_preset.Text + "' already exists, overwrite it?", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                var ret = MessageBox.Show(
+                    $"Preset '{filename}' already exists, overwrite it?",
+                    "Overwrite?",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
 
                 if (ret == DialogResult.No)
-                    write = false;
+                    return;
             }
 
-            if (write)
-            {
-                List<string> items = new List<string>();
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string json = JsonSerializer.Serialize(highlightEntries.Items, options);
+            File.WriteAllText(fullpath, json);
 
-                foreach (var item in highlightEntries.Items)
-                {
-                    /*
-                    public string text;
-                    public Color foreColor = Color.Black;
-                    public Color backColor = Color.White;
-                    public bool ignoreCase = false;
-                    public bool bold = false;
-                    public bool italic = false;
-                    public bool hide = false;
-                    */
-                    items.Add(
-                        item.enabled.ToString() + "," +
-                        item.text + "," +
-                        item.foreColor.ToString() + "," +
-                        item.backColor.ToString() + "," +
-                        item.ignoreCase.ToString() + "," +
-                        item.bold.ToString() + "," +
-                        item.italic.ToString() + "," +
-                        item.hide.ToString() + "," +
-                        item.remove.ToString()
-                        );
-                }
-
-                await File.WriteAllLinesAsync(fullpath, items);
-            }
+            // Refresh combo box
+            if (!comboBox_preset.Items.Contains(filename))
+                comboBox_preset.Items.Add(filename);
         }
 
         private void button_preset_load_Click(object sender, EventArgs e)
         {
-            if (comboBox_preset.Text.Length == 0)
+            if (string.IsNullOrWhiteSpace(comboBox_preset.Text))
                 return;
 
-            string filename = ".settings/" + comboBox_preset.Text + ".highlight";
+            string filename = Path.Combine(Application.StartupPath, ".settings", comboBox_preset.Text + ".highlight");
 
-            if (!System.IO.File.Exists(filename))
+            if (!File.Exists(filename))
             {
-                MessageBox.Show("Preset '" + comboBox_preset.Text + "' doesn't exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Preset '{comboBox_preset.Text}' doesn't exist!", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // Parse file
-            var lines = File.ReadAllLines(filename);
-
-            foreach (var line in lines)
+            try
             {
-                var items = line.Split(",");
+                string json = File.ReadAllText(filename);
+                var entries = JsonSerializer.Deserialize<List<HighlightEntry>>(json);
 
-                if (items.Length != 9)
+                if (entries != null)
                 {
-                    MessageBox.Show("Error in preset '" + comboBox_preset.Text + "'!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    foreach (var entry in entries)
+                    {
+                        highlightEntries.Add(entry);
+                        AddHighlightEntryToListView(ref listView1, entry);
+                    }
                 }
-
-                // Extract color from string that is more than just color name: "Color [Black]"
-                string fgColText = items[2];
-                int from = fgColText.IndexOf("[") + "[".Length;
-                int to = fgColText.IndexOf("]");
-                Color fgCol = Color.FromName(fgColText.Substring(from, to - from));
-
-                string bgColText = items[3];
-                from = bgColText.IndexOf("[") + "[".Length;
-                to = bgColText.IndexOf("]");
-                Color bgCol = Color.FromName(bgColText.Substring(from, to - from));
-
-                HighlightEntry entry = new HighlightEntry(Convert.ToBoolean(items[0]), items[1], fgCol, bgCol,
-                    Convert.ToBoolean(items[4]), Convert.ToBoolean(items[5]),
-                    Convert.ToBoolean(items[6]), Convert.ToBoolean(items[7]),
-                    Convert.ToBoolean(items[8]));
-
-                highlightEntries.Add(entry);
-                AddHighlightEntryToListView(ref listView1, entry);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to load preset: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void button_deletepreset_Click(object sender, EventArgs e)
         {
             string filename = comboBox_preset.Text;
-            string fullpath = ".settings/" + filename + ".highlight";
+
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                MessageBox.Show("Please select a preset to delete.", "Warning",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string fullpath = Path.Combine(Application.StartupPath, ".settings", filename + ".highlight");
+
+            if (!File.Exists(fullpath))
+            {
+                MessageBox.Show($"Preset '{filename}' does not exist.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var confirm = MessageBox.Show(
+                $"Are you sure you want to delete preset '{filename}'?",
+                "Confirm Delete",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (confirm != DialogResult.Yes)
+                return;
 
             try
             {
                 File.Delete(fullpath);
                 comboBox_preset.Text = "";
+
+                // Refresh the ComboBox to reflect current presets
+                Populate_comboBox_preset();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Could not delete '" + comboBox_preset.Text + "'!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Could not delete '{filename}'.\n\n{ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -547,7 +554,7 @@ namespace serialog
 
         private void listView1_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
-            highlightEntries.Items[e.Item.Index].enabled = e.Item.Checked;
+            highlightEntries.Items[e.Item.Index].Enabled = e.Item.Checked;
         }
 
         private void listView1_MouseClick(object sender, MouseEventArgs e)
@@ -557,14 +564,14 @@ namespace serialog
 
             var entry = highlightEntries.Items[listView1.SelectedIndices[0]];
 
-            textBox_string.Text = entry.text;
-            comboBox_fgcolor.Text = entry.foreColor.Name;
-            comboBox_bgcolor.Text = entry.backColor.Name;
-            checkBox_ignorecase.Checked = entry.ignoreCase;
-            checkBox_bold.Checked = entry.bold;
-            checkBox_italic.Checked = entry.italic;
-            checkBox_hide.Checked = entry.hide;
-            checkBox_remove.Checked = entry.remove;
+            textBox_string.Text = entry.Text;
+            comboBox_fgcolor.Text = entry.ForeColor.Name;
+            comboBox_bgcolor.Text = entry.BackColor.Name;
+            checkBox_ignorecase.Checked = entry.IgnoreCase;
+            checkBox_bold.Checked = entry.Bold;
+            checkBox_italic.Checked = entry.Italic;
+            checkBox_hide.Checked = entry.Hide;
+            checkBox_remove.Checked = entry.Remove;
         }
 
         private void textBox_string_TextChanged(object sender, EventArgs e)
@@ -577,7 +584,7 @@ namespace serialog
             foreach (ListViewItem item in listView1.SelectedItems)
             {
                 item.Text = textBox_string.Text;
-                highlightEntries.Items[item.Index].text = item.Text;
+                highlightEntries.Items[item.Index].Text = item.Text;
             }
         }
 
@@ -593,12 +600,12 @@ namespace serialog
                 if (checkBox_bold.Checked)
                 {
                     item.Font = new Font(listView1.Font, FontStyle.Bold);
-                    highlightEntries.Items[item.Index].bold = true;
+                    highlightEntries.Items[item.Index].Bold = true;
                 }
                 else
                 {
                     item.Font = new Font(listView1.Font, FontStyle.Regular);
-                    highlightEntries.Items[item.Index].bold = false;
+                    highlightEntries.Items[item.Index].Bold = false;
                 }
             }
         }
@@ -615,12 +622,12 @@ namespace serialog
                 if (checkBox_italic.Checked)
                 {
                     item.Font = new Font(listView1.Font, FontStyle.Italic);
-                    highlightEntries.Items[item.Index].italic = true;
+                    highlightEntries.Items[item.Index].Italic = true;
                 }
                 else
                 {
                     item.Font = new Font(listView1.Font, FontStyle.Regular);
-                    highlightEntries.Items[item.Index].italic = false;
+                    highlightEntries.Items[item.Index].Italic = false;
                 }
             }
         }
@@ -637,12 +644,12 @@ namespace serialog
                 if (checkBox_ignorecase.Checked)
                 {
                     item.SubItems[1].Text = "*";
-                    highlightEntries.Items[item.Index].ignoreCase = true;
+                    highlightEntries.Items[item.Index].IgnoreCase = true;
                 }
                 else
                 {
                     item.SubItems[1].Text = "";
-                    highlightEntries.Items[item.Index].ignoreCase = false;
+                    highlightEntries.Items[item.Index].IgnoreCase = false;
                 }
             }
         }
@@ -659,12 +666,12 @@ namespace serialog
                 if (checkBox_hide.Checked)
                 {
                     item.SubItems[2].Text = "*";
-                    highlightEntries.Items[item.Index].hide = true;
+                    highlightEntries.Items[item.Index].Hide = true;
                 }
                 else
                 {
                     item.SubItems[2].Text = "";
-                    highlightEntries.Items[item.Index].hide = false;
+                    highlightEntries.Items[item.Index].Hide = false;
                 }
             }
         }
@@ -681,12 +688,12 @@ namespace serialog
                 if (checkBox_remove.Checked)
                 {
                     item.SubItems[3].Text = "*";
-                    highlightEntries.Items[item.Index].remove = true;
+                    highlightEntries.Items[item.Index].Remove = true;
                 }
                 else
                 {
                     item.SubItems[3].Text = "";
-                    highlightEntries.Items[item.Index].remove = false;
+                    highlightEntries.Items[item.Index].Remove = false;
                 }
             }
         }

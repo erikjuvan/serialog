@@ -1,131 +1,109 @@
-﻿namespace serialog
+﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
+
+namespace serialog
 {
-    public class HighlightEntry
+    public class HighlightEntry : INotifyPropertyChanged
     {
-        public bool enabled = true;
-        public string text = "";
-        public Color foreColor = Color.Black;
-        public Color backColor = Color.White;
-        public bool ignoreCase = false;
-        public bool bold = false;
-        public bool italic = false;
-        public bool hide = false;
-        public bool remove = false;
+        private bool _enabled = true;
+        private string _text = "";
+        private Color _foreColor = Color.Black;
+        private Color _backColor = Color.White;
+        private bool _ignoreCase = false;
+        private bool _bold = false;
+        private bool _italic = false;
+        private bool _hide = false;
+        private bool _remove = false;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public bool Enabled {
+            get => _enabled;
+            set { if (_enabled != value) { _enabled = value; OnPropertyChanged(nameof(Enabled)); } }
+        }
+
+        public string Text {
+            get => _text;
+            set { if (_text != value) { _text = value; OnPropertyChanged(nameof(Text)); } }
+        }
+
+        [JsonConverter(typeof(ColorJsonConverter))]
+        public Color ForeColor {
+            get => _foreColor;
+            set { if (_foreColor != value) { _foreColor = value; OnPropertyChanged(nameof(ForeColor)); } }
+        }
+
+        [JsonConverter(typeof(ColorJsonConverter))]
+        public Color BackColor {
+            get => _backColor;
+            set { if (_backColor != value) { _backColor = value; OnPropertyChanged(nameof(BackColor)); } }
+        }
+
+        public bool IgnoreCase {
+            get => _ignoreCase;
+            set { if (_ignoreCase != value) { _ignoreCase = value; OnPropertyChanged(nameof(IgnoreCase)); } }
+        }
+
+        public bool Bold {
+            get => _bold;
+            set { if (_bold != value) { _bold = value; OnPropertyChanged(nameof(Bold)); } }
+        }
+
+        public bool Italic {
+            get => _italic;
+            set { if (_italic != value) { _italic = value; OnPropertyChanged(nameof(Italic)); } }
+        }
+
+        public bool Hide {
+            get => _hide;
+            set { if (_hide != value) { _hide = value; OnPropertyChanged(nameof(Hide)); } }
+        }
+
+        public bool Remove {
+            get => _remove;
+            set { if (_remove != value) { _remove = value; OnPropertyChanged(nameof(Remove)); } }
+        }
+
+        // Constructors
+        public HighlightEntry() { }
 
         public HighlightEntry(HighlightEntry entry)
         {
-            this.enabled = entry.enabled;
-            this.text = entry.text;
-            this.foreColor = entry.foreColor;
-            this.backColor = entry.backColor;
-            this.ignoreCase = entry.ignoreCase;
-            this.bold = entry.bold;
-            this.italic = entry.italic;
-            this.hide = entry.hide;
-            this.remove = entry.remove;
+            Enabled = entry.Enabled;
+            Text = entry.Text;
+            ForeColor = entry.ForeColor;
+            BackColor = entry.BackColor;
+            IgnoreCase = entry.IgnoreCase;
+            Bold = entry.Bold;
+            Italic = entry.Italic;
+            Hide = entry.Hide;
+            Remove = entry.Remove;
         }
 
         public HighlightEntry(string text)
         {
-            this.enabled = true;
-            this.text = text;
-        }
-
-        public HighlightEntry(bool enabled, string text)
-        {
-            this.enabled = enabled;
-            this.text = text;
-        }
-        public HighlightEntry(bool enabled, string text, Color foreColor)
-        {
-            this.enabled = enabled;
-            this.text = text;
-            this.foreColor = foreColor;
-        }
-        public HighlightEntry(bool enabled, string text, Color foreColor, Color backColor)
-        {
-            this.enabled = enabled;
-            this.text = text;
-            this.foreColor = foreColor;
-            this.backColor = backColor;
-        }
-        public HighlightEntry(bool enabled, string text, Color foreColor, Color backColor, bool ignoreCase, bool bold)
-        {
-            this.enabled = enabled;
-            this.text = text;
-            this.foreColor = foreColor;
-            this.backColor = backColor;
-            this.bold = bold;
-            this.ignoreCase = ignoreCase;
-        }
-
-        public HighlightEntry(bool enabled, string text, Color foreColor, Color backColor, bool ignoreCase, bool bold, bool hide)
-        {
-            this.enabled = enabled;
-            this.text = text;
-            this.foreColor = foreColor;
-            this.backColor = backColor;
-            this.ignoreCase = ignoreCase;
-            this.bold = bold;
-            this.hide = hide;
-        }
-
-        public HighlightEntry(bool enabled, string text, Color foreColor, Color backColor, bool ignoreCase, bool bold, bool italic, bool hide)
-        {
-            this.enabled = enabled;
-            this.text = text;
-            this.foreColor = foreColor;
-            this.backColor = backColor;
-            this.ignoreCase = ignoreCase;
-            this.bold = bold;
-            this.italic = italic;
-            this.hide = hide;
-        }
-
-        public HighlightEntry(bool enabled, string text, Color foreColor, Color backColor, bool ignoreCase, bool bold, bool italic, bool hide, bool remove)
-        {
-            this.enabled = enabled;
-            this.text = text;
-            this.foreColor = foreColor;
-            this.backColor = backColor;
-            this.ignoreCase = ignoreCase;
-            this.bold = bold;
-            this.italic = italic;
-            this.hide = hide;
-            this.remove = remove;
+            Text = text;
         }
 
         public HighlightEntry(ListViewItem listViewItem)
         {
-            enabled = listViewItem.Checked;
-            text = listViewItem.Text;
-            foreColor = listViewItem.ForeColor;
-            backColor = listViewItem.BackColor;
+            Enabled = listViewItem.Checked;
+            Text = listViewItem.Text;
+            ForeColor = listViewItem.ForeColor;
+            BackColor = listViewItem.BackColor;
             if (listViewItem.SubItems.Count == 3)
             {
-                if (listViewItem.SubItems[0].Text.Contains("*"))
-                {
-                    ignoreCase = true;
-                }
-
-                if (listViewItem.SubItems[1].Text.Contains("*"))
-                {
-                    hide = true;
-                }
-
-                if (listViewItem.SubItems[2].Text.Contains("*"))
-                {
-                    remove = true;
-                }
+                IgnoreCase = listViewItem.SubItems[0].Text.Contains("*");
+                Hide = listViewItem.SubItems[1].Text.Contains("*");
+                Remove = listViewItem.SubItems[2].Text.Contains("*");
             }
-            if (listViewItem.Font.Style == FontStyle.Bold)
-            {
-                bold = true;
-            }
-            if (listViewItem.Font.Style == FontStyle.Italic)
-            {
-                italic = true;
-            }
+            Bold = listViewItem.Font.Style.HasFlag(FontStyle.Bold);
+            Italic = listViewItem.Font.Style.HasFlag(FontStyle.Italic);
         }
     }
 
@@ -133,47 +111,92 @@
     {
         private List<HighlightEntry> items = new List<HighlightEntry>();
 
-        public HighlightEntries()
-        {
+        // Event that fires when the collection or any entry changes
+        public event EventHandler? EntriesChanged;
 
+        public HighlightEntries() { }
+
+        public HighlightEntries(HighlightEntries highlightEntries)
+        {
+            foreach (HighlightEntry item in highlightEntries.items)
+            {
+                Add(item); // Use Add so PropertyChanged subscription is set
+            }
         }
 
-        public HighlightEntries(HighlightEntries highlightEntires)
+        protected virtual void OnEntriesChanged()
         {
-            foreach (HighlightEntry item in highlightEntires.items)
-            {
-                items.Add(new HighlightEntry(item));
-            }
+            EntriesChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void SubscribeToEntry(HighlightEntry entry)
+        {
+            entry.PropertyChanged += Entry_PropertyChanged;
+        }
+
+        private void UnsubscribeFromEntry(HighlightEntry entry)
+        {
+            entry.PropertyChanged -= Entry_PropertyChanged;
+        }
+
+        private void Entry_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            // Bubble up any entry change as a collection change
+            OnEntriesChanged();
         }
 
         public void Add(HighlightEntry highlightEntry)
         {
-            items.Add(new HighlightEntry(highlightEntry));
+            var entryCopy = new HighlightEntry(highlightEntry);
+            items.Add(entryCopy);
+            SubscribeToEntry(entryCopy);
+            OnEntriesChanged();
         }
 
         public void Insert(int index, HighlightEntry highlightEntry)
         {
-            items.Insert(index, new HighlightEntry(highlightEntry));
+            var entryCopy = new HighlightEntry(highlightEntry);
+            items.Insert(index, entryCopy);
+            SubscribeToEntry(entryCopy);
+            OnEntriesChanged();
         }
 
         public void Insert(int index, ListViewItem listViewItem)
         {
-            items.Insert(index, new HighlightEntry(listViewItem));
+            var entryCopy = new HighlightEntry(listViewItem);
+            items.Insert(index, entryCopy);
+            SubscribeToEntry(entryCopy);
+            OnEntriesChanged();
         }
 
         public void RemoveAt(int index)
         {
+            UnsubscribeFromEntry(items[index]);
             items.RemoveAt(index);
-        }
-
-        public List<HighlightEntry> Items
-        {
-            get { return items; }
+            OnEntriesChanged();
         }
 
         public void Clear()
         {
+            foreach (var entry in items)
+                UnsubscribeFromEntry(entry);
             items.Clear();
+            OnEntriesChanged();
         }
+
+        public List<HighlightEntry> Items => items;
+
+        public HighlightEntry this[int index] {
+            get => items[index];
+            set {
+                UnsubscribeFromEntry(items[index]);
+                var entryCopy = new HighlightEntry(value);
+                items[index] = entryCopy;
+                SubscribeToEntry(entryCopy);
+                OnEntriesChanged();
+            }
+        }
+
+        public int Count => items.Count;
     }
 }

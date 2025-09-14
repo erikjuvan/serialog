@@ -273,32 +273,32 @@ namespace serialog
 
             foreach (HighlightEntry entry in Form2_Highlight.highlightEntries.Items)
             {
-                if (!entry.enabled) continue;
+                if (!entry.Enabled) continue;
 
-                string haystack = entry.ignoreCase ? line.ToLower() : line;
-                string pattern = entry.ignoreCase ? entry.text.ToLower() : entry.text;
+                string haystack = entry.IgnoreCase ? line.ToLower() : line;
+                string pattern = entry.IgnoreCase ? entry.Text.ToLower() : entry.Text;
 
                 bool foundMatch = MatchesPattern(haystack, pattern);
 
                 if (foundMatch)
                 {
-                    if (entry.remove)
+                    if (entry.Remove)
                         return null;
 
-                    if (entry.hide)
+                    if (entry.Hide)
                     {
                         item.ForeColor = Color.Transparent;
                         item.BackColor = Color.Transparent;
                         return item;
                     }
 
-                    item.ForeColor = entry.foreColor;
-                    item.BackColor = entry.backColor;
+                    item.ForeColor = entry.ForeColor;
+                    item.BackColor = entry.BackColor;
 
                     // Font styles
                     FontStyle style = FontStyle.Regular;
-                    if (entry.bold) style |= FontStyle.Bold;
-                    if (entry.italic) style |= FontStyle.Italic;
+                    if (entry.Bold) style |= FontStyle.Bold;
+                    if (entry.Italic) style |= FontStyle.Italic;
                     if (style != FontStyle.Regular)
                         item.Font = new Font(listView1.Font, style);
 
