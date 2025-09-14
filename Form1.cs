@@ -26,21 +26,76 @@ namespace serialog
         private static bool _serialComCriticalException = false;
         private static string _serialComCriticalExceptionString = "";
 
-        public Form1()
+        public Form1(Dictionary<string, string> options)
         {
             InitializeComponent();
 
             comboBox_port.Items.AddRange(GetSortedPorts());
 
-            if (comboBox_port.Items.Count > 0)
-                comboBox_port.SelectedIndex = 0;
-
-            comboBox_baud.SelectedItem = "921600";
-
             _serialcomStopped = true;
             button_stop.Enabled = false;
 
+            // Parse command line arguments
+            ParseCommandLineArguments(options);
+
             upTime.Start();
+        }
+
+        private void ParseCommandLineArguments(Dictionary<string, string> options)
+        {
+            // Apply user arguments
+            if (options.TryGetValue("port", out var port))
+            {
+                string portString = port.ToString();
+
+                // If the item exists in the comboBox, select it
+                int index = comboBox_port.Items.IndexOf(portString);
+                if (index >= 0)
+                {
+                    comboBox_port.SelectedIndex = index;
+                }
+                else
+                {
+                    // If it's not in the list, just set the text
+                    comboBox_port.Text = portString;
+                }
+            }
+            else if (comboBox_port.Items.Count > 0)
+            {
+                 comboBox_port.SelectedIndex = 0;
+            }
+
+            if (options.TryGetValue("baud", out var baudStr) &&
+                int.TryParse(baudStr, out var rate))
+            {
+                string rateString = rate.ToString();
+
+                // If the item exists in the comboBox, select it
+                int index = comboBox_baud.Items.IndexOf(rateString);
+                if (index >= 0)
+                {
+                    comboBox_baud.SelectedIndex = index;
+                }
+                else
+                {
+                    // If it's not in the list, just set the text
+                    comboBox_baud.Text = rateString;
+                }
+            }
+            else
+            {
+                comboBox_baud.SelectedItem = "921600";
+            }
+
+            if (options.TryGetValue("autoconnect", out var ac))
+            {
+                bool autoConnect = ac.Equals("true", StringComparison.OrdinalIgnoreCase);
+
+                if (autoConnect)
+                {
+                    button_run_Click(this, EventArgs.Empty);
+                }
+            }
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
