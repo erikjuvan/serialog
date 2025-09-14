@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2_Highlight));
-            this.button_ok = new System.Windows.Forms.Button();
-            this.button_cancel = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
@@ -57,34 +55,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.checkBox_hide = new System.Windows.Forms.CheckBox();
             this.checkBox_italic = new System.Windows.Forms.CheckBox();
-            this.button_apply = new System.Windows.Forms.Button();
             this.button_deletepreset = new System.Windows.Forms.Button();
             this.checkBox_remove = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
-            // 
-            // button_ok
-            // 
-            this.button_ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_ok.Location = new System.Drawing.Point(294, 1057);
-            this.button_ok.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.button_ok.Name = "button_ok";
-            this.button_ok.Size = new System.Drawing.Size(114, 38);
-            this.button_ok.TabIndex = 12;
-            this.button_ok.Text = "OK";
-            this.button_ok.UseVisualStyleBackColor = true;
-            this.button_ok.Click += new System.EventHandler(this.button_ok_Click);
-            // 
-            // button_cancel
-            // 
-            this.button_cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_cancel.Location = new System.Drawing.Point(417, 1057);
-            this.button_cancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.button_cancel.Name = "button_cancel";
-            this.button_cancel.Size = new System.Drawing.Size(114, 38);
-            this.button_cancel.TabIndex = 13;
-            this.button_cancel.Text = "Cancel";
-            this.button_cancel.UseVisualStyleBackColor = true;
-            this.button_cancel.Click += new System.EventHandler(this.button_cancel_Click);
             // 
             // listView1
             // 
@@ -384,18 +357,6 @@
             this.checkBox_italic.UseVisualStyleBackColor = true;
             this.checkBox_italic.CheckedChanged += new System.EventHandler(this.checkBox_italic_CheckedChanged);
             // 
-            // button_apply
-            // 
-            this.button_apply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_apply.Location = new System.Drawing.Point(417, 1008);
-            this.button_apply.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.button_apply.Name = "button_apply";
-            this.button_apply.Size = new System.Drawing.Size(114, 38);
-            this.button_apply.TabIndex = 24;
-            this.button_apply.Text = "Apply";
-            this.button_apply.UseVisualStyleBackColor = true;
-            this.button_apply.Click += new System.EventHandler(this.button_apply_Click);
-            // 
             // button_deletepreset
             // 
             this.button_deletepreset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -428,7 +389,6 @@
             this.ClientSize = new System.Drawing.Size(540, 1115);
             this.Controls.Add(this.checkBox_remove);
             this.Controls.Add(this.button_deletepreset);
-            this.Controls.Add(this.button_apply);
             this.Controls.Add(this.checkBox_italic);
             this.Controls.Add(this.checkBox_hide);
             this.Controls.Add(this.label4);
@@ -450,8 +410,6 @@
             this.Controls.Add(this.button_delete);
             this.Controls.Add(this.button_add);
             this.Controls.Add(this.listView1);
-            this.Controls.Add(this.button_cancel);
-            this.Controls.Add(this.button_ok);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -466,9 +424,6 @@
         }
 
         #endregion
-
-        private Button button_ok;
-        private Button button_cancel;
         private ListView listView1;
         private Button button_add;
         private Button button_delete;
@@ -492,7 +447,6 @@
         private ColumnHeader columnHeader3;
         private CheckBox checkBox_hide;
         private CheckBox checkBox_italic;
-        private Button button_apply;
         private Button button_deletepreset;
         private ComboBox comboBox_preset;
         private ColumnHeader columnHeader4;

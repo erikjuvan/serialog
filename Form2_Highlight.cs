@@ -5,20 +5,12 @@ namespace serialog
     public partial class Form2_Highlight : Form
     {
         static public HighlightEntries highlightEntries = new HighlightEntries();
-        private HighlightEntries tempHighlightEntries;
         private Color hlBgColor;
         private Color hlFgColor;
 
         public Form2_Highlight()
         {
             InitializeComponent();
-
-            // copy to temp
-            tempHighlightEntries = new HighlightEntries(highlightEntries);
-            foreach (HighlightEntry entry in tempHighlightEntries.Items)
-            {
-                AddHighlightEntryToListView(ref listView1, entry);
-            }
 
             // Fill colors
             comboBox_fgcolor.Items.AddRange(Enum.GetNames(typeof(KnownColor)));
@@ -178,28 +170,8 @@ namespace serialog
                 checkBox_ignorecase.Checked, checkBox_bold.Checked,
                 checkBox_italic.Checked, checkBox_hide.Checked, checkBox_remove.Checked);
 
-            tempHighlightEntries.Add(highlightEntry);
+            highlightEntries.Add(highlightEntry);
             AddHighlightEntryToListView(ref listView1, highlightEntry);
-        }
-
-        private void button_cancel_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-        }
-
-        private void button_ok_Click(object sender, EventArgs e)
-        {
-            var res = MessageBox.Show("Save changes?", "Save?", MessageBoxButtons.YesNoCancel);
-
-            if (res == DialogResult.Cancel)
-                return;
-
-            if (res == DialogResult.Yes)
-            {
-                highlightEntries.Clear();
-                highlightEntries = new HighlightEntries(tempHighlightEntries);
-            }
-            this.Hide();
         }
 
         private void button_delete_Click(object sender, EventArgs e)
@@ -210,7 +182,7 @@ namespace serialog
             while (listView1.SelectedIndices.Count > 0)
             {
                 int idx = listView1.SelectedIndices[listView1.SelectedIndices.Count - 1];
-                tempHighlightEntries.RemoveAt(idx);
+                highlightEntries.RemoveAt(idx);
                 listView1.Items.RemoveAt(idx);
             }
         }
@@ -300,9 +272,9 @@ namespace serialog
                     listView1.Items[indexTo].Focused = true;
 
                     // Swap
-                    var tmpEntry = tempHighlightEntries.Items[indexTo];
-                    tempHighlightEntries.Items[indexTo] = tempHighlightEntries.Items[indexFrom];
-                    tempHighlightEntries.Items[indexFrom] = tmpEntry;
+                    var tmpEntry = highlightEntries.Items[indexTo];
+                    highlightEntries.Items[indexTo] = highlightEntries.Items[indexFrom];
+                    highlightEntries.Items[indexFrom] = tmpEntry;
                 }
             }
         }
@@ -320,9 +292,9 @@ namespace serialog
                     listView1.Items[indexTo].Focused = true;
 
                     // Swap
-                    var tmpEntry = tempHighlightEntries.Items[indexTo];
-                    tempHighlightEntries.Items[indexTo] = tempHighlightEntries.Items[indexFrom];
-                    tempHighlightEntries.Items[indexFrom] = tmpEntry;
+                    var tmpEntry = highlightEntries.Items[indexTo];
+                    highlightEntries.Items[indexTo] = highlightEntries.Items[indexFrom];
+                    highlightEntries.Items[indexFrom] = tmpEntry;
                 }
             }
 
@@ -400,7 +372,7 @@ namespace serialog
                 foreach (ListViewItem item in listView1.SelectedItems)
                 {
                     item.ForeColor = fgcol;
-                    tempHighlightEntries.Items[item.Index].foreColor = fgcol;
+                    highlightEntries.Items[item.Index].foreColor = fgcol;
                 }
             }
         }
@@ -425,16 +397,9 @@ namespace serialog
                 foreach (ListViewItem item in listView1.SelectedItems)
                 {
                     item.BackColor = bgcol;
-                    tempHighlightEntries.Items[item.Index].backColor = bgcol;
+                    highlightEntries.Items[item.Index].backColor = bgcol;
                 }
             }
-        }
-
-        private void button_apply_Click(object sender, EventArgs e)
-        {
-            highlightEntries.Clear();
-
-            highlightEntries = new HighlightEntries(tempHighlightEntries);
         }
 
         private void Populate_comboBox_preset()
@@ -484,7 +449,7 @@ namespace serialog
             {
                 List<string> items = new List<string>();
 
-                foreach (var item in tempHighlightEntries.Items)
+                foreach (var item in highlightEntries.Items)
                 {
                     /*
                     public string text;
@@ -554,7 +519,7 @@ namespace serialog
                     Convert.ToBoolean(items[6]), Convert.ToBoolean(items[7]),
                     Convert.ToBoolean(items[8]));
 
-                tempHighlightEntries.Add(entry);
+                highlightEntries.Add(entry);
                 AddHighlightEntryToListView(ref listView1, entry);
             }
         }
@@ -582,7 +547,7 @@ namespace serialog
 
         private void listView1_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
-            tempHighlightEntries.Items[e.Item.Index].enabled = e.Item.Checked;
+            highlightEntries.Items[e.Item.Index].enabled = e.Item.Checked;
         }
 
         private void listView1_MouseClick(object sender, MouseEventArgs e)
@@ -590,7 +555,7 @@ namespace serialog
             if (listView1.SelectedItems.Count != 1)
                 return;
 
-            var entry = tempHighlightEntries.Items[listView1.SelectedIndices[0]];
+            var entry = highlightEntries.Items[listView1.SelectedIndices[0]];
 
             textBox_string.Text = entry.text;
             comboBox_fgcolor.Text = entry.foreColor.Name;
@@ -612,7 +577,7 @@ namespace serialog
             foreach (ListViewItem item in listView1.SelectedItems)
             {
                 item.Text = textBox_string.Text;
-                tempHighlightEntries.Items[item.Index].text = item.Text;
+                highlightEntries.Items[item.Index].text = item.Text;
             }
         }
 
@@ -628,12 +593,12 @@ namespace serialog
                 if (checkBox_bold.Checked)
                 {
                     item.Font = new Font(listView1.Font, FontStyle.Bold);
-                    tempHighlightEntries.Items[item.Index].bold = true;
+                    highlightEntries.Items[item.Index].bold = true;
                 }
                 else
                 {
                     item.Font = new Font(listView1.Font, FontStyle.Regular);
-                    tempHighlightEntries.Items[item.Index].bold = false;
+                    highlightEntries.Items[item.Index].bold = false;
                 }
             }
         }
@@ -650,12 +615,12 @@ namespace serialog
                 if (checkBox_italic.Checked)
                 {
                     item.Font = new Font(listView1.Font, FontStyle.Italic);
-                    tempHighlightEntries.Items[item.Index].italic = true;
+                    highlightEntries.Items[item.Index].italic = true;
                 }
                 else
                 {
                     item.Font = new Font(listView1.Font, FontStyle.Regular);
-                    tempHighlightEntries.Items[item.Index].italic = false;
+                    highlightEntries.Items[item.Index].italic = false;
                 }
             }
         }
@@ -672,12 +637,12 @@ namespace serialog
                 if (checkBox_ignorecase.Checked)
                 {
                     item.SubItems[1].Text = "*";
-                    tempHighlightEntries.Items[item.Index].ignoreCase = true;
+                    highlightEntries.Items[item.Index].ignoreCase = true;
                 }
                 else
                 {
                     item.SubItems[1].Text = "";
-                    tempHighlightEntries.Items[item.Index].ignoreCase = false;
+                    highlightEntries.Items[item.Index].ignoreCase = false;
                 }
             }
         }
@@ -694,12 +659,12 @@ namespace serialog
                 if (checkBox_hide.Checked)
                 {
                     item.SubItems[2].Text = "*";
-                    tempHighlightEntries.Items[item.Index].hide = true;
+                    highlightEntries.Items[item.Index].hide = true;
                 }
                 else
                 {
                     item.SubItems[2].Text = "";
-                    tempHighlightEntries.Items[item.Index].hide = false;
+                    highlightEntries.Items[item.Index].hide = false;
                 }
             }
         }
@@ -716,12 +681,12 @@ namespace serialog
                 if (checkBox_remove.Checked)
                 {
                     item.SubItems[3].Text = "*";
-                    tempHighlightEntries.Items[item.Index].remove = true;
+                    highlightEntries.Items[item.Index].remove = true;
                 }
                 else
                 {
                     item.SubItems[3].Text = "";
-                    tempHighlightEntries.Items[item.Index].remove = false;
+                    highlightEntries.Items[item.Index].remove = false;
                 }
             }
         }
