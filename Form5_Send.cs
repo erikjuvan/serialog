@@ -15,40 +15,11 @@ namespace serialog
             _serialPort = serialPort;
         }
 
-        private void button2_send_Click(object sender, EventArgs e)
+        private void Form5_Send_KeyDown(object sender, KeyEventArgs e)
         {
-            if (listView1.SelectedItems.Count == 0)
+            if (e.KeyCode == Keys.Escape)
             {
-                MessageBox.Show("Please select a line to send.");
-                return;
-            }
-
-            if (_serialPort == null)
-            {
-                MessageBox.Show("Serial port is null!");
-                return;
-            }
-
-            if (!_serialPort.IsOpen())
-            {
-                MessageBox.Show("Serial port is closed!");
-                return;
-            }
-
-            foreach (ListViewItem selectedItem in listView1.SelectedItems)
-            {
-                string line = selectedItem.Text;
-
-                // Convert to byte array
-                byte[] bytes = line.Split(' ')
-                                   .Select(b => Convert.ToByte(b, 16))
-                                   .ToArray();
-
-                _serialPort.Write(bytes, 0, bytes.Length);
-
-                // Add to parent form's listview as hex string (space separated)
-                string hexString = string.Join(" ", bytes.Select(b => b.ToString("X2")));
-                _parentForm.listView1.Items.Add(hexString);
+                this.Hide();
             }
         }
 
@@ -92,11 +63,102 @@ namespace serialog
             textBox1.Focus();
         }
 
+        private bool CanSendData()
+        {
+            if (listView1.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Please select a line to send.");
+                return false;
+            }
+
+            if (_serialPort == null)
+            {
+                MessageBox.Show("Serial port is null!");
+                return false;
+            }
+
+            if (!_serialPort.IsOpen())
+            {
+                MessageBox.Show("Serial port is closed!");
+                return false;
+            }
+
+            return true;
+        }
+
+        private void SendSelectedLine()
+        {
+            foreach (ListViewItem selectedItem in listView1.SelectedItems)
+            {
+                string line = selectedItem.Text;
+
+                // Convert to byte array
+                byte[] bytes = line.Split(' ')
+                                   .Select(b => Convert.ToByte(b, 16))
+                                   .ToArray();
+
+                _serialPort.Write(bytes, 0, bytes.Length);
+
+                // Add to parent form's listview as hex string (space separated)
+                string hexString = string.Join(" ", bytes.Select(b => b.ToString("X2")));
+                _parentForm.listView1.Items.Add(hexString);
+            }
+        }
+        private void button2_send_Click(object sender, EventArgs e)
+        {
+            if (CanSendData())
+            {
+                SendSelectedLine();
+            }
+        }
+
+        private void button_send_every_Click(object sender, EventArgs e)
+        {
+            if (!CanSendData())
+            {
+                return;
+            }
+
+            timer_send_every_ms.Enabled = !timer_send_every_ms.Enabled;
+
+            if (timer_send_every_ms.Enabled)
+            {
+                if (int.TryParse(textBox_send_every.Text, out int interval))
+                {
+                    timer_send_every_ms.Interval = interval;
+                }
+                else
+                {
+                    MessageBox.Show("Please enter a valid number for interval (ms).");
+                }
+
+                button_send_every.BackColor = Color.Green;
+            }
+            else
+            {
+                button_send_every.BackColor = Button.DefaultBackColor;
+            }
+        }
+
+        private void timer_send_every_ms_Tick(object sender, EventArgs e)
+        {
+            SendSelectedLine();
+        }
+
         private void textBoxHex_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!Uri.IsHexDigit(e.KeyChar) && !char.IsControl(e.KeyChar) && !char.IsWhiteSpace(e.KeyChar))
             {
                 e.Handled = true; // ignore invalid input
+            }
+        }
+
+        private void textBox_send_every_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Allow digits, control keys (backspace, delete, etc.)
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true; // ignore the key press
             }
         }
 
@@ -130,108 +192,103 @@ namespace serialog
             }
         }
 
-        private void comboBox_file_DropDown(object sender, EventArgs e)
+        private void Populate_comboBox_file()
         {
             comboBox_file.Items.Clear();
 
-            // list of files without the path, just file name
             try
             {
-                var listOfFiles = Directory.EnumerateFiles(".settings", "*", SearchOption.AllDirectories).Select(Path.GetFileName);
-                var listOfSendFiles= listOfFiles.Where(text => text.Contains(".send"));
-                foreach (var sendfile in listOfSendFiles)
+                var listOfFiles = Directory.EnumerateFiles(".settings", "*.send", SearchOption.AllDirectories)
+                                           .Select(Path.GetFileNameWithoutExtension);
+
+                foreach (var file in listOfFiles)
                 {
-                    int to = sendfile.IndexOf(".");
-
-                    var result = sendfile.Substring(0, to);
-
-                    comboBox_file.Items.Add(result);
+                    comboBox_file.Items.Add(file);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void comboBox_file_DropDown(object sender, EventArgs e)
+        {
+            Populate_comboBox_file();
         }
 
         private async void button_file_save_Click(object sender, EventArgs e)
         {
-            if (comboBox_file.Text.Length == 0)
+            if (string.IsNullOrWhiteSpace(comboBox_file.Text))
                 return;
 
             string filename = comboBox_file.Text;
-            string fullpath = ".settings/" + filename + ".send";
+            string fullpath = Path.Combine(".settings", filename + ".send");
             bool write = true;
 
-            System.IO.Directory.CreateDirectory(".settings");
+            Directory.CreateDirectory(".settings");
 
-            if (System.IO.File.Exists(fullpath))
+            if (File.Exists(fullpath))
             {
-                var ret = MessageBox.Show("File '" + comboBox_file.Text + "' already exists, overwrite it?", "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
+                var ret = MessageBox.Show($"File '{filename}' already exists, overwrite it?", "Overwrite?",
+                                          MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (ret == DialogResult.No)
                     write = false;
             }
 
             if (write)
             {
-                List<string> items = new List<string>();
-
-                foreach (ListViewItem item in listView1.Items)
-                {
-                    items.Add(item.Text);
-                }
-
-                await File.WriteAllLinesAsync(fullpath, items);
+                var lines = listView1.Items.Cast<ListViewItem>().Select(i => i.Text).ToList();
+                await File.WriteAllLinesAsync(fullpath, lines);
             }
         }
 
         private void button_file_load_Click(object sender, EventArgs e)
         {
-            if (comboBox_file.Text.Length == 0)
+            if (string.IsNullOrWhiteSpace(comboBox_file.Text))
                 return;
 
-            string filename = ".settings/" + comboBox_file.Text + ".send";
+            string filename = Path.Combine(".settings", comboBox_file.Text + ".send");
 
-            if (!System.IO.File.Exists(filename))
+            if (!File.Exists(filename))
             {
-                MessageBox.Show("File '" + comboBox_file.Text + "' doesn't exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"File '{comboBox_file.Text}' doesn't exist!", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            // Parse file
-            var lines = File.ReadAllLines(filename);
+            listView1.BeginUpdate();
 
+            var lines = File.ReadAllLines(filename);
             foreach (var line in lines)
             {
-                var items = line.Split(",");
-
                 listView1.Items.Add(line);
             }
+
+            listView1.EndUpdate();
         }
 
         private void button_file_delete_Click(object sender, EventArgs e)
         {
-            string filename = comboBox_file.Text;
-            string fullpath = ".settings/" + filename + ".send";
+            if (string.IsNullOrWhiteSpace(comboBox_file.Text))
+                return;
+
+            string fullpath = Path.Combine(".settings", comboBox_file.Text + ".send");
 
             try
             {
-                File.Delete(fullpath);
+                if (File.Exists(fullpath))
+                    File.Delete(fullpath);
+
                 comboBox_file.Text = "";
+                Populate_comboBox_file();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Could not delete '" + comboBox_file.Text + "'!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Could not delete '{comboBox_file.Text}'!\n{ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void Form5_Send_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape)
-            {
-                this.Hide();
-            }
-        }
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.button1_add = new System.Windows.Forms.Button();
             this.button2_send = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -38,11 +39,14 @@
             this.button_file_load = new System.Windows.Forms.Button();
             this.button_file_save = new System.Windows.Forms.Button();
             this.comboBox_file = new System.Windows.Forms.ComboBox();
+            this.button_send_every = new System.Windows.Forms.Button();
+            this.textBox_send_every = new System.Windows.Forms.TextBox();
+            this.timer_send_every_ms = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // button1_add
             // 
-            this.button1_add.Location = new System.Drawing.Point(130, 12);
+            this.button1_add.Location = new System.Drawing.Point(12, 12);
             this.button1_add.Name = "button1_add";
             this.button1_add.Size = new System.Drawing.Size(112, 34);
             this.button1_add.TabIndex = 2;
@@ -52,7 +56,7 @@
             // 
             // button2_send
             // 
-            this.button2_send.Location = new System.Drawing.Point(12, 12);
+            this.button2_send.Location = new System.Drawing.Point(12, 52);
             this.button2_send.Name = "button2_send";
             this.button2_send.Size = new System.Drawing.Size(112, 34);
             this.button2_send.TabIndex = 3;
@@ -62,9 +66,9 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(248, 15);
+            this.textBox1.Location = new System.Drawing.Point(131, 14);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(540, 31);
+            this.textBox1.Size = new System.Drawing.Size(657, 31);
             this.textBox1.TabIndex = 4;
             this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxHex_KeyPress);
             // 
@@ -73,9 +77,9 @@
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
             this.listView1.GridLines = true;
-            this.listView1.Location = new System.Drawing.Point(12, 52);
+            this.listView1.Location = new System.Drawing.Point(12, 92);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(776, 684);
+            this.listView1.Size = new System.Drawing.Size(776, 644);
             this.listView1.TabIndex = 5;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -145,11 +149,35 @@
             this.comboBox_file.TabIndex = 26;
             this.comboBox_file.DropDown += new System.EventHandler(this.comboBox_file_DropDown);
             // 
+            // button_send_every
+            // 
+            this.button_send_every.Location = new System.Drawing.Point(472, 52);
+            this.button_send_every.Name = "button_send_every";
+            this.button_send_every.Size = new System.Drawing.Size(160, 34);
+            this.button_send_every.TabIndex = 31;
+            this.button_send_every.Text = "Send every (ms):";
+            this.button_send_every.UseVisualStyleBackColor = true;
+            this.button_send_every.Click += new System.EventHandler(this.button_send_every_Click);
+            // 
+            // textBox_send_every
+            // 
+            this.textBox_send_every.Location = new System.Drawing.Point(638, 54);
+            this.textBox_send_every.Name = "textBox_send_every";
+            this.textBox_send_every.Size = new System.Drawing.Size(150, 31);
+            this.textBox_send_every.TabIndex = 32;
+            this.textBox_send_every.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_send_every_KeyPress);
+            // 
+            // timer_send_every_ms
+            // 
+            this.timer_send_every_ms.Tick += new System.EventHandler(this.timer_send_every_ms_Tick);
+            // 
             // Form5_Send
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 870);
+            this.Controls.Add(this.textBox_send_every);
+            this.Controls.Add(this.button_send_every);
             this.Controls.Add(this.button_file_delete);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.button_file_load);
@@ -179,5 +207,8 @@
         private Button button_file_save;
         private ComboBox comboBox_file;
         private ColumnHeader columnHeader1;
+        private Button button_send_every;
+        private TextBox textBox_send_every;
+        private System.Windows.Forms.Timer timer_send_every_ms;
     }
 }
