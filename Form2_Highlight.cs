@@ -360,6 +360,51 @@ namespace serialog
             }
         }
 
+        private Color ParseColorInput(string input, Color fallback)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return fallback;
+
+            input = input.Trim();
+
+            // Hex input?
+            if (input.StartsWith("#"))
+            {
+                string hex = input.Substring(1);
+
+                // #RRGGBB
+                if (hex.Length == 6 &&
+                    int.TryParse(hex, System.Globalization.NumberStyles.HexNumber, null, out int rgb))
+                {
+                    return Color.FromArgb(
+                        (rgb >> 16) & 0xFF,
+                        (rgb >> 8) & 0xFF,
+                        rgb & 0xFF
+                    );
+                }
+
+                // #AARRGGBB
+                if (hex.Length == 8 &&
+                    int.TryParse(hex, System.Globalization.NumberStyles.HexNumber, null, out int argb))
+                {
+                    return Color.FromArgb(
+                        (argb >> 24) & 0xFF,
+                        (argb >> 16) & 0xFF,
+                        (argb >> 8) & 0xFF,
+                        argb & 0xFF
+                    );
+                }
+            }
+
+            // Named color
+            var named = Color.FromName(input);
+            if (!named.IsEmpty)
+                return named;
+
+            // Fallback if nothing matched
+            return fallback;
+        }
+
         private void comboBox_fgcolor_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
@@ -371,11 +416,7 @@ namespace serialog
                     return;
                 }
 
-                Color fgcol;
-                if (comboBox_fgcolor.Text.Length == 0)
-                    fgcol = Color.Black;
-                else
-                    fgcol = Color.FromName(comboBox_fgcolor.Text);
+                Color fgcol = ParseColorInput(comboBox_fgcolor.Text, ListView.DefaultForeColor);
 
                 foreach (ListViewItem item in listView1.SelectedItems)
                 {
@@ -396,11 +437,7 @@ namespace serialog
                     return;
                 }
 
-                Color bgcol;
-                if (comboBox_bgcolor.Text.Length == 0)
-                    bgcol = Color.White;
-                else
-                    bgcol = Color.FromName(comboBox_bgcolor.Text);
+                Color bgcol = ParseColorInput(comboBox_bgcolor.Text, ListView.DefaultBackColor);
 
                 foreach (ListViewItem item in listView1.SelectedItems)
                 {
@@ -557,6 +594,14 @@ namespace serialog
             highlightEntries.Items[e.Item.Index].Enabled = e.Item.Checked;
         }
 
+        private string ColorToNameOrHex(Color color)
+        {
+            if (color.IsKnownColor)
+                return color.Name; // e.g., "Red"
+            else
+                return $"#{color.R:X2}{color.G:X2}{color.B:X2}"; // e.g., "#F1EFC2"
+        }
+
         private void listView1_MouseClick(object sender, MouseEventArgs e)
         {
             if (listView1.SelectedItems.Count != 1)
@@ -565,8 +610,10 @@ namespace serialog
             var entry = highlightEntries.Items[listView1.SelectedIndices[0]];
 
             textBox_string.Text = entry.Text;
-            comboBox_fgcolor.Text = entry.ForeColor.Name;
-            comboBox_bgcolor.Text = entry.BackColor.Name;
+            comboBox_fgcolor.Text = ColorToNameOrHex(entry.ForeColor);
+            comboBox_fgcolor.ForeColor = entry.ForeColor;
+            comboBox_bgcolor.Text = ColorToNameOrHex(entry.BackColor);
+            comboBox_bgcolor.BackColor = entry.BackColor;
             checkBox_ignorecase.Checked = entry.IgnoreCase;
             checkBox_bold.Checked = entry.Bold;
             checkBox_italic.Checked = entry.Italic;
