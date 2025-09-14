@@ -336,20 +336,25 @@ namespace serialog
                 {
                     item.Selected = true;
                 }
+
+                e.Handled = true;
             }
 
             if (e.Alt && e.KeyCode == Keys.Up)
             {
+                e.Handled = true;
                 MoveItemUp();
             }
 
             if (e.Alt && e.KeyCode == Keys.Down)
             {
+                e.Handled = true;
                 MoveItemDown();
             }
 
             if (e.KeyCode == Keys.Delete)
             {
+                e.Handled = true;
                 button_delete_Click(sender, e);
             }
         }
@@ -370,6 +375,7 @@ namespace serialog
         {
             if (e.KeyCode == Keys.Enter)
             {
+                e.Handled = true;
                 button_add_Click(sender, e);
             }
         }
@@ -378,6 +384,8 @@ namespace serialog
         {
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
             {
+                e.Handled = true;
+
                 if (listView1.SelectedItems.Count <= 0)
                 {
                     return;
@@ -401,6 +409,8 @@ namespace serialog
         {
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
             {
+                e.Handled = true;
+
                 if (listView1.SelectedItems.Count <= 0)
                 {
                     return;

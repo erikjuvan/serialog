@@ -100,21 +100,29 @@ namespace serialog
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Escape)
+            {
+                listView1.Focus();
+            }
+
             if (e.Control && e.KeyCode == Keys.F)
             {
                 textBox_find.Select();
             }
 
-            if (e.Shift && e.KeyCode == Keys.F3)
+            if (e.KeyCode == Keys.F3)
             {
-                FindPrevString(textBox_find.Text);
+                if (e.Shift)
+                {
+                    FindPrevString(textBox_find.Text);
+                }
+                else
+                {
+                    FindNextString(textBox_find.Text);
+                }
             }
-            else if (e.KeyCode == Keys.F3)
-            {
-                FindNextString(textBox_find.Text);
-            }
-
         }
+
         private string[] GetSortedPorts()
         {
             var portNames = SerialCom.GetPortNames();
@@ -392,6 +400,7 @@ namespace serialog
         {
             if (e.Control && e.KeyCode == Keys.C)
             {
+                e.Handled = true; // optional, prevents further processing
                 ListView.SelectedListViewItemCollection selectedItems = listView1.SelectedItems;
                 String text = "";
                 foreach (ListViewItem item in selectedItems)
@@ -403,6 +412,7 @@ namespace serialog
             }
             else if (e.Control && e.KeyCode == Keys.A)
             {
+                e.Handled = true; // optional, prevents further processing
                 foreach (ListViewItem item in listView1.Items)
                 {
                     item.Selected = true;
@@ -410,6 +420,7 @@ namespace serialog
             }
             else if (e.KeyCode == Keys.Delete)
             {
+                e.Handled = true; // optional, prevents further processing
                 if (listView1.SelectedItems.Count == 0)
                     return;
 
@@ -432,6 +443,11 @@ namespace serialog
                     catch (Exception ex)
                     { }
                 }
+            }
+            else if (e.KeyCode == Keys.F && e.Modifiers == Keys.None)
+            {
+                checkBox_follow.Checked = !checkBox_follow.Checked;
+                e.Handled = true; // optional, prevents further processing
             }
         }
 

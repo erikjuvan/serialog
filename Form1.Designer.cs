@@ -431,7 +431,7 @@
             this.button_stop.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_stop.Name = "button_stop";
             this.button_stop.Size = new System.Drawing.Size(47, 38);
-            this.button_stop.TabIndex = 5;
+            this.button_stop.TabIndex = 4;
             this.button_stop.Text = "■";
             this.button_stop.UseVisualStyleBackColor = true;
             this.button_stop.Click += new System.EventHandler(this.button_stop_Click);
@@ -445,7 +445,7 @@
             this.checkBox_follow.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_follow.Name = "checkBox_follow";
             this.checkBox_follow.Size = new System.Drawing.Size(90, 29);
-            this.checkBox_follow.TabIndex = 6;
+            this.checkBox_follow.TabIndex = 5;
             this.checkBox_follow.Text = "Follow";
             this.checkBox_follow.UseVisualStyleBackColor = true;
             // 
@@ -485,7 +485,7 @@
             this.button_findnext.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_findnext.Name = "button_findnext";
             this.button_findnext.Size = new System.Drawing.Size(47, 38);
-            this.button_findnext.TabIndex = 9;
+            this.button_findnext.TabIndex = 8;
             this.button_findnext.Text = ">";
             this.button_findnext.UseVisualStyleBackColor = true;
             this.button_findnext.Click += new System.EventHandler(this.button_findnext_Click);
@@ -498,7 +498,7 @@
             this.button_findprev.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_findprev.Name = "button_findprev";
             this.button_findprev.Size = new System.Drawing.Size(47, 38);
-            this.button_findprev.TabIndex = 8;
+            this.button_findprev.TabIndex = 7;
             this.button_findprev.Text = "<";
             this.button_findprev.UseVisualStyleBackColor = true;
             this.button_findprev.Click += new System.EventHandler(this.button_findprev_Click);
@@ -519,7 +519,7 @@
             this.textBox_find.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_find.Name = "textBox_find";
             this.textBox_find.Size = new System.Drawing.Size(141, 31);
-            this.textBox_find.TabIndex = 7;
+            this.textBox_find.TabIndex = 6;
             this.textBox_find.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox_find_KeyDown);
             // 
             // button_findall
@@ -530,7 +530,7 @@
             this.button_findall.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_findall.Name = "button_findall";
             this.button_findall.Size = new System.Drawing.Size(47, 38);
-            this.button_findall.TabIndex = 10;
+            this.button_findall.TabIndex = 9;
             this.button_findall.Text = "All";
             this.button_findall.UseVisualStyleBackColor = true;
             this.button_findall.Click += new System.EventHandler(this.button_findall_Click);
@@ -549,7 +549,7 @@
             this.button_prev_highlight.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_prev_highlight.Name = "button_prev_highlight";
             this.button_prev_highlight.Size = new System.Drawing.Size(47, 38);
-            this.button_prev_highlight.TabIndex = 19;
+            this.button_prev_highlight.TabIndex = 10;
             this.button_prev_highlight.Text = "<h";
             this.button_prev_highlight.UseVisualStyleBackColor = true;
             this.button_prev_highlight.Click += new System.EventHandler(this.button_prev_highlight_Click);
@@ -562,7 +562,7 @@
             this.button_next_highlight.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_next_highlight.Name = "button_next_highlight";
             this.button_next_highlight.Size = new System.Drawing.Size(47, 38);
-            this.button_next_highlight.TabIndex = 20;
+            this.button_next_highlight.TabIndex = 11;
             this.button_next_highlight.Text = "h>";
             this.button_next_highlight.UseVisualStyleBackColor = true;
             this.button_next_highlight.Click += new System.EventHandler(this.button_next_highlight_Click);
