@@ -1336,7 +1336,6 @@ namespace serialog
                 // Make sure form is always on top of parent form
                 form2Highlight.Owner = this;
                 form2Highlight.ShowInTaskbar = false;
-                form2Highlight.TopMost = true;
 
                 form2Highlight.FormClosing += ChildForm_FormClosing;
                 form2Highlight.StartPosition = FormStartPosition.Manual;
@@ -1359,7 +1358,6 @@ namespace serialog
                 // Make sure form is always on top of parent form
                 form4Highlights.Owner = this;
                 form4Highlights.ShowInTaskbar = false;
-                form4Highlights.TopMost = true;
 
                 form4Highlights.FormClosing += ChildForm_FormClosing;
                 form4Highlights.StartPosition = FormStartPosition.Manual;
@@ -1382,7 +1380,6 @@ namespace serialog
                 // Make sure form is always on top of parent form
                 form5Send.Owner = this;
                 form5Send.ShowInTaskbar = false;
-                form5Send.TopMost = true;
 
                 form5Send.FormClosing += ChildForm_FormClosing;
                 form5Send.StartPosition = FormStartPosition.Manual;
