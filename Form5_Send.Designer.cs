@@ -66,6 +66,8 @@
             // 
             // textBox1
             // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Location = new System.Drawing.Point(131, 14);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(657, 31);
@@ -74,6 +76,9 @@
             // 
             // listView1
             // 
+            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
             this.listView1.GridLines = true;
@@ -151,6 +156,7 @@
             // 
             // button_send_every
             // 
+            this.button_send_every.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button_send_every.Location = new System.Drawing.Point(472, 52);
             this.button_send_every.Name = "button_send_every";
             this.button_send_every.Size = new System.Drawing.Size(160, 34);
@@ -161,6 +167,7 @@
             // 
             // textBox_send_every
             // 
+            this.textBox_send_every.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_send_every.Location = new System.Drawing.Point(638, 54);
             this.textBox_send_every.Name = "textBox_send_every";
             this.textBox_send_every.Size = new System.Drawing.Size(150, 31);
