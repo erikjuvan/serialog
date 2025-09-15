@@ -178,8 +178,10 @@ namespace serialog
             highlightEntry.Hide = checkBox_hide.Checked;
             highlightEntry.Remove = checkBox_remove.Checked;
 
+            highlightEntries.BeginUpdate();
             highlightEntries.Add(highlightEntry);
             AddHighlightEntryToListView(ref listView1, highlightEntry);
+            highlightEntries.EndUpdate();
         }
 
         private void button_delete_Click(object sender, EventArgs e)
@@ -187,12 +189,14 @@ namespace serialog
             if (listView1.SelectedIndices.Count == 0)
                 return;
 
+            highlightEntries.BeginUpdate();
             while (listView1.SelectedIndices.Count > 0)
             {
                 int idx = listView1.SelectedIndices[listView1.SelectedIndices.Count - 1];
                 highlightEntries.RemoveAt(idx);
                 listView1.Items.RemoveAt(idx);
             }
+            highlightEntries.EndUpdate();
         }
 
         private void button_fgcolor_Click(object sender, EventArgs e)
@@ -269,6 +273,7 @@ namespace serialog
 
         private void MoveItemUp()
         {
+            highlightEntries.BeginUpdate();
             foreach (ListViewItem lvi in listView1.SelectedItems)
             {
                 if (lvi.Index > 0)
@@ -285,10 +290,12 @@ namespace serialog
                     highlightEntries.Items[indexFrom] = tmpEntry;
                 }
             }
+            highlightEntries.EndUpdate();
         }
 
         private void MoveItemDown()
         {
+            highlightEntries.BeginUpdate();
             foreach (ListViewItem lvi in listView1.SelectedItems)
             {
                 if (lvi.Index < listView1.Items.Count - 1)
@@ -305,7 +312,7 @@ namespace serialog
                     highlightEntries.Items[indexFrom] = tmpEntry;
                 }
             }
-
+            highlightEntries.EndUpdate();
         }
 
         private void listView1_KeyDown(object sender, KeyEventArgs e)
@@ -418,11 +425,13 @@ namespace serialog
 
                 Color fgcol = ParseColorInput(comboBox_fgcolor.Text, ListView.DefaultForeColor);
 
+                highlightEntries.BeginUpdate();
                 foreach (ListViewItem item in listView1.SelectedItems)
                 {
                     item.ForeColor = fgcol;
                     highlightEntries.Items[item.Index].ForeColor = fgcol;
                 }
+                highlightEntries.EndUpdate();
             }
         }
 
@@ -439,11 +448,13 @@ namespace serialog
 
                 Color bgcol = ParseColorInput(comboBox_bgcolor.Text, ListView.DefaultBackColor);
 
+                highlightEntries.BeginUpdate();
                 foreach (ListViewItem item in listView1.SelectedItems)
                 {
                     item.BackColor = bgcol;
                     highlightEntries.Items[item.Index].BackColor = bgcol;
                 }
+                highlightEntries.EndUpdate();
             }
         }
 
@@ -526,11 +537,13 @@ namespace serialog
 
                 if (entries != null)
                 {
+                    highlightEntries.BeginUpdate();
                     foreach (var entry in entries)
                     {
                         highlightEntries.Add(entry);
                         AddHighlightEntryToListView(ref listView1, entry);
                     }
+                    highlightEntries.EndUpdate();
                 }
             }
             catch (Exception ex)
@@ -628,17 +641,20 @@ namespace serialog
                 return;
             }
 
+            highlightEntries.BeginUpdate();
             foreach (ListViewItem item in listView1.SelectedItems)
             {
                 item.Text = textBox_string.Text;
                 highlightEntries.Items[item.Index].Text = item.Text;
             }
+            highlightEntries.EndUpdate();
         }
 
         private void checkBox_bold_CheckedChanged(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count <= 0) return;
 
+            highlightEntries.BeginUpdate();
             foreach (ListViewItem item in listView1.SelectedItems)
             {
                 FontStyle style = item.Font.Style;
@@ -651,12 +667,14 @@ namespace serialog
                 item.Font = new Font(item.Font, style);
                 highlightEntries.Items[item.Index].Bold = checkBox_bold.Checked;
             }
+            highlightEntries.EndUpdate();
         }
 
         private void checkBox_italic_CheckedChanged(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count <= 0) return;
 
+            highlightEntries.BeginUpdate();
             foreach (ListViewItem item in listView1.SelectedItems)
             {
                 FontStyle style = item.Font.Style;
@@ -669,6 +687,7 @@ namespace serialog
                 item.Font = new Font(item.Font, style);
                 highlightEntries.Items[item.Index].Italic = checkBox_italic.Checked;
             }
+            highlightEntries.EndUpdate();
         }
 
         private void checkBox_ignorecase_CheckedChanged(object sender, EventArgs e)
@@ -678,6 +697,7 @@ namespace serialog
                 return;
             }
 
+            highlightEntries.BeginUpdate();
             foreach (ListViewItem item in listView1.SelectedItems)
             {
                 if (checkBox_ignorecase.Checked)
@@ -691,6 +711,7 @@ namespace serialog
                     highlightEntries.Items[item.Index].IgnoreCase = false;
                 }
             }
+            highlightEntries.EndUpdate();
         }
 
         private void checkBox_hide_CheckedChanged(object sender, EventArgs e)
@@ -700,6 +721,7 @@ namespace serialog
                 return;
             }
 
+            highlightEntries.BeginUpdate();
             foreach (ListViewItem item in listView1.SelectedItems)
             {
                 if (checkBox_hide.Checked)
@@ -713,6 +735,7 @@ namespace serialog
                     highlightEntries.Items[item.Index].Hide = false;
                 }
             }
+            highlightEntries.EndUpdate();
         }
 
         private void checkBox_remove_CheckedChanged(object sender, EventArgs e)
@@ -722,6 +745,7 @@ namespace serialog
                 return;
             }
 
+            highlightEntries.BeginUpdate();
             foreach (ListViewItem item in listView1.SelectedItems)
             {
                 if (checkBox_remove.Checked)
@@ -735,6 +759,7 @@ namespace serialog
                     highlightEntries.Items[item.Index].Remove = false;
                 }
             }
+            highlightEntries.EndUpdate();
         }
     }
 }

@@ -38,6 +38,9 @@ namespace serialog
             // Parse command line arguments
             ParseCommandLineArguments(options);
 
+            // Subscribe to highlight changes
+            Form2_Highlight.highlightEntries.EntriesChanged += HighlightEntries_Changed;
+
             upTime.Start();
         }
 
@@ -96,6 +99,13 @@ namespace serialog
                     button_run_Click(this, EventArgs.Empty);
                 }
             }
+        }
+
+        private void HighlightEntries_Changed(object? sender, EventArgs e)
+        {
+            // Redraw your list view or refresh the virtual items
+            //listView1.Invalidate(); // For future virtual listview
+            //ReloadAllListViewItems(); // For current testing
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)

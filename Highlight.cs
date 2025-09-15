@@ -114,19 +114,53 @@ namespace serialog
         // Event that fires when the collection or any entry changes
         public event EventHandler? EntriesChanged;
 
+        private bool _suspendNotifications = false;
+        private bool _hasChangesDuringSuspend = false;
+
         public HighlightEntries() { }
 
         public HighlightEntries(HighlightEntries highlightEntries)
         {
+            BeginUpdate();
             foreach (HighlightEntry item in highlightEntries.items)
             {
                 Add(item); // Use Add so PropertyChanged subscription is set
+            }
+            EndUpdate();
+        }
+
+        /// <summary>SS
+        /// Begin suppressing notifications. Call EndUpdate() when done.
+        /// </summary>
+        public void BeginUpdate()
+        {
+            _suspendNotifications = true;
+            _hasChangesDuringSuspend = false;
+        }
+
+        /// <summary>
+        /// End update, firing a single EntriesChanged if anything happened.
+        /// </summary>
+        public void EndUpdate()
+        {
+            _suspendNotifications = false;
+            if (_hasChangesDuringSuspend)
+            {
+                EntriesChanged?.Invoke(this, EventArgs.Empty);
+                _hasChangesDuringSuspend = false;
             }
         }
 
         protected virtual void OnEntriesChanged()
         {
-            EntriesChanged?.Invoke(this, EventArgs.Empty);
+            if (_suspendNotifications)
+            {
+                _hasChangesDuringSuspend = true;
+            }
+            else
+            {
+                EntriesChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         private void SubscribeToEntry(HighlightEntry entry)
