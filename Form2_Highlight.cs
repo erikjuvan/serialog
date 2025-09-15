@@ -637,45 +637,37 @@ namespace serialog
 
         private void checkBox_bold_CheckedChanged(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count <= 0)
-            {
-                return;
-            }
+            if (listView1.SelectedItems.Count <= 0) return;
 
             foreach (ListViewItem item in listView1.SelectedItems)
             {
+                FontStyle style = item.Font.Style;
+
                 if (checkBox_bold.Checked)
-                {
-                    item.Font = new Font(listView1.Font, FontStyle.Bold);
-                    highlightEntries.Items[item.Index].Bold = true;
-                }
+                    style |= FontStyle.Bold;  // add bold
                 else
-                {
-                    item.Font = new Font(listView1.Font, FontStyle.Regular);
-                    highlightEntries.Items[item.Index].Bold = false;
-                }
+                    style &= ~FontStyle.Bold; // remove bold
+
+                item.Font = new Font(item.Font, style);
+                highlightEntries.Items[item.Index].Bold = checkBox_bold.Checked;
             }
         }
 
         private void checkBox_italic_CheckedChanged(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count <= 0)
-            {
-                return;
-            }
+            if (listView1.SelectedItems.Count <= 0) return;
 
             foreach (ListViewItem item in listView1.SelectedItems)
             {
+                FontStyle style = item.Font.Style;
+
                 if (checkBox_italic.Checked)
-                {
-                    item.Font = new Font(listView1.Font, FontStyle.Italic);
-                    highlightEntries.Items[item.Index].Italic = true;
-                }
+                    style |= FontStyle.Italic;  // add italic
                 else
-                {
-                    item.Font = new Font(listView1.Font, FontStyle.Regular);
-                    highlightEntries.Items[item.Index].Italic = false;
-                }
+                    style &= ~FontStyle.Italic; // remove italic
+
+                item.Font = new Font(item.Font, style);
+                highlightEntries.Items[item.Index].Italic = checkBox_italic.Checked;
             }
         }
 
