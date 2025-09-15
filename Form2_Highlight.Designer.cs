@@ -160,7 +160,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 747);
+            this.label1.Location = new System.Drawing.Point(17, 730);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(158, 25);
@@ -171,7 +171,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(309, 747);
+            this.label2.Location = new System.Drawing.Point(309, 730);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(159, 25);
@@ -185,7 +185,7 @@
             this.comboBox_bgcolor.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBox_bgcolor.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox_bgcolor.FormattingEnabled = true;
-            this.comboBox_bgcolor.Location = new System.Drawing.Point(309, 777);
+            this.comboBox_bgcolor.Location = new System.Drawing.Point(309, 760);
             this.comboBox_bgcolor.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.comboBox_bgcolor.Name = "comboBox_bgcolor";
             this.comboBox_bgcolor.Size = new System.Drawing.Size(174, 33);
@@ -198,7 +198,7 @@
             this.button_fgcolor.FlatAppearance.BorderSize = 0;
             this.button_fgcolor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_fgcolor.Image = ((System.Drawing.Image)(resources.GetObject("button_fgcolor.Image")));
-            this.button_fgcolor.Location = new System.Drawing.Point(201, 777);
+            this.button_fgcolor.Location = new System.Drawing.Point(201, 760);
             this.button_fgcolor.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_fgcolor.Name = "button_fgcolor";
             this.button_fgcolor.Size = new System.Drawing.Size(39, 38);
@@ -214,7 +214,7 @@
             this.comboBox_fgcolor.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBox_fgcolor.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox_fgcolor.FormattingEnabled = true;
-            this.comboBox_fgcolor.Location = new System.Drawing.Point(17, 777);
+            this.comboBox_fgcolor.Location = new System.Drawing.Point(17, 760);
             this.comboBox_fgcolor.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.comboBox_fgcolor.Name = "comboBox_fgcolor";
             this.comboBox_fgcolor.Size = new System.Drawing.Size(174, 33);
@@ -225,7 +225,7 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(17, 847);
+            this.label3.Location = new System.Drawing.Point(17, 806);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(62, 25);
@@ -235,7 +235,7 @@
             // textBox_string
             // 
             this.textBox_string.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.textBox_string.Location = new System.Drawing.Point(17, 877);
+            this.textBox_string.Location = new System.Drawing.Point(17, 836);
             this.textBox_string.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_string.Name = "textBox_string";
             this.textBox_string.Size = new System.Drawing.Size(513, 31);
@@ -247,7 +247,7 @@
             // 
             this.checkBox_ignorecase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBox_ignorecase.AutoSize = true;
-            this.checkBox_ignorecase.Location = new System.Drawing.Point(217, 928);
+            this.checkBox_ignorecase.Location = new System.Drawing.Point(217, 883);
             this.checkBox_ignorecase.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_ignorecase.Name = "checkBox_ignorecase";
             this.checkBox_ignorecase.Size = new System.Drawing.Size(132, 29);
@@ -260,7 +260,7 @@
             // 
             this.checkBox_bold.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBox_bold.AutoSize = true;
-            this.checkBox_bold.Location = new System.Drawing.Point(17, 928);
+            this.checkBox_bold.Location = new System.Drawing.Point(17, 883);
             this.checkBox_bold.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_bold.Name = "checkBox_bold";
             this.checkBox_bold.Size = new System.Drawing.Size(74, 29);
@@ -275,7 +275,7 @@
             this.button_bgcolor.FlatAppearance.BorderSize = 0;
             this.button_bgcolor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button_bgcolor.Image = ((System.Drawing.Image)(resources.GetObject("button_bgcolor.Image")));
-            this.button_bgcolor.Location = new System.Drawing.Point(493, 777);
+            this.button_bgcolor.Location = new System.Drawing.Point(493, 760);
             this.button_bgcolor.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_bgcolor.Name = "button_bgcolor";
             this.button_bgcolor.Size = new System.Drawing.Size(39, 38);
@@ -289,7 +289,7 @@
             this.comboBox_preset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.comboBox_preset.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox_preset.FormattingEnabled = true;
-            this.comboBox_preset.Location = new System.Drawing.Point(17, 1008);
+            this.comboBox_preset.Location = new System.Drawing.Point(17, 966);
             this.comboBox_preset.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.comboBox_preset.Name = "comboBox_preset";
             this.comboBox_preset.Size = new System.Drawing.Size(228, 33);
@@ -299,7 +299,7 @@
             // button_preset_save
             // 
             this.button_preset_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_preset_save.Location = new System.Drawing.Point(17, 1057);
+            this.button_preset_save.Location = new System.Drawing.Point(17, 1015);
             this.button_preset_save.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_preset_save.Name = "button_preset_save";
             this.button_preset_save.Size = new System.Drawing.Size(71, 38);
@@ -311,7 +311,7 @@
             // button_preset_load
             // 
             this.button_preset_load.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_preset_load.Location = new System.Drawing.Point(97, 1057);
+            this.button_preset_load.Location = new System.Drawing.Point(97, 1015);
             this.button_preset_load.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_preset_load.Name = "button_preset_load";
             this.button_preset_load.Size = new System.Drawing.Size(71, 38);
@@ -324,7 +324,7 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(17, 978);
+            this.label4.Location = new System.Drawing.Point(17, 936);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(64, 25);
@@ -335,7 +335,7 @@
             // 
             this.checkBox_hide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBox_hide.AutoSize = true;
-            this.checkBox_hide.Location = new System.Drawing.Point(351, 928);
+            this.checkBox_hide.Location = new System.Drawing.Point(351, 883);
             this.checkBox_hide.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_hide.Name = "checkBox_hide";
             this.checkBox_hide.Size = new System.Drawing.Size(75, 29);
@@ -348,7 +348,7 @@
             // 
             this.checkBox_italic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBox_italic.AutoSize = true;
-            this.checkBox_italic.Location = new System.Drawing.Point(97, 928);
+            this.checkBox_italic.Location = new System.Drawing.Point(97, 883);
             this.checkBox_italic.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_italic.Name = "checkBox_italic";
             this.checkBox_italic.Size = new System.Drawing.Size(74, 29);
@@ -360,7 +360,7 @@
             // button_deletepreset
             // 
             this.button_deletepreset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_deletepreset.Location = new System.Drawing.Point(176, 1057);
+            this.button_deletepreset.Location = new System.Drawing.Point(176, 1015);
             this.button_deletepreset.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_deletepreset.Name = "button_deletepreset";
             this.button_deletepreset.Size = new System.Drawing.Size(71, 38);
@@ -373,7 +373,7 @@
             // 
             this.checkBox_remove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBox_remove.AutoSize = true;
-            this.checkBox_remove.Location = new System.Drawing.Point(433, 928);
+            this.checkBox_remove.Location = new System.Drawing.Point(433, 883);
             this.checkBox_remove.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_remove.Name = "checkBox_remove";
             this.checkBox_remove.Size = new System.Drawing.Size(102, 29);
@@ -386,7 +386,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(540, 1115);
+            this.ClientSize = new System.Drawing.Size(540, 1067);
             this.Controls.Add(this.checkBox_remove);
             this.Controls.Add(this.button_deletepreset);
             this.Controls.Add(this.checkBox_italic);
