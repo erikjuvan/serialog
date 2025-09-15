@@ -114,7 +114,7 @@
             this.button_add.Location = new System.Drawing.Point(17, 677);
             this.button_add.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_add.Name = "button_add";
-            this.button_add.Size = new System.Drawing.Size(116, 38);
+            this.button_add.Size = new System.Drawing.Size(120, 38);
             this.button_add.TabIndex = 8;
             this.button_add.Text = "Add";
             this.button_add.UseVisualStyleBackColor = true;
@@ -123,10 +123,10 @@
             // button_delete
             // 
             this.button_delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_delete.Location = new System.Drawing.Point(150, 677);
+            this.button_delete.Location = new System.Drawing.Point(148, 677);
             this.button_delete.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_delete.Name = "button_delete";
-            this.button_delete.Size = new System.Drawing.Size(116, 38);
+            this.button_delete.Size = new System.Drawing.Size(120, 38);
             this.button_delete.TabIndex = 9;
             this.button_delete.Text = "Delete";
             this.button_delete.UseVisualStyleBackColor = true;
@@ -135,10 +135,10 @@
             // button_moveup
             // 
             this.button_moveup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_moveup.Location = new System.Drawing.Point(283, 677);
+            this.button_moveup.Location = new System.Drawing.Point(279, 674);
             this.button_moveup.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_moveup.Name = "button_moveup";
-            this.button_moveup.Size = new System.Drawing.Size(116, 38);
+            this.button_moveup.Size = new System.Drawing.Size(120, 38);
             this.button_moveup.TabIndex = 10;
             this.button_moveup.Text = "Move Up";
             this.button_moveup.UseVisualStyleBackColor = true;
@@ -147,10 +147,10 @@
             // button_movedown
             // 
             this.button_movedown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_movedown.Location = new System.Drawing.Point(416, 677);
+            this.button_movedown.Location = new System.Drawing.Point(410, 674);
             this.button_movedown.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_movedown.Name = "button_movedown";
-            this.button_movedown.Size = new System.Drawing.Size(116, 38);
+            this.button_movedown.Size = new System.Drawing.Size(120, 38);
             this.button_movedown.TabIndex = 11;
             this.button_movedown.Text = "Move Down";
             this.button_movedown.UseVisualStyleBackColor = true;
