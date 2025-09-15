@@ -64,6 +64,7 @@
             this.ClientSize = new System.Drawing.Size(1578, 944);
             this.Controls.Add(this.listView1);
             this.KeyPreview = true;
+            this.MinimizeBox = false;
             this.Name = "Form4_Highlights";
             this.Text = "HighlightResults";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form4_Highlights_KeyDown);

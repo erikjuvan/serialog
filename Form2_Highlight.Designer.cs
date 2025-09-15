@@ -413,6 +413,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(562, 796);
             this.Name = "Form2_Highlight";
             this.Text = "Highlight";

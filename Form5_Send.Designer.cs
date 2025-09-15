@@ -188,6 +188,7 @@
             this.Controls.Add(this.button2_send);
             this.Controls.Add(this.button1_add);
             this.KeyPreview = true;
+            this.MinimizeBox = false;
             this.Name = "Form5_Send";
             this.Text = "Form5_Send";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form5_Send_KeyDown);

@@ -1319,11 +1319,13 @@ namespace serialog
             }
         }
 
-        private void form2Highlight_FormClosing(object sender, FormClosingEventArgs e)
+        private void ChildForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Cancel the close and just hide the form
-            e.Cancel = true;
-            form2Highlight.Hide();
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                ((Form)sender).Hide();
+            }
         }
 
         private void highlightsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1331,7 +1333,12 @@ namespace serialog
             if (form2Highlight == null || form2Highlight.IsDisposed)
             {
                 form2Highlight = new Form2_Highlight();
-                form2Highlight.FormClosing += form2Highlight_FormClosing;
+                // Make sure form is always on top of parent form
+                form2Highlight.Owner = this;
+                form2Highlight.ShowInTaskbar = false;
+                form2Highlight.TopMost = true;
+
+                form2Highlight.FormClosing += ChildForm_FormClosing;
                 form2Highlight.StartPosition = FormStartPosition.Manual;
                 form2Highlight.Left = this.Location.X + this.Width / 2 - form2Highlight.Width / 2;
                 form2Highlight.Top = this.Location.Y + this.Height / 2 - form2Highlight.Height / 2;
@@ -1344,19 +1351,17 @@ namespace serialog
             }
         }
 
-        private void form4Highlights_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            // Cancel the close and just hide the form
-            e.Cancel = true;
-            form4Highlights.Hide();
-        }
-
         private void highlightsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             if (form4Highlights == null || form4Highlights.IsDisposed)
             {
                 form4Highlights = new Form4_Highlights();
-                form4Highlights.FormClosing += form4Highlights_FormClosing;
+                // Make sure form is always on top of parent form
+                form4Highlights.Owner = this;
+                form4Highlights.ShowInTaskbar = false;
+                form4Highlights.TopMost = true;
+
+                form4Highlights.FormClosing += ChildForm_FormClosing;
                 form4Highlights.StartPosition = FormStartPosition.Manual;
                 form4Highlights.Left = this.Location.X + this.Width / 2 - form4Highlights.Width / 2;
                 form4Highlights.Top = this.Location.Y + this.Height / 2 - form4Highlights.Height / 2;
@@ -1369,19 +1374,17 @@ namespace serialog
             }
         }
 
-        private void form5Send_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            // Cancel the close and just hide the form
-            e.Cancel = true;
-            form5Send.Hide();
-        }
-
         private void sendToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (form5Send == null || form5Send.IsDisposed)
             {
                 form5Send = new Form5_Send(this, _serialCom);
-                form5Send.FormClosing += form5Send_FormClosing;
+                // Make sure form is always on top of parent form
+                form5Send.Owner = this;
+                form5Send.ShowInTaskbar = false;
+                form5Send.TopMost = true;
+
+                form5Send.FormClosing += ChildForm_FormClosing;
                 form5Send.StartPosition = FormStartPosition.Manual;
                 form5Send.Left = this.Location.X + this.Width / 2 - form5Send.Width / 2;
                 form5Send.Top = this.Location.Y + this.Height / 2 - form5Send.Height / 2;
