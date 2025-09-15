@@ -1,6 +1,6 @@
 ﻿namespace serialog
 {
-    partial class Form4_Highlights
+    partial class Form3_Highlights
     {
         /// <summary>
         /// Required designer variable.

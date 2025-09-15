@@ -20,8 +20,8 @@ namespace serialog
         private Stopwatch upTime = new Stopwatch();
 
         private Form2_Highlight form2Highlight = null;
-        private Form4_Highlights form4Highlights = null;
-        private Form5_Send form5Send = null;
+        private Form3_Highlights form3Highlights = null;
+        private Form4_Send form4Send = null;
         
         private static bool _serialComCriticalException = false;
         private static string _serialComCriticalExceptionString = "";
@@ -1362,45 +1362,45 @@ namespace serialog
 
         private void highlightsToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (form4Highlights == null || form4Highlights.IsDisposed)
+            if (form3Highlights == null || form3Highlights.IsDisposed)
             {
-                form4Highlights = new Form4_Highlights();
+                form3Highlights = new Form3_Highlights();
                 // Make sure form is always on top of parent form
-                form4Highlights.Owner = this;
-                form4Highlights.ShowInTaskbar = false;
+                form3Highlights.Owner = this;
+                form3Highlights.ShowInTaskbar = false;
 
-                form4Highlights.FormClosing += ChildForm_FormClosing;
-                form4Highlights.StartPosition = FormStartPosition.Manual;
-                form4Highlights.Left = this.Location.X + this.Width / 2 - form4Highlights.Width / 2;
-                form4Highlights.Top = this.Location.Y + this.Height / 2 - form4Highlights.Height / 2;
-                form4Highlights.Show();
+                form3Highlights.FormClosing += ChildForm_FormClosing;
+                form3Highlights.StartPosition = FormStartPosition.Manual;
+                form3Highlights.Left = this.Location.X + this.Width / 2 - form3Highlights.Width / 2;
+                form3Highlights.Top = this.Location.Y + this.Height / 2 - form3Highlights.Height / 2;
+                form3Highlights.Show();
             }
             else
             {
-                form4Highlights.Show();   // unhide if hidden
-                form4Highlights.Focus();
+                form3Highlights.Show();   // unhide if hidden
+                form3Highlights.Focus();
             }
         }
 
         private void sendToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (form5Send == null || form5Send.IsDisposed)
+            if (form4Send == null || form4Send.IsDisposed)
             {
-                form5Send = new Form5_Send(this, _serialCom);
+                form4Send = new Form4_Send(this, _serialCom);
                 // Make sure form is always on top of parent form
-                form5Send.Owner = this;
-                form5Send.ShowInTaskbar = false;
+                form4Send.Owner = this;
+                form4Send.ShowInTaskbar = false;
 
-                form5Send.FormClosing += ChildForm_FormClosing;
-                form5Send.StartPosition = FormStartPosition.Manual;
-                form5Send.Left = this.Location.X + this.Width / 2 - form5Send.Width / 2;
-                form5Send.Top = this.Location.Y + this.Height / 2 - form5Send.Height / 2;
-                form5Send.Show();
+                form4Send.FormClosing += ChildForm_FormClosing;
+                form4Send.StartPosition = FormStartPosition.Manual;
+                form4Send.Left = this.Location.X + this.Width / 2 - form4Send.Width / 2;
+                form4Send.Top = this.Location.Y + this.Height / 2 - form4Send.Height / 2;
+                form4Send.Show();
             }
             else
             {
-                form5Send.Show();   // unhide if hidden
-                form5Send.Focus();
+                form4Send.Show();   // unhide if hidden
+                form4Send.Focus();
             }
         }
     }

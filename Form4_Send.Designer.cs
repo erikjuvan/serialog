@@ -1,6 +1,6 @@
 ﻿namespace serialog
 {
-    partial class Form5_Send
+    partial class Form4_Send
     {
         /// <summary>
         /// Required designer variable.

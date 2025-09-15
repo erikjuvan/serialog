@@ -2,12 +2,12 @@
 
 namespace serialog
 {
-    public partial class Form5_Send : Form
+    public partial class Form4_Send : Form
     {
         private Form1 _parentForm;
         private SerialCom _serialPort;
 
-        internal Form5_Send(Form1 parent, SerialCom serialPort)
+        internal Form4_Send(Form1 parent, SerialCom serialPort)
         {
             InitializeComponent();
 
