@@ -1310,13 +1310,50 @@ namespace serialog
             }
         }
 
-        private void ChildForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void RegisterChild(Form child)
         {
-            if (e.CloseReason == CloseReason.UserClosing)
+            child.Owner = this;
+            child.ShowInTaskbar = false;
+            child.StartPosition = FormStartPosition.Manual;
+            child.Left = this.Location.X + this.Width / 2 - child.Width / 2;
+            child.Top = this.Location.Y + this.Height / 2 - child.Height / 2;
+
+            child.FormClosing += (s, e) =>
             {
-                e.Cancel = true;
-                ((Form)sender).Hide();
-            }
+                if (e.CloseReason == CloseReason.UserClosing)
+                {
+                    e.Cancel = true;
+                    child.Hide();
+
+                    // schedule activation after Hide completes
+                    this.BeginInvoke((Action)(() => ActivateOwnerSafely()));
+                }
+            };
+
+            child.VisibleChanged += (s, e) =>
+            {
+                if (!child.Visible)
+                {
+                    // schedule activation after Hide completes
+                    this.BeginInvoke((Action)(() => ActivateOwnerSafely()));
+                }
+            };
+
+            // Optional: keep/ensure Escape hides the child (you already do this in the child)
+            child.KeyPreview = true;
+            child.KeyDown += (s, e) => { if (e.KeyCode == Keys.Escape) { child.Hide(); e.Handled = true; } };
+        }
+
+        private void ActivateOwnerSafely()
+        {
+            if (this.IsDisposed || !this.IsHandleCreated) return;
+
+            // restore if minimized
+            if (this.WindowState == FormWindowState.Minimized)
+                this.WindowState = FormWindowState.Normal;
+
+            // try usual managed activation
+            this.Activate();
         }
 
         private void highlightsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1324,14 +1361,7 @@ namespace serialog
             if (form2Highlight == null || form2Highlight.IsDisposed)
             {
                 form2Highlight = new Form2_Highlight();
-                // Make sure form is always on top of parent form
-                form2Highlight.Owner = this;
-                form2Highlight.ShowInTaskbar = false;
-
-                form2Highlight.FormClosing += ChildForm_FormClosing;
-                form2Highlight.StartPosition = FormStartPosition.Manual;
-                form2Highlight.Left = this.Location.X + this.Width / 2 - form2Highlight.Width / 2;
-                form2Highlight.Top = this.Location.Y + this.Height / 2 - form2Highlight.Height / 2;
+                RegisterChild(form2Highlight);
                 form2Highlight.Show();
             }
             else
@@ -1346,14 +1376,7 @@ namespace serialog
             if (form3Highlights == null || form3Highlights.IsDisposed)
             {
                 form3Highlights = new Form3_Highlights();
-                // Make sure form is always on top of parent form
-                form3Highlights.Owner = this;
-                form3Highlights.ShowInTaskbar = false;
-
-                form3Highlights.FormClosing += ChildForm_FormClosing;
-                form3Highlights.StartPosition = FormStartPosition.Manual;
-                form3Highlights.Left = this.Location.X + this.Width / 2 - form3Highlights.Width / 2;
-                form3Highlights.Top = this.Location.Y + this.Height / 2 - form3Highlights.Height / 2;
+                RegisterChild(form3Highlights);
                 form3Highlights.Show();
             }
             else
@@ -1368,14 +1391,7 @@ namespace serialog
             if (form4Send == null || form4Send.IsDisposed)
             {
                 form4Send = new Form4_Send(this, _serialCom);
-                // Make sure form is always on top of parent form
-                form4Send.Owner = this;
-                form4Send.ShowInTaskbar = false;
-
-                form4Send.FormClosing += ChildForm_FormClosing;
-                form4Send.StartPosition = FormStartPosition.Manual;
-                form4Send.Left = this.Location.X + this.Width / 2 - form4Send.Width / 2;
-                form4Send.Top = this.Location.Y + this.Height / 2 - form4Send.Height / 2;
+                RegisterChild(form4Send);
                 form4Send.Show();
             }
             else
