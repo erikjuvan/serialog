@@ -714,12 +714,24 @@ namespace serialog
                 // Store the absolute path directly
                 AppSettings.SettingsFolder = dialog.SelectedPath;
                 Directory.CreateDirectory(AppSettings.SettingsFolder); // ensure it exists
+
+                MessageBox.Show(
+                    $"Settings directory set to '{AppSettings.SettingsFolder}'",
+                    "Directory",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
             }
         }
 
         private void settingsFolderResetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AppSettings.SettingsFolder = AppSettings.DefaultSettingsFolder;
+
+            MessageBox.Show(
+                $"Settings directory reset to '{AppSettings.SettingsFolder}'",
+                "Directory",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
 
         private void RegisterChild(Form child)
