@@ -316,6 +316,91 @@
 
                 e.Handled = true;
             }
+
+            // Copy multiple cells
+            if (e.Control && e.KeyCode == Keys.C)
+            {
+                var selectedCells = dataGridView1.SelectedCells
+                    .Cast<DataGridViewCell>()
+                    .OrderBy(c => c.RowIndex)
+                    .ThenBy(c => c.ColumnIndex);
+
+                if (selectedCells.Any())
+                {
+                    int minRow = selectedCells.First().RowIndex;
+                    int maxRow = selectedCells.Last().RowIndex;
+                    int minCol = selectedCells.Min(c => c.ColumnIndex);
+                    int maxCol = selectedCells.Max(c => c.ColumnIndex);
+
+                    var rows = new List<string>();
+                    for (int r = minRow; r <= maxRow; r++)
+                    {
+                        var cols = new List<string>();
+                        for (int c = minCol; c <= maxCol; c++)
+                        {
+                            var cell = dataGridView1[c, r];
+                            cols.Add(cell.Value?.ToString() ?? "");
+                        }
+                        rows.Add(string.Join("\t", cols));
+                    }
+
+                    Clipboard.SetText(string.Join(Environment.NewLine, rows));
+                }
+                e.Handled = true;
+            }
+            // Paste multiple cells
+            else if (e.Control && e.KeyCode == Keys.V)
+            {
+                if (!dataGridView1.CurrentCell.ReadOnly)
+                {
+                    string pasteText = Clipboard.GetText();
+                    string[] lines = pasteText.Split(new[] { "\r\n", "\n" },
+                                                     StringSplitOptions.None);
+
+                    int startRow = dataGridView1.CurrentCell.RowIndex;
+                    int startCol = dataGridView1.CurrentCell.ColumnIndex;
+
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        if (string.IsNullOrWhiteSpace(lines[i]))
+                            continue;
+
+                        string[] values = lines[i].Split('\t');
+
+                        for (int j = 0; j < values.Length; j++)
+                        {
+                            int row = startRow + i;
+                            int col = startCol + j;
+
+                            // Make sure the row exists (auto-expand if at bottom)
+                            if (row >= dataGridView1.Rows.Count)
+                            {
+                                dataGridView1.Rows.Add();
+                            }
+
+                            if (col < dataGridView1.Columns.Count)
+                            {
+                                var cell = dataGridView1[col, row];
+                                if (!cell.ReadOnly)
+                                {
+                                    // Simulate editing so CellEndEdit formatting still works
+                                    dataGridView1.CurrentCell = cell;
+                                    dataGridView1.BeginEdit(true);
+
+                                    if (dataGridView1.EditingControl is TextBox tb)
+                                    {
+                                        tb.Text = values[j];
+                                        tb.SelectionStart = tb.Text.Length;
+                                    }
+
+                                    dataGridView1.EndEdit();
+                                }
+                            }
+                        }
+                    }
+                }
+                e.Handled = true;
+            }
         }
 
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
