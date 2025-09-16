@@ -9,6 +9,7 @@ namespace serialog
         static public HighlightEntries highlightEntries = new HighlightEntries();
         private Color hlBgColor;
         private Color hlFgColor;
+        private string _highlightsFileExtension = ".highlight";
 
         public Form2_Highlight()
         {
@@ -21,6 +22,12 @@ namespace serialog
             // Add index changed event function
             comboBox_fgcolor.SelectedIndexChanged += comboBox_fgcolor_SelectedIndexChanged;
             comboBox_bgcolor.SelectedIndexChanged += comboBox_bgcolor_SelectedIndexChanged;
+
+            // Populate preset combobox
+            Populate_comboBox_preset_onFolderChange();
+
+            // Subscribe to folder change
+            AppSettings.SettingsFolderChanged += (_, __) => Populate_comboBox_preset_onFolderChange();
         }
 
         // Handle when user selects a color from the ComboBox
@@ -464,13 +471,13 @@ namespace serialog
 
             try
             {
-                string settingsDir = Path.Combine(Application.StartupPath, ".settings");
+                string settingsDir = AppSettings.SettingsFolder;
 
                 if (!Directory.Exists(settingsDir))
                     return;
 
                 // Only look for .highlight files in .settings (no recursion)
-                var listOfFiles = Directory.EnumerateFiles(settingsDir, "*.highlight", SearchOption.TopDirectoryOnly);
+                var listOfFiles = Directory.EnumerateFiles(settingsDir, "*" + _highlightsFileExtension, SearchOption.TopDirectoryOnly);
 
                 foreach (var file in listOfFiles)
                 {
@@ -484,21 +491,35 @@ namespace serialog
             }
         }
 
+        private void Populate_comboBox_preset_onFolderChange()
+        {
+            Populate_comboBox_preset();
+
+            if (comboBox_preset.Items.Count > 0)
+            {
+                comboBox_preset.SelectedIndex = 0; // sets Text as well
+            }
+            else
+            {
+                comboBox_preset.Text = "";
+            }
+        }
+
+
         private void button_preset_save_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(comboBox_preset.Text))
                 return;
 
-            string filename = comboBox_preset.Text;
-            string dir = Path.Combine(Application.StartupPath, ".settings");
-            string fullpath = Path.Combine(dir, filename + ".highlight");
+            // Ensure the folder exists
+            Directory.CreateDirectory(AppSettings.SettingsFolder);
 
-            Directory.CreateDirectory(dir);
+            string fullpath = Path.Combine(AppSettings.SettingsFolder, comboBox_preset.Text + _highlightsFileExtension);
 
             if (File.Exists(fullpath))
             {
                 var ret = MessageBox.Show(
-                    $"Preset '{filename}' already exists, overwrite it?",
+                    $"Preset '{fullpath}' already exists, overwrite it?",
                     "Overwrite?",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
@@ -510,29 +531,29 @@ namespace serialog
             var options = new JsonSerializerOptions { WriteIndented = true };
             string json = JsonSerializer.Serialize(highlightEntries.Items, options);
             File.WriteAllText(fullpath, json);
-
-            // Refresh combo box
-            if (!comboBox_preset.Items.Contains(filename))
-                comboBox_preset.Items.Add(filename);
         }
 
         private void button_preset_load_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(comboBox_preset.Text))
-                return;
-
-            string filename = Path.Combine(Application.StartupPath, ".settings", comboBox_preset.Text + ".highlight");
-
-            if (!File.Exists(filename))
             {
-                MessageBox.Show($"Preset '{comboBox_preset.Text}' doesn't exist!", "Error",
+                MessageBox.Show("Select a preset to load.", "Warning",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string fullpath = Path.Combine(AppSettings.SettingsFolder, comboBox_preset.Text + _highlightsFileExtension);
+
+            if (!File.Exists(fullpath))
+            {
+                MessageBox.Show($"Preset '{fullpath}' doesn't exist!", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             try
             {
-                string json = File.ReadAllText(filename);
+                string json = File.ReadAllText(fullpath);
                 var entries = JsonSerializer.Deserialize<List<HighlightEntry>>(json);
 
                 if (entries != null)
@@ -555,26 +576,24 @@ namespace serialog
 
         private void button_deletepreset_Click(object sender, EventArgs e)
         {
-            string filename = comboBox_preset.Text;
-
-            if (string.IsNullOrWhiteSpace(filename))
+            if (string.IsNullOrWhiteSpace(comboBox_preset.Text))
             {
-                MessageBox.Show("Please select a preset to delete.", "Warning",
+                MessageBox.Show("Select a preset to delete.", "Warning",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string fullpath = Path.Combine(Application.StartupPath, ".settings", filename + ".highlight");
+            string fullpath = Path.Combine(AppSettings.SettingsFolder, comboBox_preset.Text + _highlightsFileExtension);
 
             if (!File.Exists(fullpath))
             {
-                MessageBox.Show($"Preset '{filename}' does not exist.", "Error",
+                MessageBox.Show($"Preset '{fullpath}' does not exist.", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             var confirm = MessageBox.Show(
-                $"Are you sure you want to delete preset '{filename}'?",
+                $"Are you sure you want to delete preset '{fullpath}'?",
                 "Confirm Delete",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
@@ -592,7 +611,7 @@ namespace serialog
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Could not delete '{filename}'.\n\n{ex.Message}",
+                MessageBox.Show($"Could not delete '{fullpath}'.\n\n{ex.Message}",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

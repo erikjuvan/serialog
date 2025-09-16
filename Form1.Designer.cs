@@ -61,6 +61,9 @@
             this.disableHighlightsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addStartStopTimestampToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.highlightsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.sendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -310,7 +313,8 @@
             this.alsoRemoveToolStripMenuItem,
             this.disableHighlightsToolStripMenuItem,
             this.addStartStopTimestampToolStripMenuItem,
-            this.fontToolStripMenuItem});
+            this.fontToolStripMenuItem,
+            this.settingsFolderToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(92, 29);
             this.settingsToolStripMenuItem.Text = "Settings";
@@ -357,6 +361,29 @@
             this.fontToolStripMenuItem.Size = new System.Drawing.Size(326, 34);
             this.fontToolStripMenuItem.Text = "Font...";
             this.fontToolStripMenuItem.Click += new System.EventHandler(this.fontToolStripMenuItem_Click);
+            // 
+            // settingsFolderToolStripMenuItem
+            // 
+            this.settingsFolderToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.changeToolStripMenuItem,
+            this.resetToolStripMenuItem});
+            this.settingsFolderToolStripMenuItem.Name = "settingsFolderToolStripMenuItem";
+            this.settingsFolderToolStripMenuItem.Size = new System.Drawing.Size(326, 34);
+            this.settingsFolderToolStripMenuItem.Text = "Settings folder";
+            // 
+            // changeToolStripMenuItem
+            // 
+            this.changeToolStripMenuItem.Name = "changeToolStripMenuItem";
+            this.changeToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.changeToolStripMenuItem.Text = "Change...";
+            this.changeToolStripMenuItem.Click += new System.EventHandler(this.changeToolStripMenuItem_Click);
+            // 
+            // resetToolStripMenuItem
+            // 
+            this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.resetToolStripMenuItem.Text = "Reset to default";
+            this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
@@ -661,5 +688,8 @@
         private ToolStripMenuItem highlightsToolStripMenuItem1;
         private ToolStripMenuItem sendToolStripMenuItem;
         public ListViewNF listView1;
+        private ToolStripMenuItem settingsFolderToolStripMenuItem;
+        private ToolStripMenuItem changeToolStripMenuItem;
+        private ToolStripMenuItem resetToolStripMenuItem;
     }
 }

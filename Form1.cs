@@ -1400,5 +1400,26 @@ namespace serialog
                 form4Send.Focus();
             }
         }
+
+        private void changeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using var dialog = new FolderBrowserDialog
+            {
+                ShowNewFolderButton = true,
+                SelectedPath = AppSettings.SettingsFolder // start in current folder
+            };
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                // Store the absolute path directly
+                AppSettings.SettingsFolder = dialog.SelectedPath;
+                Directory.CreateDirectory(AppSettings.SettingsFolder); // ensure it exists
+            }
+        }
+
+        private void resetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AppSettings.SettingsFolder = AppSettings.DefaultSettingsFolder;
+        }
     }
 }

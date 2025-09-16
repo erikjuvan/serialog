@@ -1,11 +1,16 @@
-﻿using System.Text.RegularExpressions;
-
-namespace serialog
+﻿namespace serialog
 {
     public partial class Form4_Send : Form
     {
         private Form1 _parentForm;
         private SerialCom _serialPort;
+        private string _sendFileExtension = ".send";
+
+        public class DataRowModel
+        {
+            public string Description { get; set; }
+            public string HexData { get; set; }
+        }
 
         internal Form4_Send(Form1 parent, SerialCom serialPort)
         {
@@ -13,51 +18,17 @@ namespace serialog
 
             _parentForm = parent;
             _serialPort = serialPort;
-        }
 
-        private void button1_add_Click(object sender, EventArgs e)
-        {
-            string input = textBox1.Text.Trim();
+            // Populate file combobox
+            Populate_comboBox_file_onFolderChange();
 
-            if (string.IsNullOrEmpty(input))
-                return;
-
-            // Remove all non-hex characters (except valid hex digits)
-            string cleaned = new string(input.Where(c => Uri.IsHexDigit(c)).ToArray());
-
-            if (cleaned.Length == 0)
-            {
-                MessageBox.Show("Input must contain at least one hex digit.");
-                return;
-            }
-
-            // Split into byte pairs, pad single dangling digit with '0' in front
-            var bytes = new List<string>();
-            for (int i = 0; i < cleaned.Length; i += 2)
-            {
-                string byteStr;
-                if (i + 1 < cleaned.Length)
-                    byteStr = cleaned.Substring(i, 2);
-                else
-                    byteStr = "0" + cleaned[i]; // pad dangling digit
-
-                bytes.Add(byteStr.ToUpper());
-            }
-
-            string formatted = string.Join(" ", bytes);
-
-            // Add to ListView only if not empty
-            if (!string.IsNullOrWhiteSpace(formatted))
-            {
-                listView1.Items.Add(formatted);
-            }
-
-            textBox1.Focus();
+            // Subscribe to folder change
+            AppSettings.SettingsFolderChanged += (_, __) => Populate_comboBox_file_onFolderChange();
         }
 
         private bool CanSendData()
         {
-            if (listView1.SelectedItems.Count == 0)
+            if (dataGridView1.SelectedCells.Count == 0)
             {
                 MessageBox.Show("Please select a line to send.");
                 return false;
@@ -80,22 +51,42 @@ namespace serialog
 
         private void SendSelectedLine()
         {
-            foreach (ListViewItem selectedItem in listView1.SelectedItems)
+
+            // Get distinct rows from selected cells
+            var rowsToSend = dataGridView1.SelectedCells
+                                .Cast<DataGridViewCell>()
+                                .Select(c => c.OwningRow)
+                                .Where(r => !r.IsNewRow)
+                                .Distinct()
+                                .ToList();
+
+            foreach (var row in rowsToSend)
             {
-                string line = selectedItem.Text;
+                // Assume the second column (index 1) contains the hex string
+                string line = Convert.ToString(row.Cells[1].Value)?.Replace(" ", "") ?? "";
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
 
-                // Convert to byte array
-                byte[] bytes = line.Split(' ')
-                                   .Select(b => Convert.ToByte(b, 16))
-                                   .ToArray();
+                try
+                {
+                    // Convert to byte array
+                    byte[] bytes = Enumerable.Range(0, line.Length / 2)
+                                             .Select(i => Convert.ToByte(line.Substring(i * 2, 2), 16))
+                                             .ToArray();
 
-                _serialPort.Write(bytes, 0, bytes.Length);
+                    _serialPort.Write(bytes, 0, bytes.Length);
 
-                // Add to parent form's listview as hex string (space separated)
-                string hexString = string.Join(" ", bytes.Select(b => b.ToString("X2")));
-                _parentForm.listView1.Items.Add(hexString);
+                    // Optionally, add to parent form's ListView as space-separated hex
+                    string hexString = "[TX] - " + string.Join(" ", bytes.Select(b => b.ToString("X2")));
+                    _parentForm.listView1.Items.Add(hexString);
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show($"Invalid hex in row {row.Index + 1}");
+                }
             }
         }
+
         private void button2_send_Click(object sender, EventArgs e)
         {
             if (CanSendData())
@@ -137,14 +128,6 @@ namespace serialog
             SendSelectedLine();
         }
 
-        private void textBoxHex_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!Uri.IsHexDigit(e.KeyChar) && !char.IsControl(e.KeyChar) && !char.IsWhiteSpace(e.KeyChar))
-            {
-                e.Handled = true; // ignore invalid input
-            }
-        }
-
         private void textBox_send_every_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Allow digits, control keys (backspace, delete, etc.)
@@ -154,43 +137,13 @@ namespace serialog
             }
         }
 
-        private void listView1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control && e.KeyCode == Keys.C)
-            {
-                ListView.SelectedListViewItemCollection selectedItems = listView1.SelectedItems;
-                String text = "";
-                foreach (ListViewItem item in selectedItems)
-                {
-                    text += item.Text + "\n";
-                }
-                if (text.Length > 0)
-                    Clipboard.SetText(text);
-            }
-            else if (e.Control && e.KeyCode == Keys.A)
-            {
-                foreach (ListViewItem item in listView1.Items)
-                {
-                    item.Selected = true;
-                }
-            }
-            else if (e.KeyCode == Keys.Delete)
-            {
-                // Remove all selected items
-                while (listView1.SelectedItems.Count > 0)
-                {
-                    listView1.Items.Remove(listView1.SelectedItems[0]);
-                }
-            }
-        }
-
         private void Populate_comboBox_file()
         {
             comboBox_file.Items.Clear();
 
             try
             {
-                var listOfFiles = Directory.EnumerateFiles(".settings", "*.send", SearchOption.AllDirectories)
+                var listOfFiles = Directory.EnumerateFiles(AppSettings.SettingsFolder, "*" + _sendFileExtension, SearchOption.AllDirectories)
                                            .Select(Path.GetFileNameWithoutExtension);
 
                 foreach (var file in listOfFiles)
@@ -204,6 +157,20 @@ namespace serialog
             }
         }
 
+        private void Populate_comboBox_file_onFolderChange()
+        {
+            Populate_comboBox_file();
+
+            if (comboBox_file.Items.Count > 0)
+            {
+                comboBox_file.SelectedIndex = 0; // sets Text as well
+            }
+            else
+            {
+                comboBox_file.Text = "";
+            }
+        }
+
         private void comboBox_file_DropDown(object sender, EventArgs e)
         {
             Populate_comboBox_file();
@@ -214,72 +181,211 @@ namespace serialog
             if (string.IsNullOrWhiteSpace(comboBox_file.Text))
                 return;
 
-            string filename = comboBox_file.Text;
-            string fullpath = Path.Combine(".settings", filename + ".send");
-            bool write = true;
+            // Ensure the folder exists
+            Directory.CreateDirectory(AppSettings.SettingsFolder);
 
-            Directory.CreateDirectory(".settings");
+            // Combine folder + file
+            string fullpath = Path.Combine(AppSettings.SettingsFolder, comboBox_file.Text + _sendFileExtension);
 
             if (File.Exists(fullpath))
             {
-                var ret = MessageBox.Show($"File '{filename}' already exists, overwrite it?", "Overwrite?",
-                                          MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                var ret = MessageBox.Show($"File '{fullpath}' already exists, overwrite it?",
+                                          "Overwrite?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (ret == DialogResult.No)
-                    write = false;
+                    return;
             }
 
-            if (write)
+            var rows = dataGridView1
+                .Rows
+                .Cast<DataGridViewRow>()
+                .Where(r => !r.IsNewRow)
+                .Select(r => new DataRowModel
+                {
+                    Description = Convert.ToString(r.Cells[0].Value),
+                    HexData = Convert.ToString(r.Cells[1].Value)
+                })
+                .ToList();
+
+            var json = System.Text.Json.JsonSerializer.Serialize(rows, new System.Text.Json.JsonSerializerOptions
             {
-                var lines = listView1.Items.Cast<ListViewItem>().Select(i => i.Text).ToList();
-                await File.WriteAllLinesAsync(fullpath, lines);
-            }
+                WriteIndented = true
+            });
+
+            await File.WriteAllTextAsync(fullpath, json);
         }
 
-        private void button_file_load_Click(object sender, EventArgs e)
+        private async void button_file_load_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(comboBox_file.Text))
-                return;
-
-            string filename = Path.Combine(".settings", comboBox_file.Text + ".send");
-
-            if (!File.Exists(filename))
             {
-                MessageBox.Show($"File '{comboBox_file.Text}' doesn't exist!", "Error",
+                MessageBox.Show("Select a file to load.", "Warning",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string fullpath = Path.Combine(AppSettings.SettingsFolder, comboBox_file.Text + _sendFileExtension);
+
+            if (!File.Exists(fullpath))
+            {
+                MessageBox.Show($"File '{fullpath}' doesn't exist!", "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            listView1.BeginUpdate();
+            var json = await File.ReadAllTextAsync(fullpath);
+            var rows = System.Text.Json.JsonSerializer.Deserialize<List<DataRowModel>>(json);
 
-            var lines = File.ReadAllLines(filename);
-            foreach (var line in lines)
+            dataGridView1.SuspendLayout();
+            foreach (var row in rows)
             {
-                listView1.Items.Add(line);
+                dataGridView1.Rows.Add(row.Description, row.HexData);
             }
-
-            listView1.EndUpdate();
+            dataGridView1.ResumeLayout();
         }
 
         private void button_file_delete_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(comboBox_file.Text))
+            {
+                MessageBox.Show("Select a file to delete.", "Warning",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+            }
 
-            string fullpath = Path.Combine(".settings", comboBox_file.Text + ".send");
+            string fullpath = Path.Combine(AppSettings.SettingsFolder, comboBox_file.Text + _sendFileExtension);
+
+            if (!File.Exists(fullpath))
+            {
+                MessageBox.Show($"File '{fullpath}' does not exist.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var confirm = MessageBox.Show(
+                $"Are you sure you want to delete file '{fullpath}'?",
+                "Confirm Delete",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (confirm != DialogResult.Yes)
+                return;
 
             try
             {
-                if (File.Exists(fullpath))
-                    File.Delete(fullpath);
-
+                File.Delete(fullpath);
                 comboBox_file.Text = "";
+
+                // Refresh the ComboBox to reflect current files
                 Populate_comboBox_file();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Could not delete '{comboBox_file.Text}'!\n{ex.Message}", "Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Could not delete '{fullpath}'.\n\n{ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void dataGridView1_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Clear cell and if entire row is empty remove the row
+            if (e.KeyCode == Keys.Delete)
+            {
+                // Track rows that might need removal
+                var rowsToCheck = dataGridView1.SelectedCells
+                                     .Cast<DataGridViewCell>()
+                                     .Select(c => c.OwningRow)
+                                     .Where(r => !r.IsNewRow)
+                                     .Distinct()
+                                     .ToList();
+
+                // Clear the selected cells first
+                foreach (DataGridViewCell cell in dataGridView1.SelectedCells)
+                {
+                    if (!cell.OwningRow.IsNewRow && !cell.ReadOnly)
+                        cell.Value = null;
+                }
+
+                // Remove rows where all cells are empty
+                foreach (var row in rowsToCheck)
+                {
+                    bool allEmpty = row.Cells.Cast<DataGridViewCell>()
+                                       .All(c => string.IsNullOrWhiteSpace(Convert.ToString(c.Value)));
+                    if (allEmpty)
+                        dataGridView1.Rows.Remove(row);
+                }
+
+                e.Handled = true;
+            }
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0) // ignore header clicks
+            {
+                dataGridView1.CurrentCell = dataGridView1[e.ColumnIndex, e.RowIndex]; // select the cell
+                dataGridView1.BeginEdit(true); // start editing
+            }
+        }
+
+        private void dataGridView1_MouseDown(object sender, MouseEventArgs e)
+        {
+            var hit = dataGridView1.HitTest(e.X, e.Y);
+
+            if (hit.Type != DataGridViewHitTestType.Cell)
+            {
+                dataGridView1.ClearSelection();      // deselect all cells
+                dataGridView1.CurrentCell = null;    // optional: remove the current cell focus
+            }
+        }
+
+        private void dataGridView1_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (e.Control is TextBox tb)
+            {
+                tb.KeyPress -= Tb_KeyPress;
+
+                tb.KeyPress += Tb_KeyPress;   // character validation
+            }
+        }
+
+        private void Tb_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (dataGridView1.CurrentCell.ColumnIndex == 1) // second column
+            {
+                 // Allow digits and control keys only
+                if (!char.IsControl(e.KeyChar) && !Uri.IsHexDigit(e.KeyChar) && !char.IsWhiteSpace(e.KeyChar))
+                {
+                    e.Handled = true; // ignore invalid input
+                }
+            }
+        }
+
+        private string FormatHexText(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return "";
+
+            // Keep only hex digits, convert to uppercase
+            var hexChars = text.Where(c => Uri.IsHexDigit(c))
+                               .Select(c => char.ToUpper(c))
+                               .ToArray();
+
+            var formatted = Enumerable.Range(0, hexChars.Length / 2)
+                                      .Select(i => new string(hexChars, i * 2, 2))
+                                      .ToList();
+
+            // Pad leftover single nibble
+            if (hexChars.Length % 2 != 0)
+                formatted.Add("0" + hexChars.Last());
+
+            return string.Join(" ", formatted);
+        }
+
+        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex != 1) return; // only second column
+            var cell = dataGridView1[e.ColumnIndex, e.RowIndex];
+            cell.Value = FormatHexText(Convert.ToString(cell.Value));
         }
     }
 }
