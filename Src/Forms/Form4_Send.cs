@@ -81,7 +81,7 @@
                     _serial.Write(bytes, 0, bytes.Length);
 
                     // Add to log and view
-                    string hexString = "[TX] - " + string.Join(" ", bytes.Select(b => b.ToString("X2")));
+                    string hexString = string.Join(" ", bytes.Select(b => $"{{0x{b:X2}}}"));
                     var entry = new DataEntry(DateTime.Now, true, hexString);
                     _dataLog.Add(entry);
                     _logView.Add(entry);

@@ -270,6 +270,8 @@ namespace serialog
                 comboBox_port.SelectedIndex = 0;
         }
 
+        private List<byte> _serialLineBuffer = new List<byte>();
+
         private void Serial_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
             int count = _serial.BytesToRead;
@@ -278,10 +280,29 @@ namespace serialog
 
             _serialDataBuffer.Append(buffer, count);
 
-            string display = BytesToDisplayString(buffer);
-            var entry = new DataEntry(DateTime.Now, false, display);
-            _dataLog.Add(entry);
-            _logView.Add(entry);
+            foreach (var b in buffer)
+            {
+                if (b == (byte)'\n')
+                {
+                    // If previous char was \r, drop it (classic CRLF)
+                    if (_serialLineBuffer.Count > 0 && _serialLineBuffer[^1] == (byte)'\r')
+                    {
+                        _serialLineBuffer.RemoveAt(_serialLineBuffer.Count - 1);
+                    }
+
+                    string display = BytesToDisplayString(_serialLineBuffer);
+                    var entry = new DataEntry(DateTime.Now, false, display);
+
+                    _dataLog.Add(entry);
+                    _logView.Add(entry);
+
+                    _serialLineBuffer.Clear();
+                }
+                else
+                {
+                    _serialLineBuffer.Add(b);
+                }
+            }
         }
 
         // Convert bytes to readable string
@@ -414,9 +435,8 @@ namespace serialog
 
                 if (addStartStopTimestampToolStripMenuItem.Checked)
                 {
-                    string dateTimeString = "ACQUISITION STOPPED " + DateTime.Now.ToString("dddd dd/MM/yyyy HH:mm:ss");
-                    listView1.Items.Add(dateTimeString);
-                    _listviewSizeBytes += dateTimeString.Length + 1;
+                    var entry = new DataEntry(DateTime.Now, false, "ACQUISITION STOPPED ");
+                    _logView.Add(entry);
                 }
             }
         }

@@ -14,7 +14,7 @@
         }
 
         public override string ToString() =>
-            $"[{Timestamp:dd/MM/yyyy HH:mm:ss}] {(IsSent ? "TX" : "")} {DisplayString}";
+            $"[{Timestamp:dd/MM/yyyy HH:mm:ss} {(IsSent ? "TX" : "RX")}] {DisplayString}";
     }
 
     public class DataLog
