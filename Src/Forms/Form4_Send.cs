@@ -3,7 +3,9 @@
     public partial class Form4_Send : Form
     {
         private Form1 _parentForm;
-        private SerialCom _serialPort;
+        private System.IO.Ports.SerialPort _serial;
+        private DataLog _dataLog;
+        private LogView _logView;
         private string _sendFileExtension = ".send";
 
         public class DataRowModel
@@ -12,12 +14,14 @@
             public string HexData { get; set; }
         }
 
-        internal Form4_Send(Form1 parent, SerialCom serialPort)
+        internal Form4_Send(Form1 parent, System.IO.Ports.SerialPort serial, DataLog dataLog, LogView logView)
         {
             InitializeComponent();
 
             _parentForm = parent;
-            _serialPort = serialPort;
+            _serial = serial;
+            _dataLog = dataLog;
+            _logView = logView;
 
             // Populate file combobox
             Populate_comboBox_file_onFolderChange();
@@ -34,13 +38,13 @@
                 return false;
             }
 
-            if (_serialPort == null)
+            if (_serial == null)
             {
                 MessageBox.Show("Serial port is null!");
                 return false;
             }
 
-            if (!_serialPort.IsOpen())
+            if (!_serial.IsOpen)
             {
                 MessageBox.Show("Serial port is closed!");
                 return false;
@@ -74,11 +78,13 @@
                                              .Select(i => Convert.ToByte(line.Substring(i * 2, 2), 16))
                                              .ToArray();
 
-                    _serialPort.Write(bytes, 0, bytes.Length);
+                    _serial.Write(bytes, 0, bytes.Length);
 
-                    // Optionally, add to parent form's ListView as space-separated hex
+                    // Add to log and view
                     string hexString = "[TX] - " + string.Join(" ", bytes.Select(b => b.ToString("X2")));
-                    _parentForm.listView1.Items.Add(hexString);
+                    var entry = new DataEntry(DateTime.Now, true, hexString);
+                    _dataLog.Add(entry);
+                    _logView.Add(entry);
                 }
                 catch (FormatException)
                 {

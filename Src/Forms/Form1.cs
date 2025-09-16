@@ -1,12 +1,18 @@
 using System.Diagnostics;
+using System.Text;
 
 namespace serialog
 {
     public partial class Form1 : Form
     {
+        private System.IO.Ports.SerialPort _serial = new System.IO.Ports.SerialPort();
+
+        private readonly SerialDataBuffer _serialDataBuffer = new SerialDataBuffer();
+        private readonly DataLog _dataLog = new DataLog();
+        private readonly LogView _logView = new LogView();
+
         private static bool _serialcomStopped = new bool();
         private bool serialcomStoppedHandleEvent = new bool();
-        private static SerialCom _serialCom = new SerialCom();
         private static List<string> _serialDataList = new List<string>(1000000);
         private static int _listviewSizeBytes = 0;
         private static int _prevListviewSizeBytes = 0;
@@ -14,7 +20,6 @@ namespace serialog
         private static int _prevSerialDataListSizeBytes = 0;
         private int _serialDataListCountAddedToTable = 0;
         private static readonly object _serialDataLock = new object();
-        private Thread serialReadThread = null;
 
         private Stopwatch runTime = new Stopwatch();
         private Stopwatch upTime = new Stopwatch();
@@ -23,12 +28,22 @@ namespace serialog
         private Form3_Highlights form3Highlights = null;
         private Form4_Send form4Send = null;
         
-        private static bool _serialComCriticalException = false;
-        private static string _serialComCriticalExceptionString = "";
-
         public Form1(Dictionary<string, string> options)
         {
             InitializeComponent();
+
+            // Hook filtered view to ListView
+            _logView.EntryAdded += entry =>
+            {
+                if (listView1.InvokeRequired)
+                {
+                    listView1.Invoke(new Action(() => AddToListView(entry)));
+                }
+                else
+                {
+                    AddToListView(entry);
+                }
+            };
 
             comboBox_port.Items.AddRange(GetSortedPorts());
 
@@ -101,6 +116,15 @@ namespace serialog
             }
         }
 
+        private void AddToListView(DataEntry entry)
+        {
+            var item = new ListViewItem(entry.ToString());
+            if (entry.IsSent)
+                item.ForeColor = Color.Blue; // TX in blue
+            listView1.Items.Add(item);
+            listView1.Items[listView1.Items.Count - 1].EnsureVisible();
+        }
+
         private void HighlightEntries_Changed(object? sender, EventArgs e)
         {
             // Redraw your list view or refresh the virtual items
@@ -135,7 +159,7 @@ namespace serialog
 
         private string[] GetSortedPorts()
         {
-            var portNames = SerialCom.GetPortNames();
+            var portNames = System.IO.Ports.SerialPort.GetPortNames();
 
             Array.Sort(portNames, (x, y) =>
             {
@@ -185,7 +209,16 @@ namespace serialog
 
                 try
                 {
-                    _serialCom.Open(comboBox_port.Text, baud);
+                    _serial.BaudRate = baud;
+                    _serial.PortName = comboBox_port.Text;
+                    _serial.Parity = System.IO.Ports.Parity.None;
+                    _serial.DataBits = 8;
+                    _serial.StopBits = System.IO.Ports.StopBits.One;
+                    _serial.Handshake = System.IO.Ports.Handshake.None;
+                    _serial.ReadTimeout = 100;
+                    _serial.WriteTimeout = 100;
+                    _serial.DataReceived += Serial_DataReceived;
+                    _serial.Open();
                 }
                 catch (Exception ex)
                 {
@@ -202,13 +235,9 @@ namespace serialog
 
                 if (addStartStopTimestampToolStripMenuItem.Checked)
                 {
-                    string dateTimeString = "ACQUISITION STARTED " + DateTime.Now.ToString("dddd dd/MM/yyyy HH:mm:ss");
-                    listView1.Items.Add(dateTimeString);
-                    _listviewSizeBytes += dateTimeString.Length + 1;
+                    var entry = new DataEntry(DateTime.Now, false, "ACQUISITION STARTED");
+                    _logView.Add(entry);
                 }
-
-                serialReadThread = new Thread(SerialRead);
-                serialReadThread.Start();
 
                 runTime.Start();
             }
@@ -219,9 +248,8 @@ namespace serialog
             if (!_serialcomStopped)
             {
                 _serialcomStopped = true;
-                serialReadThread.Join();
 
-                _serialCom.Close();
+                _serial.Close();
 
                 button_stop.Enabled = false;
                 button_run.Enabled = true;
@@ -242,36 +270,32 @@ namespace serialog
                 comboBox_port.SelectedIndex = 0;
         }
 
-        private static void SerialRead()
+        private void Serial_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            string serialBuffer = "";
+            int count = _serial.BytesToRead;
+            var buffer = new byte[count];
+            _serial.Read(buffer, 0, count);
 
-            while (!_serialcomStopped)
+            _serialDataBuffer.Append(buffer, count);
+
+            string display = BytesToDisplayString(buffer);
+            var entry = new DataEntry(DateTime.Now, false, display);
+            _dataLog.Add(entry);
+            _logView.Add(entry);
+        }
+
+        // Convert bytes to readable string
+        private string BytesToDisplayString(IEnumerable<byte> bytes)
+        {
+            var sb = new StringBuilder();
+            foreach (byte b in bytes)
             {
-                try
-                {
-                    serialBuffer += _serialCom.ReadExisting();
-                }
-                catch (TimeoutException)
-                {
-                    // ignore, continue loop
-                }
-
-                int idx = serialBuffer.LastIndexOf('\n');
-                if (idx >= 0)
-                {
-                    string subStr = serialBuffer.Substring(0, idx);
-                    serialBuffer = idx == serialBuffer.Length - 1 ? "" : serialBuffer.Substring(idx + 1);
-
-                    var list = subStr.Split('\n');
-
-                    lock (_serialDataLock)
-                    {
-                        _serialDataList.AddRange(list);
-                        _listviewSizeBytes += subStr.Length;
-                    }
-                }
+                if (b >= 32 && b <= 126)
+                    sb.Append((char)b);
+                else
+                    sb.Append($"{{0x{b:X2}}}");
             }
+            return sb.ToString();
         }
 
         private ListViewItem CreateHighlightedListItem(string line)
@@ -384,13 +408,6 @@ namespace serialog
         {
             AddEntry();
 
-            if (_serialComCriticalException)
-            {
-                _serialComCriticalException = false;
-                button_stop_Click(sender, e);
-                MessageBox.Show(_serialComCriticalExceptionString, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
             if (serialcomStoppedHandleEvent)
             {
                 serialcomStoppedHandleEvent = false;
@@ -407,9 +424,7 @@ namespace serialog
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             _serialcomStopped = true;
-            if (serialReadThread != null)
-                serialReadThread.Join();
-            _serialCom.Close();
+            _serial.Close();
         }
 
         private void listView1_KeyDown(object sender, KeyEventArgs e)
@@ -868,16 +883,9 @@ namespace serialog
             // Clear shared data safely
             lock (_serialDataLock)
             {
-                _serialDataList.Clear();
-                _serialDataListCountAddedToTable = 0;
-                _listviewSizeBytes = 0;
-                _prevListviewSizeBytes = 0;
-                _serialDataListSizeBytes = 0;
-                _prevSerialDataListSizeBytes = 0;
+                listView1.Items.Clear();
+                _logView.Clear();
             }
-
-            // Clear ListView safely (UI thread)
-            listView1.Items.Clear();
 
             runTime = new Stopwatch();
             if (!_serialcomStopped)
@@ -1001,7 +1009,11 @@ namespace serialog
             double avgListBytesPerSec = _listviewSizeBytes / (run.TotalSeconds > 0 ? run.TotalSeconds : 1);
             string avgListSpeedStr = NumberToBKBMB(avgListBytesPerSec, "/s");
 
-            string availableBytesStr = NumberToBKBMB(_serialCom.GetAvailableBytes());
+            int bytesToRead = 0;
+            if (_serial.IsOpen)
+                bytesToRead = _serial.BytesToRead;
+
+            string availableBytesStr = NumberToBKBMB(bytesToRead);
 
             this.Text = "Serialog |" +
                 "   Serial: " + serialSizeStr + " @ " + serialSpeedStr + " (avg. " + avgSerialSpeedStr + ")" +
@@ -1390,7 +1402,7 @@ namespace serialog
         {
             if (form4Send == null || form4Send.IsDisposed)
             {
-                form4Send = new Form4_Send(this, _serialCom);
+                form4Send = new Form4_Send(this, _serial, _dataLog, _logView);
                 RegisterChild(form4Send);
                 form4Send.Show();
             }
