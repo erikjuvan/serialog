@@ -535,102 +535,91 @@ namespace serialog
             return stream;
         }
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var fileContent = string.Empty;
-            var filePath = string.Empty;
-
-            //openFileDialog.InitialDirectory = "c:\\";
             openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
             openFileDialog1.FilterIndex = 1;
             openFileDialog1.RestoreDirectory = true;
 
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                //Get the path of specified file
-                filePath = openFileDialog1.FileName;
+            if (openFileDialog1.ShowDialog() != DialogResult.OK) return;
 
-                string openFileInfo = "Opening file: " + filePath;
-                listView1.Items.Add(openFileInfo);
-                _listviewSizeBytes += openFileInfo.Length + 1;
+            string filePath = openFileDialog1.FileName;
+            listView1.Items.Add("Opening file: " + filePath);
+            _listviewSizeBytes += filePath.Length + 1;
 
-                //Read the contents of the file into a stream
-                var fileStream = openFileDialog1.OpenFile();
+            string[] lines = await System.IO.File.ReadAllLinesAsync(filePath);
 
-                using (StreamReader reader = new StreamReader(fileStream))
+            var batch = new List<ListViewItem>();
+            int batchSize = 100; // adjust for performance vs. responsiveness
+
+            await ProgressForm.Helper.RunWithProgressAsync(
+                this,
+                "Opening file...",
+                lines.Length,
+                async (i) =>
                 {
-                    Form3_progressbar form3 = new Form3_progressbar("Opening file...");
-                    form3.StartPosition = FormStartPosition.Manual;
-                    form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
-                    form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
-                    form3.Show();
-                    fileContent = reader.ReadToEnd();
-                    var listOfLines = fileContent.Split('\n').ToList();
-                    form3.ProgressBarSetup(listOfLines.Count, 1);
-                    for (int i = 0, size = listOfLines.Count; i < size; i++)
+                    var item = CreateHighlightedListItem(lines[i]);
+                    if (item != null)
+                        batch.Add(item);
+
+                    // Flush batch periodically
+                    if (batch.Count >= batchSize || i == lines.Length - 1)
                     {
-                        var line = listOfLines[i];
-
-                        ListViewItem item = CreateHighlightedListItem(line);
-                        if (item != null)
-                        {
-                            listView1.Items.Add(item);
-                            _listviewSizeBytes += line.Length + 1;
-                        }
-
-                        form3.ProgressBarIncrement();
+                        listView1.BeginUpdate();
+                        listView1.Items.AddRange(batch.ToArray());
+                        listView1.EndUpdate();
+                        batch.Clear();
                     }
 
-                    form3.Close();
+                    await Task.Yield(); // keep UI responsive
+                },
+                onUIThread: true
+            );
 
-                    listView1.Items[listView1.Items.Count - 1].EnsureVisible();
-                }
+            if (listView1.Items.Count > 0)
+                listView1.Items[listView1.Items.Count - 1].EnsureVisible();
 
-                fileStream.Close();
-
-                string endOfFileInfo = "End of file: " + filePath;
-                listView1.Items.Add(endOfFileInfo);
-                _listviewSizeBytes += endOfFileInfo.Length + 1;
-            }
+            listView1.Items.Add("End of file: " + filePath);
+            _listviewSizeBytes += filePath.Length + 1;
         }
 
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Stream myStream;
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-
-            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            saveFileDialog1.FilterIndex = 1;
-            saveFileDialog1.RestoreDirectory = true;
-
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            using (SaveFileDialog saveFileDialog1 = new SaveFileDialog())
             {
-                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                saveFileDialog1.FilterIndex = 1;
+                saveFileDialog1.RestoreDirectory = true;
+
+                if (saveFileDialog1.ShowDialog() != DialogResult.OK) return;
+
+                using (Stream myStream = saveFileDialog1.OpenFile())
+                using (var sourceStream = GenerateStreamFromListOfItems(listView1.Items))
                 {
-                    Form3_progressbar form3 = new Form3_progressbar("Saving to file...");
-                    form3.StartPosition = FormStartPosition.Manual;
-                    form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
-                    form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
-                    form3.Show();
-                    form3.ProgressBarSetup(1, 1);
-                    Thread.Sleep(200);
-                    // Code to write the stream goes here.
-                    using (var stream = GenerateStreamFromListOfItems(listView1.Items))
-                    {
-                        if (stream != null)
-                            stream.CopyTo(myStream);
-                    }
+                    if (sourceStream == null) return;
 
-                    form3.ProgressBarIncrement();
-                    Thread.Sleep(300);
-                    form3.Close();
+                    const int bufferSize = 8192;
+                    long totalLength = sourceStream.Length;
+                    int totalSteps = (int)Math.Ceiling((double)totalLength / bufferSize);
 
-                    myStream.Close();
+                    await ProgressForm.Helper.RunWithProgressAsync(
+                        this,
+                        "Saving to file...",
+                        totalSteps,
+                        async (step) =>
+                        {
+                            byte[] buffer = new byte[bufferSize];
+                            int bytesRead = await sourceStream.ReadAsync(buffer, 0, buffer.Length);
+                            if (bytesRead > 0)
+                                await myStream.WriteAsync(buffer, 0, bytesRead);
+                        },
+                        onUIThread: false
+                    );
                 }
             }
         }
 
-        private void saveSelectedToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void saveSelectedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count == 0)
             {
@@ -638,75 +627,76 @@ namespace serialog
                 return;
             }
 
-            Stream myStream;
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-
-            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            saveFileDialog1.FilterIndex = 1;
-            saveFileDialog1.RestoreDirectory = true;
-
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            using (SaveFileDialog saveFileDialog1 = new SaveFileDialog())
             {
-                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                saveFileDialog1.FilterIndex = 1;
+                saveFileDialog1.RestoreDirectory = true;
+
+                if (saveFileDialog1.ShowDialog() != DialogResult.OK) return;
+
+                using (Stream myStream = saveFileDialog1.OpenFile())
+                using (var sourceStream = GenerateStreamFromListOfItems(listView1.SelectedItems))
                 {
-                    Form3_progressbar form3 = new Form3_progressbar("Saving to file...");
-                    form3.StartPosition = FormStartPosition.Manual;
-                    form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
-                    form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
-                    form3.Show();
-                    form3.ProgressBarSetup(1, 1);
-                    Thread.Sleep(200);
-                    // Code to write the stream goes here.
-                    using (var stream = GenerateStreamFromListOfItems(listView1.SelectedItems))
-                    {
-                        if (stream != null)
-                            stream.CopyTo(myStream);
-                    }
+                    if (sourceStream == null) return;
 
-                    form3.ProgressBarIncrement();
-                    Thread.Sleep(300);
-                    form3.Close();
+                    const int bufferSize = 8192;
+                    long totalLength = sourceStream.Length;
+                    int totalSteps = (int)Math.Ceiling((double)totalLength / bufferSize);
 
-                    myStream.Close();
+                    await ProgressForm.Helper.RunWithProgressAsync(
+                        this,
+                        "Saving selected items...",
+                        totalSteps,
+                        async (step) =>
+                        {
+                            byte[] buffer = new byte[bufferSize];
+                            int bytesRead = await sourceStream.ReadAsync(buffer, 0, buffer.Length);
+                            if (bytesRead > 0)
+                                await myStream.WriteAsync(buffer, 0, bytesRead);
+                        },
+                        onUIThread: false
+                    );
                 }
             }
         }
 
-        private void saveSerialAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void saveSerialAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Stream myStream;
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-
-            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            saveFileDialog1.FilterIndex = 1;
-            saveFileDialog1.RestoreDirectory = true;
-
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            using (SaveFileDialog saveFileDialog1 = new SaveFileDialog())
             {
-                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                saveFileDialog1.FilterIndex = 1;
+                saveFileDialog1.RestoreDirectory = true;
+
+                if (saveFileDialog1.ShowDialog() != DialogResult.OK) return;
+
+                using (Stream myStream = saveFileDialog1.OpenFile())
                 {
-                    Form3_progressbar form3 = new Form3_progressbar("Saving Serial data to file...");
-                    form3.StartPosition = FormStartPosition.Manual;
-                    form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
-                    form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
-                    form3.Show();
-                    form3.ProgressBarSetup(1, 1);
-                    Thread.Sleep(200);
-                    // Code to write the stream goes here.
-                    using (var stream = GenerateStreamFromSerialData())
-                    {
-                        if (stream != null)
-                            stream.CopyTo(myStream);
-                    }
+                    var serialStream = GenerateStreamFromSerialData();
+                    if (serialStream == null) return;
 
-                    form3.ProgressBarIncrement();
-                    Thread.Sleep(300);
-                    form3.Close();
+                    const int bufferSize = 8192;
+                    long totalLength = serialStream.Length;
+                    int totalSteps = (int)Math.Ceiling((double)totalLength / bufferSize);
 
-                    myStream.Close();
+                    await ProgressForm.Helper.RunWithProgressAsync(
+                        this,
+                        "Saving Serial data...",
+                        totalSteps,
+                        async (step) =>
+                        {
+                            byte[] buffer = new byte[bufferSize];
+                            int bytesRead = await serialStream.ReadAsync(buffer, 0, buffer.Length);
+                            if (bytesRead > 0)
+                                await myStream.WriteAsync(buffer, 0, bytesRead);
+                        },
+                        onUIThread: false
+                    );
                 }
             }
         }
+
         private void FindNextString(string text)
         {
             if (text == "")
@@ -894,67 +884,58 @@ namespace serialog
                 runTime.Start();
         }
 
-        private void ReloadAllListViewItems()
+        private async void ReloadAllListViewItems()
         {
-            Form3_progressbar form3 = new Form3_progressbar("Reloading...");
-            form3.StartPosition = FormStartPosition.Manual;
-            form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
-            form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
-            form3.Show();
-            form3.ProgressBarSetup(listView1.Items.Count, 1);
-            Thread.Sleep(100);
-            // must use for since foreach doesn't allow changes to its items
-            for (int i = 0; i < listView1.Items.Count; i++)
-            {
-                var item = CreateHighlightedListItem(listView1.Items[i].Text);
-                if (item == null)
-                {
-                    listView1.Items[i].Remove();
-                    i--;
-                }
-                else
-                {
-                    listView1.Items[i] = item;
-                }
+            if (listView1.Items.Count == 0) return;
 
-                form3.ProgressBarIncrement();
-                //listView1.Items.Insert(item.Index + 1, CreateHighlightedListItem(item.Text));
-                //listView1.Items.Remove(item);
-            }
-
-            form3.ProgressBarIncrement();
-            Thread.Sleep(200);
-            form3.Close();
+            await ProgressForm.Helper.RunWithProgressAsync(
+                this,
+                "Reloading all items...",
+                listView1.Items.Count,
+                async (i) =>
+                {
+                    var item = CreateHighlightedListItem(listView1.Items[i].Text);
+                    if (item == null)
+                    {
+                        listView1.Items[i].Remove();
+                    }
+                    else
+                    {
+                        listView1.Items[i] = item;
+                    }
+                    await Task.Yield(); // keeps async flow smooth
+                },
+                onUIThread: true
+            );
         }
 
-        private void ReloadSelectedListViewItems(ListView.SelectedListViewItemCollection selectedItems)
+        private async void ReloadSelectedListViewItems(ListView.SelectedListViewItemCollection selectedItems)
         {
-            Form3_progressbar form3 = new Form3_progressbar("Reloading...");
-            form3.StartPosition = FormStartPosition.Manual;
-            form3.Left = this.Location.X + this.Width / 2 - form3.Width / 2;
-            form3.Top = this.Location.Y + this.Height / 2 - form3.Height / 2;
-            form3.Show();
-            form3.ProgressBarSetup(selectedItems.Count, 1);
-            Thread.Sleep(100);
-            foreach (ListViewItem item in selectedItems)
-            {
-                var highItem = CreateHighlightedListItem(item.Text);
-                if (highItem == null)
-                {
-                    item.Remove();
-                }
-                else
-                {
-                    listView1.Items[item.Index] = highItem;
-                }
-                form3.ProgressBarIncrement();
-                //listView1.Items.Insert(item.Index + 1, CreateHighlightedListItem(item.Text));
-                //listView1.Items.Remove(item);
-            }
+            if (selectedItems.Count == 0) return;
 
-            form3.ProgressBarIncrement();
-            Thread.Sleep(200);
-            form3.Close();
+            var itemsToReload = selectedItems.Cast<ListViewItem>().ToList();
+
+            await ProgressForm.Helper.RunWithProgressAsync(
+                this,
+                "Reloading selected items...",
+                itemsToReload.Count,
+                async (i) =>
+                {
+                    var oldItem = itemsToReload[i];
+                    var newItem = CreateHighlightedListItem(oldItem.Text);
+
+                    if (newItem == null)
+                    {
+                        oldItem.Remove();
+                    }
+                    else
+                    {
+                        listView1.Items[oldItem.Index] = newItem;
+                    }
+                    await Task.Yield();
+                },
+                onUIThread: true
+            );
         }
 
         private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
