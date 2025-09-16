@@ -178,7 +178,7 @@
             // 
             this.timer_send_every_ms.Tick += new System.EventHandler(this.timer_send_every_ms_Tick);
             // 
-            // Form5_Send
+            // Form4_Send
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -196,9 +196,8 @@
             this.Controls.Add(this.button1_add);
             this.KeyPreview = true;
             this.MinimizeBox = false;
-            this.Name = "Form5_Send";
+            this.Name = "Form4_Send";
             this.Text = "Form5_Send";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form5_Send_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

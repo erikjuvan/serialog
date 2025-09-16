@@ -57,7 +57,7 @@
             this.column1.Text = "";
             this.column1.Width = 1500;
             // 
-            // Form4_Highlights
+            // Form3_Highlights
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -65,9 +65,8 @@
             this.Controls.Add(this.listView1);
             this.KeyPreview = true;
             this.MinimizeBox = false;
-            this.Name = "Form4_Highlights";
+            this.Name = "Form3_Highlights";
             this.Text = "HighlightResults";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form4_Highlights_KeyDown);
             this.ResumeLayout(false);
 
         }

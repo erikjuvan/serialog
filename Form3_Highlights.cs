@@ -20,14 +20,6 @@ namespace serialog
             InitializeComponent();
         }
 
-        private void Form4_Highlights_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape)
-            {
-                this.Hide();
-            }
-        }
-
         private void listView1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.C)

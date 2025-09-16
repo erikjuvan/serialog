@@ -15,14 +15,6 @@ namespace serialog
             _serialPort = serialPort;
         }
 
-        private void Form5_Send_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape)
-            {
-                this.Hide();
-            }
-        }
-
         private void button1_add_Click(object sender, EventArgs e)
         {
             string input = textBox1.Text.Trim();
@@ -289,6 +281,5 @@ namespace serialog
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
 }
