@@ -212,6 +212,12 @@
             });
 
             await File.WriteAllTextAsync(fullpath, json);
+
+            MessageBox.Show(
+                $"Preset saved to '{fullpath}'",
+                "Saved",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
 
         private async void button_file_load_Click(object sender, EventArgs e)

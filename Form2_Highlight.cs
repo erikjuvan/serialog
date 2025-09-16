@@ -531,6 +531,12 @@ namespace serialog
             var options = new JsonSerializerOptions { WriteIndented = true };
             string json = JsonSerializer.Serialize(highlightEntries.Items, options);
             File.WriteAllText(fullpath, json);
+
+            MessageBox.Show(
+                $"Preset saved to '{fullpath}'",
+                "Saved",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
 
         private void button_preset_load_Click(object sender, EventArgs e)
