@@ -11,7 +11,7 @@ namespace serialog
         private readonly DataLog _dataLog = new DataLog();
         private List<byte> _serialLineBuffer = new List<byte>();
 
-        private static bool _serialcomStopped = new bool();
+        private static bool _serialcomStopped = true;
         private bool serialcomStoppedHandleEvent = new bool();
         private static int _listviewSizeBytes = 0;
         private static int _prevListviewSizeBytes = 0;
@@ -31,9 +31,6 @@ namespace serialog
             InitializeComponent();
 
             comboBox_port.Items.AddRange(GetSortedPorts());
-
-            _serialcomStopped = true;
-            button_stop.Enabled = false;
 
             // Parse command line arguments
             ParseCommandLineArguments(options);
@@ -126,24 +123,9 @@ namespace serialog
             }
         }
 
-        private void AddToListView(DataEntry entry)
-        {
-            var item = new ListViewItem(entry.ToString());
-            if (entry.IsSent)
-                item.ForeColor = Color.Blue; // TX in blue
-            listView1.Items.Add(item);
-            // Scroll to last item if follow is enabled
-            if (checkBox_follow.Checked && listView1.Items.Count > 0)
-            {
-                listView1.Items[listView1.Items.Count - 1].EnsureVisible();
-            }
-        }
-
         private void HighlightEntries_Changed(object? sender, EventArgs e)
         {
-            // Redraw your list view or refresh the virtual items
-            //listView1.Invalidate(); // For future virtual listview
-            //ReloadAllListViewItems(); // For current testing
+            //listView1.Invalidate(); // TODO
         }
 
         private void Serial_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
@@ -342,60 +324,6 @@ namespace serialog
         private void listView1_Scrolled(object sender, EventArgs e)
         {
             checkBox_follow.Checked = false;
-        }
-
-        private async void ReloadAllListViewItems()
-        {
-            if (listView1.Items.Count == 0) return;
-
-            await ProgressForm.Helper.RunWithProgressAsync(
-                this,
-                "Reloading all items...",
-                listView1.Items.Count,
-                async (i) =>
-                {
-                    var item = CreateHighlightedListItem(listView1.Items[i].Text);
-                    if (item == null)
-                    {
-                        listView1.Items[i].Remove();
-                    }
-                    else
-                    {
-                        listView1.Items[i] = item;
-                    }
-                    await Task.Yield(); // keeps async flow smooth
-                },
-                onUIThread: true
-            );
-        }
-
-        private async void ReloadSelectedListViewItems(ListView.SelectedListViewItemCollection selectedItems)
-        {
-            if (selectedItems.Count == 0) return;
-
-            var itemsToReload = selectedItems.Cast<ListViewItem>().ToList();
-
-            await ProgressForm.Helper.RunWithProgressAsync(
-                this,
-                "Reloading selected items...",
-                itemsToReload.Count,
-                async (i) =>
-                {
-                    var oldItem = itemsToReload[i];
-                    var newItem = CreateHighlightedListItem(oldItem.Text);
-
-                    if (newItem == null)
-                    {
-                        oldItem.Remove();
-                    }
-                    else
-                    {
-                        listView1.Items[oldItem.Index] = newItem;
-                    }
-                    await Task.Yield();
-                },
-                onUIThread: true
-            );
         }
 
         string NumberToBKBMB(double num, string suffix = "")
@@ -982,14 +910,6 @@ namespace serialog
                 runTime.Start();
         }
 
-        private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (listView1.SelectedItems.Count == 0)
-                ReloadAllListViewItems();
-            else
-                ReloadSelectedListViewItems(listView1.SelectedItems);
-        }
-
         private static DialogResult ShowInputDialogBox(ref string input, string prompt, string title = "Title", int width = 300, int height = 120)
         {
             //This function creates the custom input dialog box by individually creating the different window elements and adding them to the dialog box
@@ -1126,11 +1046,7 @@ namespace serialog
                 listView1.Font.Dispose();
                 listView1.Font = fontDialog1.Font;
 
-                if (MessageBox.Show("Reload highlight settings?", "Reload?",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    ReloadAllListViewItems();
-                }
+                // Listview invalidate TODO
             }
         }
 

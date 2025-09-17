@@ -35,7 +35,6 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectAllContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearAllContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.reloadContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addCustomRowContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.formHighlightContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,7 +51,6 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addCustomRowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.formHighlightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -123,7 +121,6 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectAllContextMenuItem,
             this.clearAllContextMenuItem,
-            this.reloadContextMenuItem,
             this.addCustomRowContextMenuItem,
             this.toolStripMenuItem2,
             this.formHighlightContextMenuItem,
@@ -131,7 +128,7 @@
             this.alsoRemoveContextMenuItem,
             this.disableHighlightsContextMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(259, 266);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(259, 234);
             // 
             // selectAllContextMenuItem
             // 
@@ -147,14 +144,6 @@
             this.clearAllContextMenuItem.Size = new System.Drawing.Size(258, 32);
             this.clearAllContextMenuItem.Text = "Clear All";
             this.clearAllContextMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
-            // 
-            // reloadContextMenuItem
-            // 
-            this.reloadContextMenuItem.Name = "reloadContextMenuItem";
-            this.reloadContextMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.reloadContextMenuItem.Size = new System.Drawing.Size(258, 32);
-            this.reloadContextMenuItem.Text = "Reload";
-            this.reloadContextMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
             // 
             // addCustomRowContextMenuItem
             // 
@@ -269,7 +258,6 @@
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectAllToolStripMenuItem,
             this.clearAllToolStripMenuItem,
-            this.reloadToolStripMenuItem,
             this.addCustomRowToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(58, 29);
@@ -289,14 +277,6 @@
             this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(266, 34);
             this.clearAllToolStripMenuItem.Text = "Clear All";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
-            // 
-            // reloadToolStripMenuItem
-            // 
-            this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
-            this.reloadToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(266, 34);
-            this.reloadToolStripMenuItem.Text = "Reload";
-            this.reloadToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
             // 
             // addCustomRowToolStripMenuItem
             // 
@@ -374,14 +354,14 @@
             // settingsFolderChangeToolStripMenuItem
             // 
             this.settingsFolderChangeToolStripMenuItem.Name = "settingsFolderChangeToolStripMenuItem";
-            this.settingsFolderChangeToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.settingsFolderChangeToolStripMenuItem.Size = new System.Drawing.Size(238, 34);
             this.settingsFolderChangeToolStripMenuItem.Text = "Change...";
             this.settingsFolderChangeToolStripMenuItem.Click += new System.EventHandler(this.settingsFolderChangeToolStripMenuItem_Click);
             // 
             // settingsFolderResetToolStripMenuItem
             // 
             this.settingsFolderResetToolStripMenuItem.Name = "settingsFolderResetToolStripMenuItem";
-            this.settingsFolderResetToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.settingsFolderResetToolStripMenuItem.Size = new System.Drawing.Size(238, 34);
             this.settingsFolderResetToolStripMenuItem.Text = "Reset to default";
             this.settingsFolderResetToolStripMenuItem.Click += new System.EventHandler(this.settingsFolderResetToolStripMenuItem_Click);
             // 
@@ -453,6 +433,7 @@
             // 
             // button_stop
             // 
+            this.button_stop.Enabled = false;
             this.button_stop.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.button_stop.Location = new System.Drawing.Point(426, 53);
             this.button_stop.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -663,7 +644,6 @@
         private ToolStripMenuItem editToolStripMenuItem;
         private ToolStripMenuItem selectAllToolStripMenuItem;
         private ToolStripMenuItem clearAllToolStripMenuItem;
-        private ToolStripMenuItem reloadToolStripMenuItem;
         private System.Windows.Forms.Timer timer_updatesysinfo;
         private ToolStripMenuItem addStartStopTimestampToolStripMenuItem;
         private FontDialog fontDialog1;
@@ -672,7 +652,6 @@
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem selectAllContextMenuItem;
         private ToolStripMenuItem clearAllContextMenuItem;
-        private ToolStripMenuItem reloadContextMenuItem;
         private ToolStripSeparator toolStripMenuItem2;
         private ToolStripMenuItem formHighlightContextMenuItem;
         private ToolStripMenuItem hideUnhighlightedContextMenuItem;
