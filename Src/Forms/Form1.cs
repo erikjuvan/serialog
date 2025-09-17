@@ -45,6 +45,31 @@ namespace serialog
             upTime.Start();
         }
 
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                listView1.Focus();
+            }
+
+            if (e.Control && e.KeyCode == Keys.F)
+            {
+                textBox_find.Select();
+            }
+
+            if (e.KeyCode == Keys.F3)
+            {
+                if (e.Shift)
+                {
+                    FindPrevString(textBox_find.Text);
+                }
+                else
+                {
+                    FindNextString(textBox_find.Text);
+                }
+            }
+        }
+
         private void ParseCommandLineArguments(Dictionary<string, string> options)
         {
             // Apply user arguments
@@ -122,144 +147,6 @@ namespace serialog
             //ReloadAllListViewItems(); // For current testing
         }
 
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape)
-            {
-                listView1.Focus();
-            }
-
-            if (e.Control && e.KeyCode == Keys.F)
-            {
-                textBox_find.Select();
-            }
-
-            if (e.KeyCode == Keys.F3)
-            {
-                if (e.Shift)
-                {
-                    FindPrevString(textBox_find.Text);
-                }
-                else
-                {
-                    FindNextString(textBox_find.Text);
-                }
-            }
-        }
-
-        private string[] GetSortedPorts()
-        {
-            var portNames = System.IO.Ports.SerialPort.GetPortNames();
-
-            Array.Sort(portNames, (x, y) =>
-            {
-                int xNum = 0, yNum = 0;
-
-                bool xIsCom = x.StartsWith("COM", StringComparison.OrdinalIgnoreCase) &&
-                              int.TryParse(x.Substring(3), out xNum);
-
-                bool yIsCom = y.StartsWith("COM", StringComparison.OrdinalIgnoreCase) &&
-                              int.TryParse(y.Substring(3), out yNum);
-
-                if (xIsCom && yIsCom)
-                {
-                    return xNum.CompareTo(yNum); // sort numerically
-                }
-                else if (xIsCom)
-                {
-                    return -1; // COM ports first
-                }
-                else if (yIsCom)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return string.Compare(x, y, StringComparison.OrdinalIgnoreCase);
-                }
-            });
-
-            return portNames;
-        }
-
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void button_run_Click(object sender, EventArgs e)
-        {
-            if (_serialcomStopped)
-            {
-                int baud = 0;
-                bool success = int.TryParse(comboBox_baud.Text, out baud);
-
-                if (!success)
-                    return;
-
-                try
-                {
-                    _serial.BaudRate = baud;
-                    _serial.PortName = comboBox_port.Text;
-                    _serial.Parity = System.IO.Ports.Parity.None;
-                    _serial.DataBits = 8;
-                    _serial.StopBits = System.IO.Ports.StopBits.One;
-                    _serial.Handshake = System.IO.Ports.Handshake.None;
-                    _serial.ReadTimeout = 100;
-                    _serial.WriteTimeout = 100;
-                    _serial.DataReceived += Serial_DataReceived;
-                    _serial.Open();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    return;
-                }
-
-                _serialcomStopped = false;
-                button_stop.Enabled = true;
-                button_run.Enabled = false;
-
-                comboBox_port.Enabled = false;
-                comboBox_baud.Enabled = false;
-
-                if (addStartStopTimestampToolStripMenuItem.Checked)
-                {
-                    var entry = new DataEntry(DateTime.Now, false, "ACQUISITION STARTED");
-                    _logView.Add(entry);
-                }
-
-                runTime.Start();
-            }
-        }
-
-        private void button_stop_Click(object sender, EventArgs e)
-        {
-            if (!_serialcomStopped)
-            {
-                _serialcomStopped = true;
-
-                _serial.Close();
-
-                button_stop.Enabled = false;
-                button_run.Enabled = true;
-                comboBox_port.Enabled = true;
-                comboBox_baud.Enabled = true;
-
-                serialcomStoppedHandleEvent = true;
-
-                runTime.Stop();
-            }
-        }
-
-        private void comboBox_port_DropDown(object sender, EventArgs e)
-        {
-            comboBox_port.Items.Clear();
-            comboBox_port.Items.AddRange(GetSortedPorts());
-            if (comboBox_port.Items.Count > 0)
-                comboBox_port.SelectedIndex = 0;
-        }
-
         private void Serial_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
             int count = _serial.BytesToRead;
@@ -293,7 +180,6 @@ namespace serialog
             }
         }
 
-        // Convert bytes to readable string
         private string BytesToDisplayString(IEnumerable<byte> bytes)
         {
             var sb = new StringBuilder();
@@ -350,7 +236,7 @@ namespace serialog
             }
 
             // No match found
-            if (toolStripMenuItem_hiderest.Checked)
+            if (hideUnhighlightedToolStripMenuItem.Checked)
             {
                 if (alsoRemoveToolStripMenuItem.Checked)
                     return null;
@@ -458,6 +344,506 @@ namespace serialog
         private void listView1_Scrolled(object sender, EventArgs e)
         {
             checkBox_follow.Checked = false;
+        }
+
+        private async void ReloadAllListViewItems()
+        {
+            if (listView1.Items.Count == 0) return;
+
+            await ProgressForm.Helper.RunWithProgressAsync(
+                this,
+                "Reloading all items...",
+                listView1.Items.Count,
+                async (i) =>
+                {
+                    var item = CreateHighlightedListItem(listView1.Items[i].Text);
+                    if (item == null)
+                    {
+                        listView1.Items[i].Remove();
+                    }
+                    else
+                    {
+                        listView1.Items[i] = item;
+                    }
+                    await Task.Yield(); // keeps async flow smooth
+                },
+                onUIThread: true
+            );
+        }
+
+        private async void ReloadSelectedListViewItems(ListView.SelectedListViewItemCollection selectedItems)
+        {
+            if (selectedItems.Count == 0) return;
+
+            var itemsToReload = selectedItems.Cast<ListViewItem>().ToList();
+
+            await ProgressForm.Helper.RunWithProgressAsync(
+                this,
+                "Reloading selected items...",
+                itemsToReload.Count,
+                async (i) =>
+                {
+                    var oldItem = itemsToReload[i];
+                    var newItem = CreateHighlightedListItem(oldItem.Text);
+
+                    if (newItem == null)
+                    {
+                        oldItem.Remove();
+                    }
+                    else
+                    {
+                        listView1.Items[oldItem.Index] = newItem;
+                    }
+                    await Task.Yield();
+                },
+                onUIThread: true
+            );
+        }
+
+        string NumberToBKBMB(double num, string suffix = "")
+        {
+            string str;
+
+            if (num > 1024.0 * 1024.0)
+            {
+                num /= 1024.0 * 1024.0;
+                str = num.ToString("0.00") + " MB" + suffix;
+            }
+            else if (num > 1024.0)
+            {
+                num /= 1024.0;
+                str = num.ToString("0.00") + " KB" + suffix;
+            }
+            else
+            {
+                str = Convert.ToInt32(num).ToString() + " B" + suffix;
+            }
+
+            return str;
+        }
+
+        private void timer_updatesysinfo_Tick(object sender, EventArgs e)
+        {
+            var up = upTime.Elapsed;
+            string ups = "";
+            if (up.Hours > 0) ups += up.Hours.ToString() + ":";
+            if (up.Minutes > 0) ups += up.Minutes.ToString("00") + ":";
+            if (up.Seconds > 0) ups += up.Seconds.ToString("00");
+
+            var run = runTime.Elapsed;
+            string runs = "";
+            if (run.Hours > 0) runs += run.Hours.ToString() + ":";
+            if (run.Minutes > 0) runs += run.Minutes.ToString("00") + ":";
+            if (run.Seconds > 0) runs += run.Seconds.ToString("00");
+
+
+            string serialSizeStr = NumberToBKBMB(_serialDataListSizeBytes);
+
+            double serialBytesPerSec = (double)(_serialDataListSizeBytes - _prevSerialDataListSizeBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
+            _prevSerialDataListSizeBytes = _serialDataListSizeBytes;
+            string serialSpeedStr = NumberToBKBMB(serialBytesPerSec, "/s");
+            double avgSerialBytesPerSec = _serialDataListSizeBytes / (run.TotalSeconds > 0 ? run.TotalSeconds : 1);
+            string avgSerialSpeedStr = NumberToBKBMB(avgSerialBytesPerSec, "/s");
+
+            // So that saved file size will be the same as the one in the label subtract one byte (last newline)                       
+            double listSize = _listviewSizeBytes > 0 ? _listviewSizeBytes - 1 : 0;
+            string listSizeStr = NumberToBKBMB(listSize);
+
+            double listBytesPerSec = (double)(_listviewSizeBytes - _prevListviewSizeBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
+            _prevListviewSizeBytes = _listviewSizeBytes;
+            string listSpeedStr = NumberToBKBMB(listBytesPerSec, "/s");
+            double avgListBytesPerSec = _listviewSizeBytes / (run.TotalSeconds > 0 ? run.TotalSeconds : 1);
+            string avgListSpeedStr = NumberToBKBMB(avgListBytesPerSec, "/s");
+
+            int bytesToRead = 0;
+            if (_serial.IsOpen)
+                bytesToRead = _serial.BytesToRead;
+
+            string availableBytesStr = NumberToBKBMB(bytesToRead);
+
+            this.Text = "Serialog |" +
+                "   Serial: " + serialSizeStr + " @ " + serialSpeedStr + " (avg. " + avgSerialSpeedStr + ")" +
+                "   List: " + listSizeStr + " @ " + listSpeedStr + " (avg. " + avgListSpeedStr + ")" +
+                "   Available: " + availableBytesStr +
+                "   Alive: " + ups +
+                "   Running: " + runs;
+        }
+
+        private string[] GetSortedPorts()
+        {
+            var portNames = System.IO.Ports.SerialPort.GetPortNames();
+
+            Array.Sort(portNames, (x, y) =>
+            {
+                int xNum = 0, yNum = 0;
+
+                bool xIsCom = x.StartsWith("COM", StringComparison.OrdinalIgnoreCase) &&
+                              int.TryParse(x.Substring(3), out xNum);
+
+                bool yIsCom = y.StartsWith("COM", StringComparison.OrdinalIgnoreCase) &&
+                              int.TryParse(y.Substring(3), out yNum);
+
+                if (xIsCom && yIsCom)
+                {
+                    return xNum.CompareTo(yNum); // sort numerically
+                }
+                else if (xIsCom)
+                {
+                    return -1; // COM ports first
+                }
+                else if (yIsCom)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return string.Compare(x, y, StringComparison.OrdinalIgnoreCase);
+                }
+            });
+
+            return portNames;
+        }
+
+        private void comboBox_port_DropDown(object sender, EventArgs e)
+        {
+            comboBox_port.Items.Clear();
+            comboBox_port.Items.AddRange(GetSortedPorts());
+            if (comboBox_port.Items.Count > 0)
+                comboBox_port.SelectedIndex = 0;
+        }
+
+        private void button_run_Click(object sender, EventArgs e)
+        {
+            if (_serialcomStopped)
+            {
+                int baud = 0;
+                bool success = int.TryParse(comboBox_baud.Text, out baud);
+
+                if (!success)
+                    return;
+
+                try
+                {
+                    _serial.BaudRate = baud;
+                    _serial.PortName = comboBox_port.Text;
+                    _serial.Parity = System.IO.Ports.Parity.None;
+                    _serial.DataBits = 8;
+                    _serial.StopBits = System.IO.Ports.StopBits.One;
+                    _serial.Handshake = System.IO.Ports.Handshake.None;
+                    _serial.ReadTimeout = 100;
+                    _serial.WriteTimeout = 100;
+                    _serial.DataReceived += Serial_DataReceived;
+                    _serial.Open();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return;
+                }
+
+                _serialcomStopped = false;
+                button_stop.Enabled = true;
+                button_run.Enabled = false;
+
+                comboBox_port.Enabled = false;
+                comboBox_baud.Enabled = false;
+
+                if (addStartStopTimestampToolStripMenuItem.Checked)
+                {
+                    var entry = new DataEntry(DateTime.Now, false, "ACQUISITION STARTED");
+                    _logView.Add(entry);
+                }
+
+                runTime.Start();
+            }
+        }
+
+        private void button_stop_Click(object sender, EventArgs e)
+        {
+            if (!_serialcomStopped)
+            {
+                _serialcomStopped = true;
+
+                _serial.Close();
+
+                button_stop.Enabled = false;
+                button_run.Enabled = true;
+                comboBox_port.Enabled = true;
+                comboBox_baud.Enabled = true;
+
+                serialcomStoppedHandleEvent = true;
+
+                runTime.Stop();
+            }
+        }
+
+        private void textBox_find_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string text = textBox_find.Text;
+
+                if (e.Shift)
+                {
+                    FindPrevString(text);
+                }
+                else
+                {
+                    FindNextString(text);
+                }
+            }
+        }
+
+        private void FindLastString(string text)
+        {
+            if (text == "")
+                return;
+
+            for (int i = listView1.Items.Count - 1; i >= 0; i--)
+            {
+                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
+                {
+                    checkBox_follow.Checked = false;
+                    listView1.Select();
+                    listView1.SelectedItems.Clear();
+                    listView1.Items[i].Selected = true;
+                    listView1.Items[i].EnsureVisible();
+                    return;
+                }
+            }
+            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void FindNextString(string text)
+        {
+            if (text == "")
+                return;
+
+            var selected = listView1.SelectedIndices;
+            int searchFromIndex = 0;
+
+            if (selected.Count > 0)
+                searchFromIndex = selected[selected.Count - 1] + 1;
+
+            for (int i = searchFromIndex; i < listView1.Items.Count; i++)
+            {
+                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
+                {
+                    listView1.Select();
+                    checkBox_follow.Checked = false;
+                    listView1.SelectedItems.Clear();
+                    listView1.Items[i].Selected = true;
+                    listView1.Items[i].EnsureVisible();
+                    return;
+                }
+            }
+            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void button_findnext_Click(object sender, EventArgs e)
+        {
+            string text = textBox_find.Text;
+
+            if ((ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                FindLastString(text);
+            }
+            else
+            {
+                FindNextString(text);
+            }
+        }
+
+        private void FindFirstString(string text)
+        {
+            if (text == "")
+                return;
+
+            for (int i = 0; i < listView1.Items.Count; i++)
+            {
+                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
+                {
+                    checkBox_follow.Checked = false;
+                    listView1.Select();
+                    listView1.SelectedItems.Clear();
+                    listView1.Items[i].Selected = true;
+                    listView1.Items[i].EnsureVisible();
+                    return;
+                }
+            }
+            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void FindPrevString(string text)
+        {
+            if (text == "")
+                return;
+
+            var selected = listView1.SelectedIndices;
+            int searchFromIndex = listView1.Items.Count - 1;
+
+            if (selected.Count > 0)
+                searchFromIndex = selected[0] - 1;
+
+            for (int i = searchFromIndex; i >= 0; i--)
+            {
+                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
+                {
+                    checkBox_follow.Checked = false;
+                    listView1.Select();
+                    listView1.SelectedItems.Clear();
+                    listView1.Items[i].Selected = true;
+                    listView1.Items[i].EnsureVisible();
+                    return;
+                }
+            }
+            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void button_findprev_Click(object sender, EventArgs e)
+        {
+            string text = textBox_find.Text;
+
+            if ((ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                FindFirstString(text);
+            }
+            else
+            {
+                FindPrevString(text);
+            }
+        }
+
+        private void FindAllString(string text)
+        {
+            if (text == "")
+                return;
+
+            bool foundText = false;
+            for (int i = 0; i < listView1.Items.Count; i++)
+            {
+                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!foundText)
+                    {
+                        foundText = true;
+                        listView1.Select();
+                        listView1.SelectedItems.Clear();
+                    }
+                    listView1.Items[i].Selected = true;
+                }
+            }
+
+            if (foundText)
+            {
+                checkBox_follow.Checked = false;
+                listView1.Items[listView1.SelectedIndices[listView1.SelectedIndices.Count - 1]].EnsureVisible();
+            }
+            else
+            {
+                MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void button_findall_Click(object sender, EventArgs e)
+        {
+            string text = textBox_find.Text;
+
+            FindAllString(text);
+        }
+
+        private void FindHighlighted(int startIdx, bool reverse = false)
+        {
+            if (reverse)
+            {
+                for (int i = startIdx; i >= 0; --i)
+                {
+                    var itm = listView1.Items[i];
+                    if (itm.ForeColor.Name != "WindowText" || itm.BackColor.Name != "Window")
+                    {
+                        checkBox_follow.Checked = false;
+                        listView1.Select();
+                        listView1.SelectedItems.Clear();
+                        listView1.Items[i].Selected = true;
+                        listView1.Items[i].EnsureVisible();
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = startIdx; i < listView1.Items.Count; ++i)
+                {
+                    var itm = listView1.Items[i];
+                    if (itm.ForeColor.Name != "WindowText" || itm.BackColor.Name != "Window")
+                    {
+                        checkBox_follow.Checked = false;
+                        listView1.Select();
+                        listView1.SelectedItems.Clear();
+                        listView1.Items[i].Selected = true;
+                        listView1.Items[i].EnsureVisible();
+                        return;
+                    }
+                }
+            }
+
+            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void FindFirstHighlightedEntry()
+        {
+            FindHighlighted(0);
+        }
+
+        private void FindPrevHighlightedEntry()
+        {
+            var selected = listView1.SelectedIndices;
+            int searchFromIndex = listView1.Items.Count - 1;
+
+            if (selected.Count > 0)
+                searchFromIndex = selected[0] - 1;
+
+            FindHighlighted(searchFromIndex, true);
+        }
+
+        private void button_prev_highlight_Click(object sender, EventArgs e)
+        {
+            if ((ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                FindFirstHighlightedEntry();
+            }
+            else
+            {
+                FindPrevHighlightedEntry();
+            }
+        }
+
+        private void FindLastHighlightedEntry()
+        {
+            FindHighlighted(listView1.Items.Count - 1, true);
+        }
+
+        private void FindNextHighlightedEntry()
+        {
+            var selected = listView1.SelectedIndices;
+            int searchFromIndex = 0;
+
+            if (selected.Count > 0)
+                searchFromIndex = selected[selected.Count - 1] + 1;
+
+            FindHighlighted(searchFromIndex);
+        }
+
+        private void button_next_highlight_Click(object sender, EventArgs e)
+        {
+            if ((ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                FindLastHighlightedEntry();
+            }
+            else
+            {
+                FindNextHighlightedEntry();
+            }
         }
 
         private async void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -572,162 +958,9 @@ namespace serialog
             }
         }
 
-        private void FindNextString(string text)
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (text == "")
-                return;
-
-            var selected = listView1.SelectedIndices;
-            int searchFromIndex = 0;
-
-            if (selected.Count > 0)
-                searchFromIndex = selected[selected.Count - 1] + 1;
-
-            for (int i = searchFromIndex; i < listView1.Items.Count; i++)
-            {
-                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
-                {
-                    listView1.Select();
-                    checkBox_follow.Checked = false;
-                    listView1.SelectedItems.Clear();
-                    listView1.Items[i].Selected = true;
-                    listView1.Items[i].EnsureVisible();
-                    return;
-                }
-            }
-            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void FindPrevString(string text)
-        {
-            if (text == "")
-                return;
-
-            var selected = listView1.SelectedIndices;
-            int searchFromIndex = listView1.Items.Count - 1;
-
-            if (selected.Count > 0)
-                searchFromIndex = selected[0] - 1;
-
-            for (int i = searchFromIndex; i >= 0; i--)
-            {
-                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
-                {
-                    checkBox_follow.Checked = false;
-                    listView1.Select();
-                    listView1.SelectedItems.Clear();
-                    listView1.Items[i].Selected = true;
-                    listView1.Items[i].EnsureVisible();
-                    return;
-                }
-            }
-            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void FindFirstString(string text)
-        {
-            if (text == "")
-                return;
-
-            for (int i = 0; i < listView1.Items.Count; i++)
-            {
-                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
-                {
-                    checkBox_follow.Checked = false;
-                    listView1.Select();
-                    listView1.SelectedItems.Clear();
-                    listView1.Items[i].Selected = true;
-                    listView1.Items[i].EnsureVisible();
-                    return;
-                }
-            }
-            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void FindLastString(string text)
-        {
-            if (text == "")
-                return;
-
-            for (int i = listView1.Items.Count - 1; i >= 0; i--)
-            {
-                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
-                {
-                    checkBox_follow.Checked = false;
-                    listView1.Select();
-                    listView1.SelectedItems.Clear();
-                    listView1.Items[i].Selected = true;
-                    listView1.Items[i].EnsureVisible();
-                    return;
-                }
-            }
-            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void FindAllString(string text)
-        {
-            if (text == "")
-                return;
-
-            bool foundText = false;
-            for (int i = 0; i < listView1.Items.Count; i++)
-            {
-                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
-                {
-                    if (!foundText)
-                    {
-                        foundText = true;
-                        listView1.Select();
-                        listView1.SelectedItems.Clear();
-                    }
-                    listView1.Items[i].Selected = true;
-                }
-            }
-
-            if (foundText)
-            {
-                checkBox_follow.Checked = false;
-                listView1.Items[listView1.SelectedIndices[listView1.SelectedIndices.Count - 1]].EnsureVisible();
-            }
-            else
-            {
-                MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
-        private void button_findnext_Click(object sender, EventArgs e)
-        {
-            string text = textBox_find.Text;
-
-            if ((ModifierKeys & Keys.Control) == Keys.Control)
-            {
-                FindLastString(text);
-            }
-            else
-            {
-                FindNextString(text);
-            }
-        }
-
-        private void button_findprev_Click(object sender, EventArgs e)
-        {
-            string text = textBox_find.Text;
-
-            if ((ModifierKeys & Keys.Control) == Keys.Control)
-            {
-                FindFirstString(text);
-            }
-            else
-            {
-                FindPrevString(text);
-            }
-        }
-
-        private void button_findall_Click(object sender, EventArgs e)
-        {
-            string text = textBox_find.Text;
-
-            FindAllString(text);
+            this.Close();
         }
 
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -752,223 +985,12 @@ namespace serialog
                 runTime.Start();
         }
 
-        private async void ReloadAllListViewItems()
-        {
-            if (listView1.Items.Count == 0) return;
-
-            await ProgressForm.Helper.RunWithProgressAsync(
-                this,
-                "Reloading all items...",
-                listView1.Items.Count,
-                async (i) =>
-                {
-                    var item = CreateHighlightedListItem(listView1.Items[i].Text);
-                    if (item == null)
-                    {
-                        listView1.Items[i].Remove();
-                    }
-                    else
-                    {
-                        listView1.Items[i] = item;
-                    }
-                    await Task.Yield(); // keeps async flow smooth
-                },
-                onUIThread: true
-            );
-        }
-
-        private async void ReloadSelectedListViewItems(ListView.SelectedListViewItemCollection selectedItems)
-        {
-            if (selectedItems.Count == 0) return;
-
-            var itemsToReload = selectedItems.Cast<ListViewItem>().ToList();
-
-            await ProgressForm.Helper.RunWithProgressAsync(
-                this,
-                "Reloading selected items...",
-                itemsToReload.Count,
-                async (i) =>
-                {
-                    var oldItem = itemsToReload[i];
-                    var newItem = CreateHighlightedListItem(oldItem.Text);
-
-                    if (newItem == null)
-                    {
-                        oldItem.Remove();
-                    }
-                    else
-                    {
-                        listView1.Items[oldItem.Index] = newItem;
-                    }
-                    await Task.Yield();
-                },
-                onUIThread: true
-            );
-        }
-
         private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count == 0)
                 ReloadAllListViewItems();
             else
                 ReloadSelectedListViewItems(listView1.SelectedItems);
-        }
-
-        string NumberToBKBMB(double num, string suffix = "")
-        {
-            string str;
-
-            if (num > 1024.0 * 1024.0)
-            {
-                num /= 1024.0 * 1024.0;
-                str = num.ToString("0.00") + " MB" + suffix;
-            }
-            else if (num > 1024.0)
-            {
-                num /= 1024.0;
-                str = num.ToString("0.00") + " KB" + suffix;
-            }
-            else
-            {
-                str = Convert.ToInt32(num).ToString() + " B" + suffix;
-            }
-
-            return str;
-        }
-
-        private void timer_updatesysinfo_Tick(object sender, EventArgs e)
-        {
-            var up = upTime.Elapsed;
-            string ups = "";
-            if (up.Hours > 0) ups += up.Hours.ToString() + ":";
-            if (up.Minutes > 0) ups += up.Minutes.ToString("00") + ":";
-            if (up.Seconds > 0) ups += up.Seconds.ToString("00");
-
-            var run = runTime.Elapsed;
-            string runs = "";
-            if (run.Hours > 0) runs += run.Hours.ToString() + ":";
-            if (run.Minutes > 0) runs += run.Minutes.ToString("00") + ":";
-            if (run.Seconds > 0) runs += run.Seconds.ToString("00");
-
-
-            string serialSizeStr = NumberToBKBMB(_serialDataListSizeBytes);
-
-            double serialBytesPerSec = (double)(_serialDataListSizeBytes - _prevSerialDataListSizeBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
-            _prevSerialDataListSizeBytes = _serialDataListSizeBytes;
-            string serialSpeedStr = NumberToBKBMB(serialBytesPerSec, "/s");
-            double avgSerialBytesPerSec = _serialDataListSizeBytes / (run.TotalSeconds > 0 ? run.TotalSeconds : 1);
-            string avgSerialSpeedStr = NumberToBKBMB(avgSerialBytesPerSec, "/s");
-
-            // So that saved file size will be the same as the one in the label subtract one byte (last newline)                       
-            double listSize = _listviewSizeBytes > 0 ? _listviewSizeBytes - 1 : 0;
-            string listSizeStr = NumberToBKBMB(listSize);
-
-            double listBytesPerSec = (double)(_listviewSizeBytes - _prevListviewSizeBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
-            _prevListviewSizeBytes = _listviewSizeBytes;
-            string listSpeedStr = NumberToBKBMB(listBytesPerSec, "/s");
-            double avgListBytesPerSec = _listviewSizeBytes / (run.TotalSeconds > 0 ? run.TotalSeconds : 1);
-            string avgListSpeedStr = NumberToBKBMB(avgListBytesPerSec, "/s");
-
-            int bytesToRead = 0;
-            if (_serial.IsOpen)
-                bytesToRead = _serial.BytesToRead;
-
-            string availableBytesStr = NumberToBKBMB(bytesToRead);
-
-            this.Text = "Serialog |" +
-                "   Serial: " + serialSizeStr + " @ " + serialSpeedStr + " (avg. " + avgSerialSpeedStr + ")" +
-                "   List: " + listSizeStr + " @ " + listSpeedStr + " (avg. " + avgListSpeedStr + ")" +
-                "   Available: " + availableBytesStr +
-                "   Alive: " + ups +
-                "   Running: " + runs;
-        }
-
-        private void fontToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            fontDialog1.ShowColor = true;
-            fontDialog1.ShowApply = true;
-            fontDialog1.ShowEffects = true;
-            fontDialog1.ShowHelp = true;
-
-            fontDialog1.MinSize = 6;
-            fontDialog1.MaxSize = 20;
-
-            fontDialog1.Font = listView1.Font;
-
-            if (fontDialog1.ShowDialog() == DialogResult.OK)
-            {
-                listView1.Font.Dispose();
-                listView1.Font = fontDialog1.Font;
-
-                if (MessageBox.Show("Reload highlight settings?", "Reload?",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    ReloadAllListViewItems();
-                }
-            }
-        }
-
-        private void textBox_find_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                string text = textBox_find.Text;
-
-                if (e.Shift)
-                {
-                    FindPrevString(text);
-                }
-                else
-                {
-                    FindNextString(text);
-                }
-            }
-        }
-
-        private void toolStripMenuItem_hiderest_Click(object sender, EventArgs e)
-        {
-            toolStripMenuItem_hiderest.Checked = !toolStripMenuItem_hiderest.Checked;
-            hideHighlightedToolStripMenuItem.Checked = toolStripMenuItem_hiderest.Checked;
-            if (!toolStripMenuItem_hiderest.Checked)
-            {
-                alsoRemoveToolStripMenuItem.Checked = false;
-                alsoRemoveToolStripMenuItem1.Checked = false;
-            }
-
-        }
-
-        private void alsoRemoveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            alsoRemoveToolStripMenuItem.Checked = !alsoRemoveToolStripMenuItem.Checked;
-            alsoRemoveToolStripMenuItem1.Checked = alsoRemoveToolStripMenuItem.Checked;
-            if (alsoRemoveToolStripMenuItem.Checked)
-            {
-                toolStripMenuItem_hiderest.Checked = true;
-                hideHighlightedToolStripMenuItem.Checked = true;
-            }
-        }
-
-        private void hideHighlightedToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            toolStripMenuItem_hiderest_Click(sender, e);
-        }
-
-        // This one is the menustrip click function
-        private void disableHighlightsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            disableHighlightsToolStripMenuItem.Checked = !disableHighlightsToolStripMenuItem.Checked;
-            disableHighlightsToolStripMenuItem1.Checked = disableHighlightsToolStripMenuItem.Checked;
-            if (!disableHighlightsToolStripMenuItem.Checked)
-            {
-                disableHighlightsToolStripMenuItem.Checked = false;
-                disableHighlightsToolStripMenuItem1.Checked = false;
-            }
-        }
-
-        // This one is the context click function
-        private void disableHighlightsToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            disableHighlightsToolStripMenuItem_Click(sender, e);
         }
 
         private static DialogResult ShowInputDialogBox(ref string input, string prompt, string title = "Title", int width = 300, int height = 120)
@@ -1057,103 +1079,83 @@ namespace serialog
             }
         }
 
-        private void addCustomRowToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void hideUnhighlightedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            addCustomRowToolStripMenuItem_Click(sender, e);
+            hideUnhighlightedToolStripMenuItem.Checked = !hideUnhighlightedToolStripMenuItem.Checked;
+            hideUnhighlightedContextMenuItem.Checked = hideUnhighlightedToolStripMenuItem.Checked;
+            if (!hideUnhighlightedToolStripMenuItem.Checked)
+            {
+                alsoRemoveToolStripMenuItem.Checked = false;
+                alsoRemoveContextMenuItem.Checked = false;
+            }
         }
 
-        private void FindHighlighted(int startIdx, bool reverse = false)
+        private void alsoRemoveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (reverse)
+            alsoRemoveToolStripMenuItem.Checked = !alsoRemoveToolStripMenuItem.Checked;
+            alsoRemoveContextMenuItem.Checked = alsoRemoveToolStripMenuItem.Checked;
+            if (alsoRemoveToolStripMenuItem.Checked)
             {
-                for (int i = startIdx; i >= 0; --i)
+                hideUnhighlightedToolStripMenuItem.Checked = true;
+                hideUnhighlightedContextMenuItem.Checked = true;
+            }
+        }
+
+        private void disableHighlightsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            disableHighlightsToolStripMenuItem.Checked = !disableHighlightsToolStripMenuItem.Checked;
+            disableHighlightsContextMenuItem.Checked = disableHighlightsToolStripMenuItem.Checked;
+            if (!disableHighlightsToolStripMenuItem.Checked)
+            {
+                disableHighlightsToolStripMenuItem.Checked = false;
+                disableHighlightsContextMenuItem.Checked = false;
+            }
+        }
+
+        private void fontToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fontDialog1.ShowColor = true;
+            fontDialog1.ShowApply = true;
+            fontDialog1.ShowEffects = true;
+            fontDialog1.ShowHelp = true;
+
+            fontDialog1.MinSize = 6;
+            fontDialog1.MaxSize = 20;
+
+            fontDialog1.Font = listView1.Font;
+
+            if (fontDialog1.ShowDialog() == DialogResult.OK)
+            {
+                listView1.Font.Dispose();
+                listView1.Font = fontDialog1.Font;
+
+                if (MessageBox.Show("Reload highlight settings?", "Reload?",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    var itm = listView1.Items[i];
-                    if (itm.ForeColor.Name != "WindowText" || itm.BackColor.Name != "Window")
-                    {
-                        checkBox_follow.Checked = false;
-                        listView1.Select();
-                        listView1.SelectedItems.Clear();
-                        listView1.Items[i].Selected = true;
-                        listView1.Items[i].EnsureVisible();
-                        return;
-                    }
+                    ReloadAllListViewItems();
                 }
             }
-            else
+        }
+
+        private void settingsFolderChangeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using var dialog = new FolderBrowserDialog
             {
-                for (int i = startIdx; i < listView1.Items.Count; ++i)
-                {
-                    var itm = listView1.Items[i];
-                    if (itm.ForeColor.Name != "WindowText" || itm.BackColor.Name != "Window")
-                    {
-                        checkBox_follow.Checked = false;
-                        listView1.Select();
-                        listView1.SelectedItems.Clear();
-                        listView1.Items[i].Selected = true;
-                        listView1.Items[i].EnsureVisible();
-                        return;
-                    }
-                }
-            }
+                ShowNewFolderButton = true,
+                SelectedPath = AppSettings.SettingsFolder // start in current folder
+            };
 
-            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void FindFirstHighlightedEntry()
-        {
-            FindHighlighted(0);
-        }
-
-        private void FindPrevHighlightedEntry()
-        {
-            var selected = listView1.SelectedIndices;
-            int searchFromIndex = listView1.Items.Count - 1;
-
-            if (selected.Count > 0)
-                searchFromIndex = selected[0] - 1;
-
-            FindHighlighted(searchFromIndex, true);
-        }
-
-        private void FindLastHighlightedEntry()
-        {
-            FindHighlighted(listView1.Items.Count - 1, true);
-        }
-
-        private void FindNextHighlightedEntry()
-        {
-            var selected = listView1.SelectedIndices;
-            int searchFromIndex = 0;
-
-            if (selected.Count > 0)
-                searchFromIndex = selected[selected.Count - 1] + 1;
-
-            FindHighlighted(searchFromIndex);
-        }
-
-        private void button_prev_highlight_Click(object sender, EventArgs e)
-        {
-            if ((ModifierKeys & Keys.Control) == Keys.Control)
+            if (dialog.ShowDialog() == DialogResult.OK)
             {
-                FindFirstHighlightedEntry();
-            }
-            else
-            {
-                FindPrevHighlightedEntry();
+                // Store the absolute path directly
+                AppSettings.SettingsFolder = dialog.SelectedPath;
+                Directory.CreateDirectory(AppSettings.SettingsFolder); // ensure it exists
             }
         }
 
-        private void button_next_highlight_Click(object sender, EventArgs e)
+        private void settingsFolderResetToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if ((ModifierKeys & Keys.Control) == Keys.Control)
-            {
-                FindLastHighlightedEntry();
-            }
-            else
-            {
-                FindNextHighlightedEntry();
-            }
+            AppSettings.SettingsFolder = AppSettings.DefaultSettingsFolder;
         }
 
         private void RegisterChild(Form child)
@@ -1202,7 +1204,7 @@ namespace serialog
             this.Activate();
         }
 
-        private void highlightToolStripMenuItem_Click(object sender, EventArgs e)
+        private void formHighlightToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (form2Highlight == null || form2Highlight.IsDisposed)
             {
@@ -1217,7 +1219,7 @@ namespace serialog
             }
         }
 
-        private void highlightsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void formHighlightsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (form3Highlights == null || form3Highlights.IsDisposed)
             {
@@ -1232,7 +1234,7 @@ namespace serialog
             }
         }
 
-        private void sendToolStripMenuItem_Click(object sender, EventArgs e)
+        private void formSendToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (form4Send == null || form4Send.IsDisposed)
             {
@@ -1245,27 +1247,6 @@ namespace serialog
                 form4Send.Show();   // unhide if hidden
                 form4Send.Focus();
             }
-        }
-
-        private void changeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using var dialog = new FolderBrowserDialog
-            {
-                ShowNewFolderButton = true,
-                SelectedPath = AppSettings.SettingsFolder // start in current folder
-            };
-
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                // Store the absolute path directly
-                AppSettings.SettingsFolder = dialog.SelectedPath;
-                Directory.CreateDirectory(AppSettings.SettingsFolder); // ensure it exists
-            }
-        }
-
-        private void resetToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AppSettings.SettingsFolder = AppSettings.DefaultSettingsFolder;
         }
     }
 }
