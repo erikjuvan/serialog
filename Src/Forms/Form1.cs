@@ -9,7 +9,6 @@ namespace serialog
 
         private readonly SerialDataBuffer _serialDataBuffer = new SerialDataBuffer();
         private readonly DataLog _dataLog = new DataLog();
-        private readonly LogView _logView = new LogView();
         private List<byte> _serialLineBuffer = new List<byte>();
 
         private static bool _serialcomStopped = new bool();
@@ -169,7 +168,6 @@ namespace serialog
                     var entry = new DataEntry(DateTime.Now, false, display);
 
                     _dataLog.Add(entry);
-                    _logView.Add(entry);
 
                     _serialLineBuffer.Clear();
                 }
@@ -275,7 +273,7 @@ namespace serialog
                 if (addStartStopTimestampToolStripMenuItem.Checked)
                 {
                     var entry = new DataEntry(DateTime.Now, false, "ACQUISITION STOPPED ");
-                    _logView.Add(entry);
+                    //_logView.Add(entry); TODO replace
                 }
             }
         }
@@ -551,7 +549,7 @@ namespace serialog
                 if (addStartStopTimestampToolStripMenuItem.Checked)
                 {
                     var entry = new DataEntry(DateTime.Now, false, "ACQUISITION STARTED");
-                    _logView.Add(entry);
+                    //_logView.Add(entry); TODO replace
                 }
 
                 runTime.Start();
@@ -977,7 +975,6 @@ namespace serialog
             lock (_serialDataLock)
             {
                 listView1.Items.Clear();
-                _logView.Clear();
             }
 
             runTime = new Stopwatch();
@@ -1238,7 +1235,7 @@ namespace serialog
         {
             if (form4Send == null || form4Send.IsDisposed)
             {
-                form4Send = new Form4_Send(this, _serial, _dataLog, _logView);
+                form4Send = new Form4_Send(this, _serial, _dataLog);
                 RegisterChild(form4Send);
                 form4Send.Show();
             }

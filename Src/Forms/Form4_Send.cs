@@ -5,7 +5,6 @@
         private Form1 _parentForm;
         private System.IO.Ports.SerialPort _serial;
         private DataLog _dataLog;
-        private LogView _logView;
         private string _sendFileExtension = ".send";
 
         public class DataRowModel
@@ -14,14 +13,13 @@
             public string HexData { get; set; }
         }
 
-        internal Form4_Send(Form1 parent, System.IO.Ports.SerialPort serial, DataLog dataLog, LogView logView)
+        internal Form4_Send(Form1 parent, System.IO.Ports.SerialPort serial, DataLog dataLog)
         {
             InitializeComponent();
 
             _parentForm = parent;
             _serial = serial;
             _dataLog = dataLog;
-            _logView = logView;
 
             // Populate file combobox
             Populate_comboBox_file_onFolderChange();
@@ -84,7 +82,6 @@
                     string hexString = string.Join(" ", bytes.Select(b => $"{{0x{b:X2}}}"));
                     var entry = new DataEntry(DateTime.Now, true, hexString);
                     _dataLog.Add(entry);
-                    _logView.Add(entry);
                 }
                 catch (FormatException)
                 {
