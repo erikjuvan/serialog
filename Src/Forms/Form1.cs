@@ -10,15 +10,14 @@ namespace serialog
         private readonly SerialDataBuffer _serialDataBuffer = new SerialDataBuffer();
         private readonly DataLog _dataLog = new DataLog();
         private readonly LogView _logView = new LogView();
+        private List<byte> _serialLineBuffer = new List<byte>();
 
         private static bool _serialcomStopped = new bool();
         private bool serialcomStoppedHandleEvent = new bool();
-        private static List<string> _serialDataList = new List<string>(1000000);
         private static int _listviewSizeBytes = 0;
         private static int _prevListviewSizeBytes = 0;
         private static int _serialDataListSizeBytes = 0;
         private static int _prevSerialDataListSizeBytes = 0;
-        private int _serialDataListCountAddedToTable = 0;
         private static readonly object _serialDataLock = new object();
 
         private Stopwatch runTime = new Stopwatch();
@@ -31,19 +30,6 @@ namespace serialog
         public Form1(Dictionary<string, string> options)
         {
             InitializeComponent();
-
-            // Hook filtered view to ListView
-            _logView.EntryAdded += entry =>
-            {
-                if (listView1.InvokeRequired)
-                {
-                    listView1.Invoke(new Action(() => AddToListView(entry)));
-                }
-                else
-                {
-                    AddToListView(entry);
-                }
-            };
 
             comboBox_port.Items.AddRange(GetSortedPorts());
 
@@ -122,7 +108,11 @@ namespace serialog
             if (entry.IsSent)
                 item.ForeColor = Color.Blue; // TX in blue
             listView1.Items.Add(item);
-            listView1.Items[listView1.Items.Count - 1].EnsureVisible();
+            // Scroll to last item if follow is enabled
+            if (checkBox_follow.Checked && listView1.Items.Count > 0)
+            {
+                listView1.Items[listView1.Items.Count - 1].EnsureVisible();
+            }
         }
 
         private void HighlightEntries_Changed(object? sender, EventArgs e)
@@ -270,8 +260,6 @@ namespace serialog
                 comboBox_port.SelectedIndex = 0;
         }
 
-        private List<byte> _serialLineBuffer = new List<byte>();
-
         private void Serial_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
             int count = _serial.BytesToRead;
@@ -392,43 +380,8 @@ namespace serialog
             }
         }
 
-        private void AddEntry()
-        {
-            List<string> newLines;
-
-            // Only lock to read new lines
-            lock (_serialDataLock)
-            {
-                if (_serialDataListCountAddedToTable >= _serialDataList.Count)
-                    return;
-
-                newLines = _serialDataList.Skip(_serialDataListCountAddedToTable).ToList();
-
-                _serialDataListCountAddedToTable = _serialDataList.Count;
-            }
-
-            // Add items to ListView outside lock
-            foreach (string line in newLines)
-            {
-                ListViewItem item = CreateHighlightedListItem(line);
-                if (item != null)
-                {
-                    listView1.Items.Add(item);
-                    _listviewSizeBytes += line.Length + 1; // 1 for \n
-                }
-            }
-
-            // Scroll to last item if follow is enabled
-            if (checkBox_follow.Checked && listView1.Items.Count > 0)
-            {
-                listView1.Items[listView1.Items.Count - 1].EnsureVisible();
-            }
-        }
-
         private void timer1_Tick(object sender, EventArgs e)
         {
-            AddEntry();
-
             if (serialcomStoppedHandleEvent)
             {
                 serialcomStoppedHandleEvent = false;
@@ -507,69 +460,6 @@ namespace serialog
             checkBox_follow.Checked = false;
         }
 
-        public static Stream GenerateStreamFromListOfItems(ListView.ListViewItemCollection items)
-        {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-
-            if (items.Count == 0)
-                return null;
-
-            // for instead of foreach so that we can control last item and not add "\n" at the end so that we 
-            // do not introduce an extra item in list
-            for (int i = 0; i < items.Count - 1; i++)
-            {
-                writer.Write(items[i].Text + '\n');
-            }
-            writer.Write(items[items.Count - 1].Text);
-
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
-        }
-
-        public static Stream GenerateStreamFromListOfItems(ListView.SelectedListViewItemCollection items)
-        {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-
-            if (items.Count == 0)
-                return null;
-
-            // for instead of foreach so that we can control last item and not add "\n" at the end so that we 
-            // do not introduce an extra item in list
-            for (int i = 0; i < items.Count - 1; i++)
-            {
-                writer.Write(items[i].Text + '\n');
-            }
-            writer.Write(items[items.Count - 1].Text);
-
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
-        }
-
-        public static Stream GenerateStreamFromSerialData()
-        {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-
-            if (_serialDataList.Count == 0)
-                return null;
-
-            // for instead of foreach so that we can control last item and not add "\n" at the end so that we 
-            // do not introduce an extra item in list
-            for (int i = 0; i < _serialDataList.Count - 1; i++)
-            {
-                writer.Write(_serialDataList[i].ToString() + '\n');
-            }
-            writer.Write(_serialDataList[_serialDataList.Count - 1].ToString());
-
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
-        }
-
         private async void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
@@ -618,7 +508,7 @@ namespace serialog
             _listviewSizeBytes += filePath.Length + 1;
         }
 
-        private async void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (SaveFileDialog saveFileDialog1 = new SaveFileDialog())
             {
@@ -628,33 +518,16 @@ namespace serialog
 
                 if (saveFileDialog1.ShowDialog() != DialogResult.OK) return;
 
-                using (Stream myStream = saveFileDialog1.OpenFile())
-                using (var sourceStream = GenerateStreamFromListOfItems(listView1.Items))
-                {
-                    if (sourceStream == null) return;
+                string filename = saveFileDialog1.FileName;
 
-                    const int bufferSize = 8192;
-                    long totalLength = sourceStream.Length;
-                    int totalSteps = (int)Math.Ceiling((double)totalLength / bufferSize);
+                // Convert DataLog snapshot into readable lines
+                var lines = _dataLog.GetSnapshot().Select(entry => entry.ToString());
 
-                    await ProgressForm.Helper.RunWithProgressAsync(
-                        this,
-                        "Saving to file...",
-                        totalSteps,
-                        async (step) =>
-                        {
-                            byte[] buffer = new byte[bufferSize];
-                            int bytesRead = await sourceStream.ReadAsync(buffer, 0, buffer.Length);
-                            if (bytesRead > 0)
-                                await myStream.WriteAsync(buffer, 0, bytesRead);
-                        },
-                        onUIThread: false
-                    );
-                }
+                File.WriteAllLines(filename, lines);
             }
         }
 
-        private async void saveSelectedToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveSelectedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count == 0)
             {
@@ -662,41 +535,27 @@ namespace serialog
                 return;
             }
 
-            using (SaveFileDialog saveFileDialog1 = new SaveFileDialog())
+            using (var saveFileDialog1 = new SaveFileDialog())
             {
-                saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                saveFileDialog1.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
                 saveFileDialog1.FilterIndex = 1;
                 saveFileDialog1.RestoreDirectory = true;
 
-                if (saveFileDialog1.ShowDialog() != DialogResult.OK) return;
+                if (saveFileDialog1.ShowDialog() != DialogResult.OK)
+                    return;
 
-                using (Stream myStream = saveFileDialog1.OpenFile())
-                using (var sourceStream = GenerateStreamFromListOfItems(listView1.SelectedItems))
-                {
-                    if (sourceStream == null) return;
+                string filename = saveFileDialog1.FileName;
 
-                    const int bufferSize = 8192;
-                    long totalLength = sourceStream.Length;
-                    int totalSteps = (int)Math.Ceiling((double)totalLength / bufferSize);
+                // Extract selected items -> strings
+                var lines = listView1.SelectedItems
+                    .Cast<ListViewItem>()
+                    .Select(item => item.Text);
 
-                    await ProgressForm.Helper.RunWithProgressAsync(
-                        this,
-                        "Saving selected items...",
-                        totalSteps,
-                        async (step) =>
-                        {
-                            byte[] buffer = new byte[bufferSize];
-                            int bytesRead = await sourceStream.ReadAsync(buffer, 0, buffer.Length);
-                            if (bytesRead > 0)
-                                await myStream.WriteAsync(buffer, 0, bytesRead);
-                        },
-                        onUIThread: false
-                    );
-                }
+                File.WriteAllLines(filename, lines);
             }
         }
 
-        private async void saveSerialAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveSerialAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (SaveFileDialog saveFileDialog1 = new SaveFileDialog())
             {
@@ -706,29 +565,10 @@ namespace serialog
 
                 if (saveFileDialog1.ShowDialog() != DialogResult.OK) return;
 
-                using (Stream myStream = saveFileDialog1.OpenFile())
-                {
-                    var serialStream = GenerateStreamFromSerialData();
-                    if (serialStream == null) return;
+                string filename = saveFileDialog1.FileName;
 
-                    const int bufferSize = 8192;
-                    long totalLength = serialStream.Length;
-                    int totalSteps = (int)Math.Ceiling((double)totalLength / bufferSize);
-
-                    await ProgressForm.Helper.RunWithProgressAsync(
-                        this,
-                        "Saving Serial data...",
-                        totalSteps,
-                        async (step) =>
-                        {
-                            byte[] buffer = new byte[bufferSize];
-                            int bytesRead = await serialStream.ReadAsync(buffer, 0, buffer.Length);
-                            if (bytesRead > 0)
-                                await myStream.WriteAsync(buffer, 0, bytesRead);
-                        },
-                        onUIThread: false
-                    );
-                }
+                // Save raw bytes
+                File.WriteAllBytes(filename, _serialDataBuffer.GetSnapshot().ToArray());
             }
         }
 
@@ -1108,34 +948,9 @@ namespace serialog
             }
         }
 
-        private void selectAllToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            selectAllToolStripMenuItem_Click(sender, e);
-        }
-
-        private void clearAllToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            clearAllToolStripMenuItem_Click(sender, e);
-        }
-
-        private void reloadToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            reloadToolStripMenuItem_Click(sender, e);
-        }
-
-        private void highlightToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            highlightsToolStripMenuItem_Click(sender, e);
-        }
-
         private void hideHighlightedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             toolStripMenuItem_hiderest_Click(sender, e);
-        }
-
-        private void alsoRemoveToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            alsoRemoveToolStripMenuItem_Click(sender, e);
         }
 
         // This one is the menustrip click function
@@ -1214,7 +1029,6 @@ namespace serialog
             //After input has been submitted, return the input value
             return result;
         }
-
 
         private void addCustomRowToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1388,7 +1202,7 @@ namespace serialog
             this.Activate();
         }
 
-        private void highlightsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void highlightToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (form2Highlight == null || form2Highlight.IsDisposed)
             {
@@ -1403,7 +1217,7 @@ namespace serialog
             }
         }
 
-        private void highlightsToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void highlightsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (form3Highlights == null || form3Highlights.IsDisposed)
             {
