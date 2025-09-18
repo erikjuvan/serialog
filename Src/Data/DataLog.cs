@@ -1,20 +1,79 @@
 ﻿namespace serialog
 {
+    public enum DataEntryFormat
+    {
+        Line,
+        DateLine,
+        DateSourceLine
+    }
+
+    public enum DataEntrySource
+    {
+        SerialRX,
+        SerialTX,
+        File,
+        User
+    }
+
+    public static class DataEntrySourceExtensions
+    {
+        public static string ToShortString(this DataEntrySource source)
+        {
+            return source switch
+            {
+                DataEntrySource.SerialRX => "RX",
+                DataEntrySource.SerialTX => "TX",
+                DataEntrySource.File => "F",
+                DataEntrySource.User => "U",
+                _ => "?"
+            };
+        }
+    }
+
     public class DataEntry
     {
+        public string Line { get; }
         public DateTime Timestamp { get; }
-        public bool IsSent { get; }
-        public string DisplayString { get; }
+        public DataEntrySource Source { get; }
+        public DataEntryFormat Format { get; }
 
-        public DataEntry(DateTime ts, bool isSent, string display)
+        // Raw entry
+        public DataEntry(string line)
         {
-            Timestamp = ts;
-            IsSent = isSent;
-            DisplayString = display;
+            Line = line;
+            Format = DataEntryFormat.Line;
         }
 
-        public override string ToString() =>
-            $"[{Timestamp:dd/MM/yyyy HH:mm:ss} {(IsSent ? "TX" : "RX")}] {DisplayString}";
+        public DataEntry(string line, DateTime timestamp)
+        {
+            Line = line;
+            Timestamp = timestamp;
+            Format = DataEntryFormat.DateLine;
+        }
+
+        public DataEntry(string line, DateTime timestamp, DataEntrySource source)
+        {
+            Line = line;
+            Timestamp = timestamp;
+            Source = source;
+            Format = DataEntryFormat.DateSourceLine;
+        }
+
+        public override string ToString()
+        {
+            if (Format == DataEntryFormat.DateSourceLine)
+            {
+                return $"[{Timestamp:dd/MM/yyyy HH:mm:ss} {Source.ToShortString()}] {Line}";
+            }
+            else if (Format == DataEntryFormat.Line)
+            {
+                return Line;
+            }
+            else // (Format == DataEntryFormat.DateLine)
+            {
+                return $"[{Timestamp:dd/MM/yyyy HH:mm:ss} {Line}";
+            }
+        }
     }
 
     public class DataLog

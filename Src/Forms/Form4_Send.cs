@@ -80,8 +80,7 @@
 
                     // Add to log and view
                     string hexString = string.Join(" ", bytes.Select(b => $"{{0x{b:X2}}}"));
-                    var entry = new DataEntry(DateTime.Now, true, hexString);
-                    _dataLog.Add(entry);
+                    _parentForm.AddLogEntry(new DataEntry(hexString, DateTime.Now, DataEntrySource.SerialTX));
                 }
                 catch (FormatException)
                 {

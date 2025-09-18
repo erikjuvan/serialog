@@ -1,15 +1,15 @@
 using System.Diagnostics;
-using System.Text;
 
 namespace serialog
 {
     public partial class Form1 : Form
     {
-        private System.IO.Ports.SerialPort _serial = new System.IO.Ports.SerialPort();
-
+        private System.IO.Ports.SerialPort _serialPort = new System.IO.Ports.SerialPort();
         private readonly SerialDataBuffer _serialDataBuffer = new SerialDataBuffer();
+        private readonly DataParser _serialRXDataParser = new DataParser();
+        private SerialReader _serialReader;
+
         private readonly DataLog _dataLog = new DataLog();
-        private List<byte> _serialLineBuffer = new List<byte>();
 
         private static bool _serialcomStopped = true;
         private bool serialcomStoppedHandleEvent = new bool();
@@ -30,13 +30,27 @@ namespace serialog
         {
             InitializeComponent();
 
-            comboBox_port.Items.AddRange(GetSortedPorts());
+            comboBox_port.Items.AddRange(Helpers.GetSortedPorts());
 
             // Parse command line arguments
             ParseCommandLineArguments(options);
 
             // Subscribe to highlight changes
             Form2_Highlight.highlightEntries.EntriesChanged += HighlightEntries_Changed;
+
+            // Let listview see the Highlights 
+            listView1.HighlightItems = Form2_Highlight.highlightEntries.Items;
+
+            // Attach parser to UI updates
+            _serialRXDataParser.LineParsed += bytes =>
+            {
+                string line = FormatHelpers.BytesToDisplayString(bytes, hideNonPrintableCharsToolStripMenuItem.Checked);
+
+                AddLogEntry(new DataEntry(line, DateTime.Now, DataEntrySource.SerialRX));
+            };
+
+            // Set up serial reader
+            _serialReader = new SerialReader(_serialPort, _serialDataBuffer, _serialRXDataParser);
 
             upTime.Start();
         }
@@ -123,127 +137,23 @@ namespace serialog
             }
         }
 
+        public void AddLogEntry(DataEntry entry)
+        {
+            // Add to master log
+            _dataLog.Add(entry);
+
+            // Update UI
+            BeginInvoke(new Action(() =>
+            {
+                listView1.SetEntries(_dataLog.GetSnapshot());
+                if (checkBox_follow.Checked && listView1.Items.Count > 0)
+                    listView1.EnsureVisible(listView1.Items.Count - 1);
+            }));
+        }
+
         private void HighlightEntries_Changed(object? sender, EventArgs e)
         {
-            //listView1.Invalidate(); // TODO
-        }
-
-        private void Serial_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
-        {
-            int count = _serial.BytesToRead;
-            var buffer = new byte[count];
-            _serial.Read(buffer, 0, count);
-
-            _serialDataBuffer.Append(buffer, count);
-
-            foreach (var b in buffer)
-            {
-                if (b == (byte)'\n')
-                {
-                    // If previous char was \r, drop it (classic CRLF)
-                    if (_serialLineBuffer.Count > 0 && _serialLineBuffer[^1] == (byte)'\r')
-                    {
-                        _serialLineBuffer.RemoveAt(_serialLineBuffer.Count - 1);
-                    }
-
-                    string display = BytesToDisplayString(_serialLineBuffer);
-                    var entry = new DataEntry(DateTime.Now, false, display);
-
-                    _dataLog.Add(entry);
-
-                    _serialLineBuffer.Clear();
-                }
-                else
-                {
-                    _serialLineBuffer.Add(b);
-                }
-            }
-        }
-
-        private string BytesToDisplayString(IEnumerable<byte> bytes)
-        {
-            var sb = new StringBuilder();
-            foreach (byte b in bytes)
-            {
-                if (b >= 32 && b <= 126)
-                    sb.Append((char)b);
-                else
-                    sb.Append($"{{0x{b:X2}}}");
-            }
-            return sb.ToString();
-        }
-
-        private ListViewItem CreateHighlightedListItem(string line)
-        {
-            var item = new ListViewItem(line);
-
-            if (disableHighlightsToolStripMenuItem.Checked)
-                return item;
-
-            foreach (HighlightEntry entry in Form2_Highlight.highlightEntries.Items)
-            {
-                if (!entry.Enabled) continue;
-
-                string haystack = entry.IgnoreCase ? line.ToLower() : line;
-                string pattern = entry.IgnoreCase ? entry.Text.ToLower() : entry.Text;
-
-                bool foundMatch = MatchesPattern(haystack, pattern);
-
-                if (foundMatch)
-                {
-                    if (entry.Remove)
-                        return null;
-
-                    if (entry.Hide)
-                    {
-                        item.ForeColor = Color.Transparent;
-                        item.BackColor = Color.Transparent;
-                        return item;
-                    }
-
-                    item.ForeColor = entry.ForeColor;
-                    item.BackColor = entry.BackColor;
-
-                    // Font styles
-                    FontStyle style = FontStyle.Regular;
-                    if (entry.Bold) style |= FontStyle.Bold;
-                    if (entry.Italic) style |= FontStyle.Italic;
-                    if (style != FontStyle.Regular)
-                        item.Font = new Font(listView1.Font, style);
-
-                    return item; // first match wins
-                }
-            }
-
-            // No match found
-            if (hideUnhighlightedToolStripMenuItem.Checked)
-            {
-                if (alsoRemoveToolStripMenuItem.Checked)
-                    return null;
-
-                item.ForeColor = Color.Transparent;
-                item.BackColor = Color.Transparent;
-            }
-
-            return item;
-        }
-
-        private bool MatchesPattern(string line, string pattern)
-        {
-            if (pattern.Contains("&"))
-            {
-                var tokens = pattern.Split('&');
-                return tokens.All(token => line.Contains(token));
-            }
-            else if (pattern.Contains("|"))
-            {
-                var tokens = pattern.Split('|');
-                return tokens.Any(token => line.Contains(token));
-            }
-            else
-            {
-                return line.Contains(pattern);
-            }
+            listView1.Invalidate();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -254,8 +164,7 @@ namespace serialog
 
                 if (addStartStopTimestampToolStripMenuItem.Checked)
                 {
-                    var entry = new DataEntry(DateTime.Now, false, "ACQUISITION STOPPED ");
-                    //_logView.Add(entry); TODO replace
+                    AddLogEntry(new DataEntry("ACQUISITION STOPPED", DateTime.Now, DataEntrySource.User));
                 }
             }
         }
@@ -263,7 +172,7 @@ namespace serialog
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             _serialcomStopped = true;
-            _serial.Close();
+            _serialPort.Close();
         }
 
         private void listView1_KeyDown(object sender, KeyEventArgs e)
@@ -326,28 +235,6 @@ namespace serialog
             checkBox_follow.Checked = false;
         }
 
-        string NumberToBKBMB(double num, string suffix = "")
-        {
-            string str;
-
-            if (num > 1024.0 * 1024.0)
-            {
-                num /= 1024.0 * 1024.0;
-                str = num.ToString("0.00") + " MB" + suffix;
-            }
-            else if (num > 1024.0)
-            {
-                num /= 1024.0;
-                str = num.ToString("0.00") + " KB" + suffix;
-            }
-            else
-            {
-                str = Convert.ToInt32(num).ToString() + " B" + suffix;
-            }
-
-            return str;
-        }
-
         private void timer_updatesysinfo_Tick(object sender, EventArgs e)
         {
             var up = upTime.Elapsed;
@@ -363,29 +250,29 @@ namespace serialog
             if (run.Seconds > 0) runs += run.Seconds.ToString("00");
 
 
-            string serialSizeStr = NumberToBKBMB(_serialDataListSizeBytes);
+            string serialSizeStr = FormatHelpers.NumberToBKBMB(_serialDataListSizeBytes);
 
             double serialBytesPerSec = (double)(_serialDataListSizeBytes - _prevSerialDataListSizeBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
             _prevSerialDataListSizeBytes = _serialDataListSizeBytes;
-            string serialSpeedStr = NumberToBKBMB(serialBytesPerSec, "/s");
+            string serialSpeedStr = FormatHelpers.NumberToBKBMB(serialBytesPerSec, "/s");
             double avgSerialBytesPerSec = _serialDataListSizeBytes / (run.TotalSeconds > 0 ? run.TotalSeconds : 1);
-            string avgSerialSpeedStr = NumberToBKBMB(avgSerialBytesPerSec, "/s");
+            string avgSerialSpeedStr = FormatHelpers.NumberToBKBMB(avgSerialBytesPerSec, "/s");
 
             // So that saved file size will be the same as the one in the label subtract one byte (last newline)                       
             double listSize = _listviewSizeBytes > 0 ? _listviewSizeBytes - 1 : 0;
-            string listSizeStr = NumberToBKBMB(listSize);
+            string listSizeStr = FormatHelpers.NumberToBKBMB(listSize);
 
             double listBytesPerSec = (double)(_listviewSizeBytes - _prevListviewSizeBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
             _prevListviewSizeBytes = _listviewSizeBytes;
-            string listSpeedStr = NumberToBKBMB(listBytesPerSec, "/s");
+            string listSpeedStr = FormatHelpers.NumberToBKBMB(listBytesPerSec, "/s");
             double avgListBytesPerSec = _listviewSizeBytes / (run.TotalSeconds > 0 ? run.TotalSeconds : 1);
-            string avgListSpeedStr = NumberToBKBMB(avgListBytesPerSec, "/s");
+            string avgListSpeedStr = FormatHelpers.NumberToBKBMB(avgListBytesPerSec, "/s");
 
             int bytesToRead = 0;
-            if (_serial.IsOpen)
-                bytesToRead = _serial.BytesToRead;
+            if (_serialPort.IsOpen)
+                bytesToRead = _serialPort.BytesToRead;
 
-            string availableBytesStr = NumberToBKBMB(bytesToRead);
+            string availableBytesStr = FormatHelpers.NumberToBKBMB(bytesToRead);
 
             this.Text = "Serialog |" +
                 "   Serial: " + serialSizeStr + " @ " + serialSpeedStr + " (avg. " + avgSerialSpeedStr + ")" +
@@ -395,45 +282,10 @@ namespace serialog
                 "   Running: " + runs;
         }
 
-        private string[] GetSortedPorts()
-        {
-            var portNames = System.IO.Ports.SerialPort.GetPortNames();
-
-            Array.Sort(portNames, (x, y) =>
-            {
-                int xNum = 0, yNum = 0;
-
-                bool xIsCom = x.StartsWith("COM", StringComparison.OrdinalIgnoreCase) &&
-                              int.TryParse(x.Substring(3), out xNum);
-
-                bool yIsCom = y.StartsWith("COM", StringComparison.OrdinalIgnoreCase) &&
-                              int.TryParse(y.Substring(3), out yNum);
-
-                if (xIsCom && yIsCom)
-                {
-                    return xNum.CompareTo(yNum); // sort numerically
-                }
-                else if (xIsCom)
-                {
-                    return -1; // COM ports first
-                }
-                else if (yIsCom)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return string.Compare(x, y, StringComparison.OrdinalIgnoreCase);
-                }
-            });
-
-            return portNames;
-        }
-
         private void comboBox_port_DropDown(object sender, EventArgs e)
         {
             comboBox_port.Items.Clear();
-            comboBox_port.Items.AddRange(GetSortedPorts());
+            comboBox_port.Items.AddRange(Helpers.GetSortedPorts());
             if (comboBox_port.Items.Count > 0)
                 comboBox_port.SelectedIndex = 0;
         }
@@ -450,16 +302,15 @@ namespace serialog
 
                 try
                 {
-                    _serial.BaudRate = baud;
-                    _serial.PortName = comboBox_port.Text;
-                    _serial.Parity = System.IO.Ports.Parity.None;
-                    _serial.DataBits = 8;
-                    _serial.StopBits = System.IO.Ports.StopBits.One;
-                    _serial.Handshake = System.IO.Ports.Handshake.None;
-                    _serial.ReadTimeout = 100;
-                    _serial.WriteTimeout = 100;
-                    _serial.DataReceived += Serial_DataReceived;
-                    _serial.Open();
+                    _serialPort.BaudRate = baud;
+                    _serialPort.PortName = comboBox_port.Text;
+                    _serialPort.Parity = System.IO.Ports.Parity.None;
+                    _serialPort.DataBits = 8;
+                    _serialPort.StopBits = System.IO.Ports.StopBits.One;
+                    _serialPort.Handshake = System.IO.Ports.Handshake.None;
+                    _serialPort.ReadTimeout = 100;
+                    _serialPort.WriteTimeout = 100;
+                    _serialPort.Open();
                 }
                 catch (Exception ex)
                 {
@@ -476,8 +327,7 @@ namespace serialog
 
                 if (addStartStopTimestampToolStripMenuItem.Checked)
                 {
-                    var entry = new DataEntry(DateTime.Now, false, "ACQUISITION STARTED");
-                    //_logView.Add(entry); TODO replace
+                    AddLogEntry(new DataEntry("ACQUISITION STARTED", DateTime.Now, DataEntrySource.User));
                 }
 
                 runTime.Start();
@@ -490,7 +340,7 @@ namespace serialog
             {
                 _serialcomStopped = true;
 
-                _serial.Close();
+                _serialPort.Close();
 
                 button_stop.Enabled = false;
                 button_run.Enabled = true;
@@ -781,8 +631,7 @@ namespace serialog
             if (openFileDialog1.ShowDialog() != DialogResult.OK) return;
 
             string filePath = openFileDialog1.FileName;
-            listView1.Items.Add("Opening file: " + filePath);
-            _listviewSizeBytes += filePath.Length + 1;
+            AddLogEntry(new DataEntry("Opening file: " + filePath, DateTime.Now, DataEntrySource.User));
 
             string[] lines = await System.IO.File.ReadAllLinesAsync(filePath);
 
@@ -795,18 +644,7 @@ namespace serialog
                 lines.Length,
                 async (i) =>
                 {
-                    var item = CreateHighlightedListItem(lines[i]);
-                    if (item != null)
-                        batch.Add(item);
-
-                    // Flush batch periodically
-                    if (batch.Count >= batchSize || i == lines.Length - 1)
-                    {
-                        listView1.BeginUpdate();
-                        listView1.Items.AddRange(batch.ToArray());
-                        listView1.EndUpdate();
-                        batch.Clear();
-                    }
+                    AddLogEntry(new DataEntry(lines[i]));
 
                     await Task.Yield(); // keep UI responsive
                 },
@@ -816,8 +654,7 @@ namespace serialog
             if (listView1.Items.Count > 0)
                 listView1.Items[listView1.Items.Count - 1].EnsureVisible();
 
-            listView1.Items.Add("End of file: " + filePath);
-            _listviewSizeBytes += filePath.Length + 1;
+            AddLogEntry(new DataEntry("End of file: " + filePath, DateTime.Now, DataEntrySource.User));
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -902,7 +739,7 @@ namespace serialog
             // Clear shared data safely
             lock (_serialDataLock)
             {
-                listView1.Items.Clear();
+                
             }
 
             runTime = new Stopwatch();
@@ -983,16 +820,7 @@ namespace serialog
             if (result == DialogResult.OK)
             {
                 // Add item
-                ListViewItem item = new ListViewItem(input);
-                var ret = listView1.Items.Insert(addRowAtIndex, item);
-
-                // Ensure listview is selected
-                listView1.Select();
-
-                // Select added item
-                listView1.SelectedIndices.Clear();
-                ret.Selected = true;
-                ret.EnsureVisible();
+                // TODO
             }
         }
 
@@ -1005,6 +833,9 @@ namespace serialog
                 alsoRemoveToolStripMenuItem.Checked = false;
                 alsoRemoveContextMenuItem.Checked = false;
             }
+
+            listView1.HideNonMatchingLines = hideUnhighlightedToolStripMenuItem.Checked;
+            listView1.AlsoRemoveNonMatchingLines = alsoRemoveToolStripMenuItem.Checked;
         }
 
         private void alsoRemoveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1016,17 +847,17 @@ namespace serialog
                 hideUnhighlightedToolStripMenuItem.Checked = true;
                 hideUnhighlightedContextMenuItem.Checked = true;
             }
+
+            listView1.HideNonMatchingLines = hideUnhighlightedToolStripMenuItem.Checked;
+            listView1.AlsoRemoveNonMatchingLines = alsoRemoveToolStripMenuItem.Checked;
         }
 
         private void disableHighlightsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             disableHighlightsToolStripMenuItem.Checked = !disableHighlightsToolStripMenuItem.Checked;
             disableHighlightsContextMenuItem.Checked = disableHighlightsToolStripMenuItem.Checked;
-            if (!disableHighlightsToolStripMenuItem.Checked)
-            {
-                disableHighlightsToolStripMenuItem.Checked = false;
-                disableHighlightsContextMenuItem.Checked = false;
-            }
+
+            listView1.HighlightsDisabled = disableHighlightsToolStripMenuItem.Checked;
         }
 
         private void fontToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1151,7 +982,7 @@ namespace serialog
         {
             if (form4Send == null || form4Send.IsDisposed)
             {
-                form4Send = new Form4_Send(this, _serial, _dataLog);
+                form4Send = new Form4_Send(this, _serialPort, _dataLog);
                 RegisterChild(form4Send);
                 form4Send.Show();
             }

@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.listView1 = new serialog.ListViewNF();
+            this.listView1 = new serialog.ListViewVirt();
             this.column1 = new System.Windows.Forms.ColumnHeader();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectAllContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,6 +62,7 @@
             this.settingsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsFolderChangeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsFolderResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hideNonPrintableCharsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.formHighlightsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.formSendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,6 +91,7 @@
             // 
             // listView1
             // 
+            this.listView1.AlsoRemoveNonMatchingLines = false;
             this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -98,15 +100,20 @@
             this.column1});
             this.listView1.ContextMenuStrip = this.contextMenuStrip1;
             this.listView1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
+            this.listView1.HideNonMatchingLines = false;
+            this.listView1.HighlightsDisabled = false;
             this.listView1.Location = new System.Drawing.Point(17, 102);
             this.listView1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.listView1.Name = "listView1";
+            this.listView1.OwnerDraw = true;
             this.listView1.ShowGroups = false;
             this.listView1.Size = new System.Drawing.Size(1268, 1479);
             this.listView1.TabIndex = 12;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.VirtualMode = true;
             this.listView1.Scrolled += new System.EventHandler<System.EventArgs>(this.listView1_Scrolled);
             this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
             // 
@@ -294,7 +301,8 @@
             this.disableHighlightsToolStripMenuItem,
             this.addStartStopTimestampToolStripMenuItem,
             this.fontToolStripMenuItem,
-            this.settingsFolderToolStripMenuItem});
+            this.settingsFolderToolStripMenuItem,
+            this.hideNonPrintableCharsToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(92, 29);
             this.settingsToolStripMenuItem.Text = "Settings";
@@ -364,6 +372,13 @@
             this.settingsFolderResetToolStripMenuItem.Size = new System.Drawing.Size(238, 34);
             this.settingsFolderResetToolStripMenuItem.Text = "Reset to default";
             this.settingsFolderResetToolStripMenuItem.Click += new System.EventHandler(this.settingsFolderResetToolStripMenuItem_Click);
+            // 
+            // hideNonPrintableCharsToolStripMenuItem
+            // 
+            this.hideNonPrintableCharsToolStripMenuItem.CheckOnClick = true;
+            this.hideNonPrintableCharsToolStripMenuItem.Name = "hideNonPrintableCharsToolStripMenuItem";
+            this.hideNonPrintableCharsToolStripMenuItem.Size = new System.Drawing.Size(326, 34);
+            this.hideNonPrintableCharsToolStripMenuItem.Text = "Hide Non-Printable Chars";
             // 
             // toolsToolStripMenuItem
             // 
@@ -666,9 +681,10 @@
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem formHighlightsToolStripMenuItem;
         private ToolStripMenuItem formSendToolStripMenuItem;
-        public ListViewNF listView1;
+        public ListViewVirt listView1;
         private ToolStripMenuItem settingsFolderToolStripMenuItem;
         private ToolStripMenuItem settingsFolderChangeToolStripMenuItem;
         private ToolStripMenuItem settingsFolderResetToolStripMenuItem;
+        private ToolStripMenuItem hideNonPrintableCharsToolStripMenuItem;
     }
 }
