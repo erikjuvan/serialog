@@ -177,56 +177,10 @@ namespace serialog
 
         private void listView1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control && e.KeyCode == Keys.C)
-            {
-                e.Handled = true; // optional, prevents further processing
-                ListView.SelectedListViewItemCollection selectedItems = listView1.SelectedItems;
-                String text = "";
-                foreach (ListViewItem item in selectedItems)
-                {
-                    text += item.Text + "\n";
-                }
-                if (text.Length > 0)
-                    Clipboard.SetText(text);
-            }
-            else if (e.Control && e.KeyCode == Keys.A)
-            {
-                e.Handled = true; // optional, prevents further processing
-                foreach (ListViewItem item in listView1.Items)
-                {
-                    item.Selected = true;
-                }
-            }
-            else if (e.KeyCode == Keys.Delete)
-            {
-                e.Handled = true; // optional, prevents further processing
-                if (listView1.SelectedItems.Count == 0)
-                    return;
-
-                if (MessageBox.Show("Delete selected text? You can't get it back!", "Careful...",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                {
-                    int idx = 0;
-                    foreach (ListViewItem item in listView1.SelectedItems)
-                    {
-                        idx = item.Index;
-                        _listviewSizeBytes -= item.Text.Length + 1;
-                        listView1.Items.Remove(item);
-                    }
-                    //listView1.Items[idx].Selected = true; // no need to select item
-
-                    try
-                    {
-                        listView1.Items[idx].Focused = true;
-                    }
-                    catch (Exception ex)
-                    { }
-                }
-            }
-            else if (e.KeyCode == Keys.F && e.Modifiers == Keys.None)
+            if (e.KeyCode == Keys.F && e.Modifiers == Keys.None)
             {
                 checkBox_follow.Checked = !checkBox_follow.Checked;
-                e.Handled = true; // optional, prevents further processing
+                e.Handled = true;
             }
         }
 
