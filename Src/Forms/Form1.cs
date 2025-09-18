@@ -678,30 +678,31 @@ namespace serialog
 
         private void saveSelectedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count == 0)
+            if (listView1.SelectedIndices.Count == 0)
             {
                 MessageBox.Show("Please select lines to save.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            using (var saveFileDialog1 = new SaveFileDialog())
+            using var saveFileDialog1 = new SaveFileDialog
             {
-                saveFileDialog1.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-                saveFileDialog1.FilterIndex = 1;
-                saveFileDialog1.RestoreDirectory = true;
+                Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
+                FilterIndex = 1,
+                RestoreDirectory = true
+            };
 
-                if (saveFileDialog1.ShowDialog() != DialogResult.OK)
-                    return;
+            if (saveFileDialog1.ShowDialog() != DialogResult.OK)
+                return;
 
-                string filename = saveFileDialog1.FileName;
+            string filename = saveFileDialog1.FileName;
 
-                // Extract selected items -> strings
-                var lines = listView1.SelectedItems
-                    .Cast<ListViewItem>()
-                    .Select(item => item.Text);
+            // Get lines from the backing data based on selected indices
+            var lines = listView1.SelectedIndices
+                .Cast<int>()
+                .Select(i => _dataLog.GetSnapshot()[i].ToString())  // or ToDecoratedString() / ToRawString()
+                .ToArray();
 
-                File.WriteAllLines(filename, lines);
-            }
+            File.WriteAllLines(filename, lines);
         }
 
         private void saveSerialAsToolStripMenuItem_Click(object sender, EventArgs e)
