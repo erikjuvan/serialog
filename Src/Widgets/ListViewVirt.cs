@@ -135,19 +135,6 @@ namespace serialog
                 g.DrawString(line, font, brush, bounds);
         }
 
-        private void SelectAll()
-        {
-            this.BeginUpdate();
-
-            this.SelectedIndices.Clear();
-            for (int i = 0; i < this.VirtualListSize; i++)
-            {
-                this.SelectedIndices.Add(i);
-            }
-
-            this.EndUpdate();
-        }
-
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.A)
@@ -165,6 +152,19 @@ namespace serialog
                 CopySelectedEntriesToClipboard();
                 e.Handled = true;
             }
+        }
+
+        private void SelectAll()
+        {
+            this.BeginUpdate();
+
+            this.SelectedIndices.Clear();
+            for (int i = 0; i < this.VirtualListSize; i++)
+            {
+                this.SelectedIndices.Add(i);
+            }
+
+            this.EndUpdate();
         }
 
         private void DeleteSelectedEntries()
