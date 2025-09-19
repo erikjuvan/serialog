@@ -1,6 +1,6 @@
 ﻿namespace serialog
 {
-    public static class VirtualListViewExtensions
+    public static class ListViewVirtExtensions
     {
         public static bool UseRegex = false;
 

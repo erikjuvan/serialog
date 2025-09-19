@@ -845,7 +845,7 @@ namespace serialog
 
         private void checkBoxRegex_CheckedChanged(object sender, EventArgs e)
         {
-            VirtualListViewExtensions.UseRegex = checkBoxRegex.Checked;
+            ListViewVirtExtensions.UseRegex = checkBoxRegex.Checked;
         }
     }
 }
