@@ -820,8 +820,7 @@ namespace serialog
 
             if (result == DialogResult.OK)
             {
-                // Add item
-                // TODO
+                AddLogEntry(new DataEntry(input, DateTime.Now, DataEntrySource.User));
             }
         }
 
