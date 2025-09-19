@@ -301,7 +301,7 @@
             this.formHighlightToolStripMenuItem.Name = "formHighlightToolStripMenuItem";
             this.formHighlightToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
             this.formHighlightToolStripMenuItem.Size = new System.Drawing.Size(326, 34);
-            this.formHighlightToolStripMenuItem.Text = "Highlighting...";
+            this.formHighlightToolStripMenuItem.Text = "Highlight...";
             this.formHighlightToolStripMenuItem.Click += new System.EventHandler(this.formHighlightToolStripMenuItem_Click);
             // 
             // hideUnhighlightedToolStripMenuItem

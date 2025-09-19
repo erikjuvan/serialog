@@ -4,14 +4,14 @@ using System.Text.Json.Serialization;
 
 namespace serialog
 {
-    public partial class Form2_Highlight : Form
+    public partial class FormHighlight : Form
     {
         static public HighlightEntries highlightEntries = new HighlightEntries();
         private Color hlBgColor;
         private Color hlFgColor;
         private string _highlightsFileExtension = ".highlight";
 
-        public Form2_Highlight()
+        public FormHighlight()
         {
             InitializeComponent();
 

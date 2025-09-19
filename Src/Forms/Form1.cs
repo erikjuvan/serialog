@@ -26,7 +26,7 @@ namespace serialog
         private Stopwatch upTime = new Stopwatch();
 
         // Forms
-        private Form2_Highlight form2Highlight = null;
+        private FormHighlight formHighlight = null;
         private FormSerialSend formSerialSend = null;
         
         public Form1(Dictionary<string, string> options)
@@ -39,12 +39,12 @@ namespace serialog
             ParseCommandLineArguments(options);
 
             // Subscribe to highlight changes
-            Form2_Highlight.highlightEntries.EntriesChanged += HighlightEntries_Changed;
+            FormHighlight.highlightEntries.EntriesChanged += HighlightEntries_Changed;
 
             listView1.DataLog = _dataLogEditable;
 
             // Let listview see the Highlights 
-            listView1.HighlightItems = Form2_Highlight.highlightEntries.Items;
+            listView1.HighlightItems = FormHighlight.highlightEntries.Items;
 
             // Attach parser to UI updates
             _serialRXDataParser.LineParsed += bytes =>
@@ -928,16 +928,16 @@ namespace serialog
 
         private void formHighlightToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (form2Highlight == null || form2Highlight.IsDisposed)
+            if (formHighlight == null || formHighlight.IsDisposed)
             {
-                form2Highlight = new Form2_Highlight();
-                RegisterChild(form2Highlight);
-                form2Highlight.Show();
+                formHighlight = new FormHighlight();
+                RegisterChild(formHighlight);
+                formHighlight.Show();
             }
             else
             {
-                form2Highlight.Show();   // unhide if hidden
-                form2Highlight.Focus();
+                formHighlight.Show();   // unhide if hidden
+                formHighlight.Focus();
             }
         }
 

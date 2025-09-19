@@ -1,6 +1,6 @@
 ﻿namespace serialog
 {
-    partial class Form2_Highlight
+    partial class FormHighlight
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2_Highlight));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHighlight));
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeaderText = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderIgnore = new System.Windows.Forms.ColumnHeader();
