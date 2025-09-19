@@ -95,29 +95,29 @@ namespace serialog
             if (HighlightsDisabled)
                 return true;
 
-            foreach (HighlightEntry entry in HighlightItems)
+            foreach (HighlightEntry highlight in HighlightItems)
             {
-                if (!entry.Enabled) continue;
+                if (!highlight.Enabled) continue;
 
-                string haystack = entry.IgnoreCase ? line.ToLowerInvariant() : line;
-                string pattern = entry.IgnoreCase ? entry.Text.ToLowerInvariant() : entry.Text;
+                string haystack = highlight.IgnoreCase ? line.ToLowerInvariant() : line;
+                string pattern = highlight.IgnoreCase ? highlight.Text.ToLowerInvariant() : highlight.Text;
 
                 if (MatchesPattern(haystack, pattern))
                 {
-                    if (entry.Remove)
+                    if (highlight.Remove)
                         return false;
 
-                    if (entry.Hide)
+                    if (highlight.Hide)
                     {
                         fore = Color.Transparent;
                         back = Color.Transparent;
                         return true;
                     }
 
-                    fore = entry.ForeColor;
-                    back = entry.BackColor;
-                    if (entry.Bold) style |= FontStyle.Bold;
-                    if (entry.Italic) style |= FontStyle.Italic;
+                    fore = highlight.ForeColor;
+                    back = highlight.BackColor;
+                    if (highlight.Bold) style |= FontStyle.Bold;
+                    if (highlight.Italic) style |= FontStyle.Italic;
 
                     return true; // first match wins
                 }
