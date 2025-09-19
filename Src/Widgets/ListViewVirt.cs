@@ -143,14 +143,24 @@ namespace serialog
                 g.DrawString(line, font, brush, bounds);
         }
 
+        private void SelectAll()
+        {
+            this.BeginUpdate();
+
+            this.SelectedIndices.Clear();
+            for (int i = 0; i < this.VirtualListSize; i++)
+            {
+                this.SelectedIndices.Add(i);
+            }
+
+            this.EndUpdate();
+        }
+
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.A)
             {
-                this.BeginUpdate();
-                for (int i = 0; i < this.VirtualListSize; i++)
-                    this.Items[i].Selected = true;
-                this.EndUpdate();
+                SelectAll();
                 e.Handled = true;
             }
             else if (e.KeyCode == Keys.Delete)
