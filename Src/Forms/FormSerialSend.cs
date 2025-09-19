@@ -1,6 +1,6 @@
 ﻿namespace serialog
 {
-    public partial class Form4_Send : Form
+    public partial class FormSerialSend : Form
     {
         private Form1 _parentForm;
         private System.IO.Ports.SerialPort _serial;
@@ -13,7 +13,7 @@
             public string HexData { get; set; }
         }
 
-        internal Form4_Send(Form1 parent, System.IO.Ports.SerialPort serial, DataLog dataLog)
+        internal FormSerialSend(Form1 parent, System.IO.Ports.SerialPort serial, DataLog dataLog)
         {
             InitializeComponent();
 

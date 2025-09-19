@@ -63,7 +63,7 @@
             this.hideNonPrintableCharsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsAddViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.formSendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsSerialSendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.button_run = new System.Windows.Forms.Button();
             this.comboBox_port = new System.Windows.Forms.ComboBox();
@@ -366,7 +366,7 @@
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolsAddViewToolStripMenuItem,
-            this.formSendToolStripMenuItem});
+            this.toolsSerialSendToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(69, 29);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -378,12 +378,12 @@
             this.toolsAddViewToolStripMenuItem.Text = "Add View...";
             this.toolsAddViewToolStripMenuItem.Click += new System.EventHandler(this.toolsAddViewToolStripMenuItem_Click);
             // 
-            // formSendToolStripMenuItem
+            // toolsSerialSendToolStripMenuItem
             // 
-            this.formSendToolStripMenuItem.Name = "formSendToolStripMenuItem";
-            this.formSendToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.formSendToolStripMenuItem.Text = "Send...";
-            this.formSendToolStripMenuItem.Click += new System.EventHandler(this.formSendToolStripMenuItem_Click);
+            this.toolsSerialSendToolStripMenuItem.Name = "toolsSerialSendToolStripMenuItem";
+            this.toolsSerialSendToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.toolsSerialSendToolStripMenuItem.Text = "Serial Send...";
+            this.toolsSerialSendToolStripMenuItem.Click += new System.EventHandler(this.toolsSerialSendToolStripMenuItem_Click);
             // 
             // label1
             // 
@@ -660,7 +660,7 @@
         private Button button_next_highlight;
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem toolsAddViewToolStripMenuItem;
-        private ToolStripMenuItem formSendToolStripMenuItem;
+        private ToolStripMenuItem toolsSerialSendToolStripMenuItem;
         public ListViewVirt listView1;
         private ToolStripMenuItem settingsFolderToolStripMenuItem;
         private ToolStripMenuItem settingsFolderChangeToolStripMenuItem;

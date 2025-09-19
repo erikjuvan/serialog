@@ -25,8 +25,9 @@ namespace serialog
         private Stopwatch runTime = new Stopwatch();
         private Stopwatch upTime = new Stopwatch();
 
+        // Forms
         private Form2_Highlight form2Highlight = null;
-        private Form4_Send form4Send = null;
+        private FormSerialSend formSerialSend = null;
         
         public Form1(Dictionary<string, string> options)
         {
@@ -950,18 +951,18 @@ namespace serialog
             child.Show();
         }
 
-        private void formSendToolStripMenuItem_Click(object sender, EventArgs e)
+        private void toolsSerialSendToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (form4Send == null || form4Send.IsDisposed)
+            if (formSerialSend == null || formSerialSend.IsDisposed)
             {
-                form4Send = new Form4_Send(this, _serialPort, _dataLog);
-                RegisterChild(form4Send);
-                form4Send.Show();
+                formSerialSend = new FormSerialSend(this, _serialPort, _dataLog);
+                RegisterChild(formSerialSend);
+                formSerialSend.Show();
             }
             else
             {
-                form4Send.Show();   // unhide if hidden
-                form4Send.Focus();
+                formSerialSend.Show();   // unhide if hidden
+                formSerialSend.Focus();
             }
         }
     }
