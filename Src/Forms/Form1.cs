@@ -683,9 +683,17 @@ namespace serialog
 
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (ListViewItem item in listView1.Items)
+            listView1.BeginUpdate();
+            try
             {
-                item.Selected = true;
+                for (int i = 0; i < listView1.VirtualListSize; i++)
+                {
+                    listView1.SelectedIndices.Add(i);
+                }
+            }
+            finally
+            {
+                listView1.EndUpdate();
             }
         }
 
