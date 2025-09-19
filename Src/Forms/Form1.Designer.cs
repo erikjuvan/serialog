@@ -60,7 +60,7 @@
             this.settingsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsFolderChangeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsFolderResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hideNonPrintableCharsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nonPrintableCharsAsHexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsAddViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsSerialSendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -292,7 +292,7 @@
             this.addStartStopTimestampToolStripMenuItem,
             this.fontToolStripMenuItem,
             this.settingsFolderToolStripMenuItem,
-            this.hideNonPrintableCharsToolStripMenuItem});
+            this.nonPrintableCharsAsHexToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(92, 29);
             this.settingsToolStripMenuItem.Text = "Settings";
@@ -356,12 +356,13 @@
             this.settingsFolderResetToolStripMenuItem.Text = "Reset to default";
             this.settingsFolderResetToolStripMenuItem.Click += new System.EventHandler(this.settingsFolderResetToolStripMenuItem_Click);
             // 
-            // hideNonPrintableCharsToolStripMenuItem
+            // nonPrintableCharsAsHexToolStripMenuItem
             // 
-            this.hideNonPrintableCharsToolStripMenuItem.CheckOnClick = true;
-            this.hideNonPrintableCharsToolStripMenuItem.Name = "hideNonPrintableCharsToolStripMenuItem";
-            this.hideNonPrintableCharsToolStripMenuItem.Size = new System.Drawing.Size(326, 34);
-            this.hideNonPrintableCharsToolStripMenuItem.Text = "Hide Non-Printable Chars";
+            this.nonPrintableCharsAsHexToolStripMenuItem.CheckOnClick = true;
+            this.nonPrintableCharsAsHexToolStripMenuItem.Name = "nonPrintableCharsAsHexToolStripMenuItem";
+            this.nonPrintableCharsAsHexToolStripMenuItem.Size = new System.Drawing.Size(330, 34);
+            this.nonPrintableCharsAsHexToolStripMenuItem.Text = "Non-Printable Chars as Hex";
+            this.nonPrintableCharsAsHexToolStripMenuItem.Click += new System.EventHandler(this.nonPrintableCharsAsHexToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
@@ -678,7 +679,7 @@
         private ToolStripMenuItem settingsFolderToolStripMenuItem;
         private ToolStripMenuItem settingsFolderChangeToolStripMenuItem;
         private ToolStripMenuItem settingsFolderResetToolStripMenuItem;
-        private ToolStripMenuItem hideNonPrintableCharsToolStripMenuItem;
+        private ToolStripMenuItem nonPrintableCharsAsHexToolStripMenuItem;
         private CheckBox checkBoxRegex;
     }
 }

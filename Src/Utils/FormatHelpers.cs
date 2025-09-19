@@ -4,15 +4,27 @@ namespace serialog
 {
     public static class FormatHelpers
     {
-        public static string BytesToDisplayString(IEnumerable<byte> bytes, bool hideNonPrintable)
+        public static string BytesToDisplayString(IEnumerable<byte> bytes, bool allAsHex = false, bool nonPrintableAsHex = false)
         {
             var sb = new StringBuilder();
             foreach (byte b in bytes)
             {
-                if (b >= 32 && b <= 126)
-                    sb.Append((char)b);
-                else if (!hideNonPrintable)
-                    sb.Append($"{{0x{b:X2}}}");
+                if (allAsHex)
+                    sb.Append($"\\x{(int)b:X2}");
+                else if (nonPrintableAsHex)
+                {
+                    if (b >= 32 && b <= 126)
+                        sb.Append((char)b);
+                    else
+                        sb.Append($"\\x{b:X2}");
+                }
+                else
+                {
+                    if (b >= 32 && b <= 126)
+                        sb.Append((char)b);
+                    else
+                        sb.Append((char)(0x2400 + b));
+                }                
             }
             return sb.ToString();
         }

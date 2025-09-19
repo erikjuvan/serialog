@@ -79,8 +79,8 @@
                     _serial.Write(bytes, 0, bytes.Length);
 
                     // Add to log and view
-                    string hexString = string.Join(" ", bytes.Select(b => $"{{0x{b:X2}}}"));
-                    _parentForm.AddLogEntry(new DataEntry(hexString, DateTime.Now, DataEntrySource.SerialTX));
+                    string sendString = FormatHelpers.BytesToDisplayString(bytes, false, _parentForm.DisplayNonPrintableCharsAsHex);
+                    _parentForm.AddLogEntry(new DataEntry(sendString, DateTime.Now, DataEntrySource.SerialTX));
                 }
                 catch (FormatException)
                 {

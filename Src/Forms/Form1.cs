@@ -15,6 +15,8 @@ namespace serialog
 
         private int _uiUpdatePending = 0; // 0 = none pending, 1 = pending
 
+        public bool DisplayNonPrintableCharsAsHex = false;
+
         private static bool _serialcomStopped = true;
         private bool serialcomStoppedHandleEvent = new bool();
         private static int _listviewSizeBytes = 0;
@@ -50,7 +52,7 @@ namespace serialog
             // Attach parser to UI updates
             _serialRXDataParser.LineParsed += bytes =>
             {
-                string line = FormatHelpers.BytesToDisplayString(bytes, hideNonPrintableCharsToolStripMenuItem.Checked);
+                string line = FormatHelpers.BytesToDisplayString(bytes, false, DisplayNonPrintableCharsAsHex);
 
                 AddLogEntry(new DataEntry(line, DateTime.Now, DataEntrySource.SerialRX));
             };
@@ -846,6 +848,11 @@ namespace serialog
         private void checkBoxRegex_CheckedChanged(object sender, EventArgs e)
         {
             ListViewVirtExtensions.UseRegex = checkBoxRegex.Checked;
+        }
+
+        private void nonPrintableCharsAsHexToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DisplayNonPrintableCharsAsHex = nonPrintableCharsAsHexToolStripMenuItem.Checked;
         }
     }
 }
