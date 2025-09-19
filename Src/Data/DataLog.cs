@@ -89,11 +89,50 @@
             }
         }
 
+        public void Clear()
+        {
+            lock (_lock)
+            {
+                _entries.Clear();
+            }
+        }
+
+
         public IReadOnlyList<DataEntry> GetSnapshot()
         {
             lock (_lock)
             {
                 return _entries.ToList();
+            }
+        }
+
+        public int Count
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    return _entries.Count;
+                }
+            }
+        }
+
+        public DataEntry this[int index]
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    return _entries[index];
+                }
+            }
+        }
+
+        public void RemoveAt(int index)
+        {
+            lock (_lock)
+            {
+                _entries.RemoveAt(index);
             }
         }
     }
