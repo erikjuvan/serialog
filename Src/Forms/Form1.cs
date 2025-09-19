@@ -605,10 +605,9 @@ namespace serialog
                 onUIThread: true
             );
 
-            if (listView1.Items.Count > 0)
-                listView1.Items[listView1.Items.Count - 1].EnsureVisible();
-
             AddLogEntry(new DataEntry("End of file: " + filePath, DateTime.Now, DataEntrySource.User));
+
+            listView1.RefreshEntries();
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
