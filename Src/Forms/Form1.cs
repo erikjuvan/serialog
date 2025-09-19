@@ -10,6 +10,9 @@ namespace serialog
         private SerialReader _serialReader;
 
         private readonly DataLog _dataLog = new DataLog();
+        private readonly DataLog _dataLogEditable = new DataLog();
+
+        private int _uiUpdatePending = 0; // 0 = none pending, 1 = pending
 
         private static bool _serialcomStopped = true;
         private bool serialcomStoppedHandleEvent = new bool();
@@ -37,6 +40,8 @@ namespace serialog
 
             // Subscribe to highlight changes
             Form2_Highlight.highlightEntries.EntriesChanged += HighlightEntries_Changed;
+
+            listView1.DataLog = _dataLogEditable;
 
             // Let listview see the Highlights 
             listView1.HighlightItems = Form2_Highlight.highlightEntries.Items;
@@ -139,16 +144,50 @@ namespace serialog
 
         public void AddLogEntry(DataEntry entry)
         {
-            // Add to master log
+            // Add to master log (assumed thread-safe)
             _dataLog.Add(entry);
 
-            // Update UI
-            BeginInvoke(new Action(() =>
+            // Add to editable log connected to listview (thread-safe)
+            _dataLogEditable.Add(entry);
+
+            // Try to schedule one UI update if none is queued yet
+            if (Interlocked.Exchange(ref _uiUpdatePending, 1) == 0)
             {
-                listView1.SetEntries(_dataLog.GetSnapshot());
-                if (checkBox_follow.Checked && listView1.Items.Count > 0)
-                    listView1.EnsureVisible(listView1.Items.Count - 1);
-            }));
+                // Queue a single UI update. When that runs, it will clear the pending flag.
+                BeginInvoke(new Action(ProcessPendingUiUpdate));
+            }
+        }
+
+        private void ProcessPendingUiUpdate()
+        {
+            try
+            {
+                // Optional: avoid visible flicker while updating
+                listView1.BeginUpdate();
+                try
+                {
+                    // Grow virtual size to match the log size
+                    listView1.VirtualListSize = _dataLogEditable.Count;
+
+                    // If follow is ON and user is already at bottom (or near it), scroll to end
+                    if (checkBox_follow.Checked)
+                    {
+                        listView1.Follow();
+                    }
+
+                    // Redraw visible region (Invalidate is usually fine)
+                    listView1.Invalidate();
+                }
+                finally
+                {
+                    listView1.EndUpdate();
+                }
+            }
+            finally
+            {
+                // Allow scheduling the next batch of updates
+                Interlocked.Exchange(ref _uiUpdatePending, 0);
+            }
         }
 
         private void HighlightEntries_Changed(object? sender, EventArgs e)
@@ -701,7 +740,7 @@ namespace serialog
             // Clear shared data safely
             lock (_serialDataLock)
             {
-                
+                listView1.ClearView();
             }
 
             runTime = new Stopwatch();

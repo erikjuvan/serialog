@@ -9,8 +9,8 @@ namespace serialog
         public bool HighlightsDisabled { get; set; } = false;
         public bool HideNonMatchingLines { get; set; } = false;
 
+        public DataLog DataLog { get;  set; }
         private readonly Dictionary<FontStyle, Font> _fontCache = new Dictionary<FontStyle, Font>();
-        private IReadOnlyList<DataEntry> _entries = Array.Empty<DataEntry>();
 
         public ListViewVirt()
         {
@@ -28,26 +28,18 @@ namespace serialog
             this.KeyDown += OnKeyDown;
         }
 
-        /// <summary>Bind this view to a snapshot of your DataLog.</summary>
-        public void SetEntries(IReadOnlyList<DataEntry> entries)
-        {
-            _entries = entries ?? Array.Empty<DataEntry>();
-            this.VirtualListSize = _entries.Count;
-            this.Invalidate();
-        }
-
         /// <summary>Refresh when new entries were added to the log.</summary>
         public void RefreshEntries()
         {
-            this.VirtualListSize = _entries.Count;
+            this.VirtualListSize = DataLog.Count;
             this.Invalidate();
         }
 
         private void OnRetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
         {
-            if (e.ItemIndex >= 0 && e.ItemIndex < _entries.Count)
+            if (e.ItemIndex >= 0 && e.ItemIndex < DataLog.Count)
             {
-                var entry = _entries[e.ItemIndex];
+                var entry = DataLog[e.ItemIndex];
                 e.Item = new ListViewItem(entry.ToString());
             }
         }
@@ -65,7 +57,7 @@ namespace serialog
 
         private void OnDrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
-            var entry = _entries[e.ItemIndex];
+            var entry = DataLog[e.ItemIndex];
             string line = entry.ToString();
 
             // Get highlight style
@@ -178,13 +170,11 @@ namespace serialog
         private void DeleteSelectedEntries()
         {
             var indices = this.SelectedIndices.Cast<int>().OrderByDescending(i => i);
-            var list = _entries as List<DataEntry>; // only works if bound to a mutable list
-            if (list == null) return;
 
             foreach (var idx in indices)
             {
-                if (idx >= 0 && idx < list.Count)
-                    list.RemoveAt(idx);
+                if (idx >= 0 && idx < DataLog.Count)
+                    DataLog.RemoveAt(idx);
             }
 
             RefreshEntries();
@@ -195,8 +185,8 @@ namespace serialog
             var sb = new StringBuilder();
             foreach (int idx in this.SelectedIndices)
             {
-                if (idx >= 0 && idx < _entries.Count)
-                    sb.AppendLine(_entries[idx].ToString());
+                if (idx >= 0 && idx < DataLog.Count)
+                    sb.AppendLine(DataLog[idx].ToString());
             }
             if (sb.Length > 0)
                 Clipboard.SetText(sb.ToString());
@@ -217,6 +207,20 @@ namespace serialog
             _fontCache[FontStyle.Strikeout] = new Font(baseFont, FontStyle.Strikeout);
 
             Invalidate();
+        }
+
+        public void ClearView()
+        {
+            DataLog.Clear();
+            RefreshEntries();
+        }
+
+        public void Follow()
+        {
+            if (VirtualListSize > 0)
+            {
+                this.EnsureVisible(VirtualListSize - 1);
+            }
         }
     }
 }
