@@ -59,9 +59,10 @@ namespace serialog
         {
             var entry = DataLog[e.ItemIndex];
             string line = entry.ToString();
+            string searchString = entry.ToSearchString();
 
             // Get highlight style
-            if (!TryGetHighlightStyle(line, out Color fore, out Color back, out FontStyle style))
+            if (!TryGetHighlightStyle(searchString, out Color fore, out Color back, out FontStyle style))
                 return;
 
             // Selection overrides
@@ -90,7 +91,7 @@ namespace serialog
                 string haystack = highlight.IgnoreCase ? line.ToLowerInvariant() : line;
                 string pattern = highlight.IgnoreCase ? highlight.Text.ToLowerInvariant() : highlight.Text;
 
-                if (MatchesPattern(haystack, pattern, highlight.UseRegex))
+                if (Helpers.MatchesPattern(haystack, pattern, highlight.UseRegex))
                 {
                     if (highlight.Hide)
                         return false;
@@ -108,16 +109,6 @@ namespace serialog
                     return false;
 
             return true;
-        }
-
-        private bool MatchesPattern(string line, string pattern, bool useRegex)
-        {
-            if (useRegex)
-            {
-                return Regex.IsMatch(line, pattern);
-            }
-
-            return line.Contains(pattern);
         }
 
         private void DrawLine(Graphics g, Rectangle bounds, string line, Color fore, Color back, FontStyle style)

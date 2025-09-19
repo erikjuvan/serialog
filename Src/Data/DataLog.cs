@@ -74,6 +74,11 @@
                 return $"[{Timestamp:dd/MM/yyyy HH:mm:ss} {Line}";
             }
         }
+
+        public string ToSearchString()
+        {
+            return Line;
+        }
     }
 
     public class DataLog

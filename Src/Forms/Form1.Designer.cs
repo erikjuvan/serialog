@@ -83,6 +83,7 @@
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
             this.button_prev_highlight = new System.Windows.Forms.Button();
             this.button_next_highlight = new System.Windows.Forms.Button();
+            this.checkBoxRegex = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -374,14 +375,14 @@
             // toolsAddViewToolStripMenuItem
             // 
             this.toolsAddViewToolStripMenuItem.Name = "toolsAddViewToolStripMenuItem";
-            this.toolsAddViewToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.toolsAddViewToolStripMenuItem.Size = new System.Drawing.Size(213, 34);
             this.toolsAddViewToolStripMenuItem.Text = "Add View...";
             this.toolsAddViewToolStripMenuItem.Click += new System.EventHandler(this.toolsAddViewToolStripMenuItem_Click);
             // 
             // toolsSerialSendToolStripMenuItem
             // 
             this.toolsSerialSendToolStripMenuItem.Name = "toolsSerialSendToolStripMenuItem";
-            this.toolsSerialSendToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.toolsSerialSendToolStripMenuItem.Size = new System.Drawing.Size(213, 34);
             this.toolsSerialSendToolStripMenuItem.Text = "Serial Send...";
             this.toolsSerialSendToolStripMenuItem.Click += new System.EventHandler(this.toolsSerialSendToolStripMenuItem_Click);
             // 
@@ -550,7 +551,7 @@
             // 
             this.button_prev_highlight.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button_prev_highlight.ForeColor = System.Drawing.Color.Black;
-            this.button_prev_highlight.Location = new System.Drawing.Point(973, 53);
+            this.button_prev_highlight.Location = new System.Drawing.Point(1108, 53);
             this.button_prev_highlight.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_prev_highlight.Name = "button_prev_highlight";
             this.button_prev_highlight.Size = new System.Drawing.Size(47, 38);
@@ -563,7 +564,7 @@
             // 
             this.button_next_highlight.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button_next_highlight.ForeColor = System.Drawing.Color.Black;
-            this.button_next_highlight.Location = new System.Drawing.Point(1026, 53);
+            this.button_next_highlight.Location = new System.Drawing.Point(1161, 53);
             this.button_next_highlight.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_next_highlight.Name = "button_next_highlight";
             this.button_next_highlight.Size = new System.Drawing.Size(47, 38);
@@ -572,11 +573,23 @@
             this.button_next_highlight.UseVisualStyleBackColor = true;
             this.button_next_highlight.Click += new System.EventHandler(this.button_next_highlight_Click);
             // 
+            // checkBoxRegex
+            // 
+            this.checkBoxRegex.AutoSize = true;
+            this.checkBoxRegex.Location = new System.Drawing.Point(950, 57);
+            this.checkBoxRegex.Name = "checkBoxRegex";
+            this.checkBoxRegex.Size = new System.Drawing.Size(85, 29);
+            this.checkBoxRegex.TabIndex = 19;
+            this.checkBoxRegex.Text = "Regex";
+            this.checkBoxRegex.UseVisualStyleBackColor = true;
+            this.checkBoxRegex.CheckedChanged += new System.EventHandler(this.checkBoxRegex_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1334, 1602);
+            this.Controls.Add(this.checkBoxRegex);
             this.Controls.Add(this.button_prev_highlight);
             this.Controls.Add(this.button_next_highlight);
             this.Controls.Add(this.button_findall);
@@ -666,5 +679,6 @@
         private ToolStripMenuItem settingsFolderChangeToolStripMenuItem;
         private ToolStripMenuItem settingsFolderResetToolStripMenuItem;
         private ToolStripMenuItem hideNonPrintableCharsToolStripMenuItem;
+        private CheckBox checkBoxRegex;
     }
 }

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace serialog
 {
@@ -76,11 +77,11 @@ namespace serialog
             {
                 if (e.Shift)
                 {
-                    FindPrevString(textBox_find.Text);
+                    listView1.FindPrev(textBox_find.Text);
                 }
                 else
                 {
-                    FindNextString(textBox_find.Text);
+                    listView1.FindNext(textBox_find.Text);
                 }
             }
         }
@@ -350,175 +351,42 @@ namespace serialog
         {
             if (e.KeyCode == Keys.Enter)
             {
-                string text = textBox_find.Text;
+                bool found = e.Shift
+                    ? listView1.FindPrev(textBox_find.Text)
+                    : listView1.FindNext(textBox_find.Text);
 
-                if (e.Shift)
-                {
-                    FindPrevString(text);
-                }
-                else
-                {
-                    FindNextString(text);
-                }
+                if (!found)
+                    MessageBox.Show("No match");
             }
-        }
-
-        private void FindLastString(string text)
-        {
-            if (text == "")
-                return;
-
-            for (int i = listView1.Items.Count - 1; i >= 0; i--)
-            {
-                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
-                {
-                    checkBox_follow.Checked = false;
-                    listView1.Select();
-                    listView1.SelectedItems.Clear();
-                    listView1.Items[i].Selected = true;
-                    listView1.Items[i].EnsureVisible();
-                    return;
-                }
-            }
-            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void FindNextString(string text)
-        {
-            if (text == "")
-                return;
-
-            var selected = listView1.SelectedIndices;
-            int searchFromIndex = 0;
-
-            if (selected.Count > 0)
-                searchFromIndex = selected[selected.Count - 1] + 1;
-
-            for (int i = searchFromIndex; i < listView1.Items.Count; i++)
-            {
-                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
-                {
-                    listView1.Select();
-                    checkBox_follow.Checked = false;
-                    listView1.SelectedItems.Clear();
-                    listView1.Items[i].Selected = true;
-                    listView1.Items[i].EnsureVisible();
-                    return;
-                }
-            }
-            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void button_findnext_Click(object sender, EventArgs e)
         {
-            string text = textBox_find.Text;
+            bool ctrl = (ModifierKeys & Keys.Control) == Keys.Control;
+            bool found = ctrl
+                ? listView1.FindLast(textBox_find.Text)
+                : listView1.FindNext(textBox_find.Text);
 
-            if ((ModifierKeys & Keys.Control) == Keys.Control)
-            {
-                FindLastString(text);
-            }
-            else
-            {
-                FindNextString(text);
-            }
-        }
-
-        private void FindFirstString(string text)
-        {
-            if (text == "")
-                return;
-
-            for (int i = 0; i < listView1.Items.Count; i++)
-            {
-                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
-                {
-                    checkBox_follow.Checked = false;
-                    listView1.Select();
-                    listView1.SelectedItems.Clear();
-                    listView1.Items[i].Selected = true;
-                    listView1.Items[i].EnsureVisible();
-                    return;
-                }
-            }
-            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void FindPrevString(string text)
-        {
-            if (text == "")
-                return;
-
-            var selected = listView1.SelectedIndices;
-            int searchFromIndex = listView1.Items.Count - 1;
-
-            if (selected.Count > 0)
-                searchFromIndex = selected[0] - 1;
-
-            for (int i = searchFromIndex; i >= 0; i--)
-            {
-                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
-                {
-                    checkBox_follow.Checked = false;
-                    listView1.Select();
-                    listView1.SelectedItems.Clear();
-                    listView1.Items[i].Selected = true;
-                    listView1.Items[i].EnsureVisible();
-                    return;
-                }
-            }
-            MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (!found)
+                MessageBox.Show("No match");
         }
 
         private void button_findprev_Click(object sender, EventArgs e)
         {
-            string text = textBox_find.Text;
+            bool ctrl = (ModifierKeys & Keys.Control) == Keys.Control;
+            bool found = ctrl
+                ? listView1.FindFirst(textBox_find.Text)
+                : listView1.FindPrev(textBox_find.Text);
 
-            if ((ModifierKeys & Keys.Control) == Keys.Control)
-            {
-                FindFirstString(text);
-            }
-            else
-            {
-                FindPrevString(text);
-            }
-        }
-
-        private void FindAllString(string text)
-        {
-            if (text == "")
-                return;
-
-            bool foundText = false;
-            for (int i = 0; i < listView1.Items.Count; i++)
-            {
-                if (listView1.Items[i].Text.Contains(text, StringComparison.OrdinalIgnoreCase))
-                {
-                    if (!foundText)
-                    {
-                        foundText = true;
-                        listView1.Select();
-                        listView1.SelectedItems.Clear();
-                    }
-                    listView1.Items[i].Selected = true;
-                }
-            }
-
-            if (foundText)
-            {
-                checkBox_follow.Checked = false;
-                listView1.Items[listView1.SelectedIndices[listView1.SelectedIndices.Count - 1]].EnsureVisible();
-            }
-            else
-            {
-                MessageBox.Show("No match", "No match", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            if (!found)
+                MessageBox.Show("No match");
         }
 
         private void button_findall_Click(object sender, EventArgs e)
         {
-            string text = textBox_find.Text;
-
-            FindAllString(text);
+            bool found = listView1.FindAll(textBox_find.Text);
+            if (!found)
+                MessageBox.Show("No match");
         }
 
         private void FindHighlighted(int startIdx, bool reverse = false)
@@ -973,6 +841,11 @@ namespace serialog
                 formSerialSend.Show();   // unhide if hidden
                 formSerialSend.Focus();
             }
+        }
+
+        private void checkBoxRegex_CheckedChanged(object sender, EventArgs e)
+        {
+            VirtualListViewExtensions.UseRegex = checkBoxRegex.Checked;
         }
     }
 }

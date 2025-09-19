@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace serialog
 {
@@ -41,6 +37,23 @@ namespace serialog
             });
 
             return portNames;
+        }
+
+        public static bool MatchesPattern(string line, string pattern, bool useRegex)
+        {
+            if (useRegex)
+            {
+                try
+                {
+                    return Regex.IsMatch(line, pattern, RegexOptions.IgnoreCase);
+                }
+                catch (ArgumentException)
+                {
+                    return false;
+                }
+            }
+
+            return line.Contains(pattern);
         }
     }
 }

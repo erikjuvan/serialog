@@ -691,7 +691,7 @@ namespace serialog
             highlightEntries.BeginUpdate();
             foreach (ListViewItem item in listView1.SelectedItems)
             {
-                if (checkBox_hide.Checked)
+                if (checkBoxUseRegex.Checked)
                 {
                     item.SubItems[1].Text = "*";
                     highlightEntries.Items[item.Index].UseRegex = true;
