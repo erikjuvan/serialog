@@ -30,9 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2_Highlight));
             this.listView1 = new System.Windows.Forms.ListView();
-            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeaderText = new System.Windows.Forms.ColumnHeader();
+            this.columnHeaderIgnore = new System.Windows.Forms.ColumnHeader();
+            this.columnHeaderHide = new System.Windows.Forms.ColumnHeader();
             this.button_add = new System.Windows.Forms.Button();
             this.button_delete = new System.Windows.Forms.Button();
             this.button_moveup = new System.Windows.Forms.Button();
@@ -55,6 +55,8 @@
             this.checkBox_hide = new System.Windows.Forms.CheckBox();
             this.checkBox_italic = new System.Windows.Forms.CheckBox();
             this.button_deletepreset = new System.Windows.Forms.Button();
+            this.checkBoxUseRegex = new System.Windows.Forms.CheckBox();
+            this.columnHeaderRegex = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
             // listView1
@@ -64,9 +66,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listView1.CheckBoxes = true;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3});
+            this.columnHeaderText,
+            this.columnHeaderRegex,
+            this.columnHeaderIgnore,
+            this.columnHeaderHide});
             this.listView1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
@@ -82,22 +85,22 @@
             this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
             this.listView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseClick);
             // 
-            // columnHeader1
+            // columnHeaderText
             // 
-            this.columnHeader1.Text = "Contains Text";
-            this.columnHeader1.Width = 320;
+            this.columnHeaderText.Text = "Contains Text";
+            this.columnHeaderText.Width = 230;
             // 
-            // columnHeader2
+            // columnHeaderIgnore
             // 
-            this.columnHeader2.Text = "Ign C";
-            this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader2.Width = 90;
+            this.columnHeaderIgnore.Text = "Ign C";
+            this.columnHeaderIgnore.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeaderIgnore.Width = 90;
             // 
-            // columnHeader3
+            // columnHeaderHide
             // 
-            this.columnHeader3.Text = "Hide";
-            this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader3.Width = 90;
+            this.columnHeaderHide.Text = "Hide";
+            this.columnHeaderHide.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeaderHide.Width = 90;
             // 
             // button_add
             // 
@@ -238,7 +241,7 @@
             // 
             this.checkBox_ignorecase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBox_ignorecase.AutoSize = true;
-            this.checkBox_ignorecase.Location = new System.Drawing.Point(309, 883);
+            this.checkBox_ignorecase.Location = new System.Drawing.Point(317, 883);
             this.checkBox_ignorecase.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_ignorecase.Name = "checkBox_ignorecase";
             this.checkBox_ignorecase.Size = new System.Drawing.Size(132, 29);
@@ -326,7 +329,7 @@
             // 
             this.checkBox_hide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBox_hide.AutoSize = true;
-            this.checkBox_hide.Location = new System.Drawing.Point(455, 883);
+            this.checkBox_hide.Location = new System.Drawing.Point(457, 883);
             this.checkBox_hide.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_hide.Name = "checkBox_hide";
             this.checkBox_hide.Size = new System.Drawing.Size(75, 29);
@@ -339,7 +342,7 @@
             // 
             this.checkBox_italic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBox_italic.AutoSize = true;
-            this.checkBox_italic.Location = new System.Drawing.Point(97, 883);
+            this.checkBox_italic.Location = new System.Drawing.Point(99, 883);
             this.checkBox_italic.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_italic.Name = "checkBox_italic";
             this.checkBox_italic.Size = new System.Drawing.Size(74, 29);
@@ -360,11 +363,28 @@
             this.button_deletepreset.UseVisualStyleBackColor = true;
             this.button_deletepreset.Click += new System.EventHandler(this.button_deletepreset_Click);
             // 
+            // checkBoxUseRegex
+            // 
+            this.checkBoxUseRegex.AutoSize = true;
+            this.checkBoxUseRegex.Location = new System.Drawing.Point(83, 806);
+            this.checkBoxUseRegex.Name = "checkBoxUseRegex";
+            this.checkBoxUseRegex.Size = new System.Drawing.Size(85, 29);
+            this.checkBoxUseRegex.TabIndex = 26;
+            this.checkBoxUseRegex.Text = "Regex";
+            this.checkBoxUseRegex.UseVisualStyleBackColor = true;
+            this.checkBoxUseRegex.CheckedChanged += new System.EventHandler(this.checkBoxUseRegex_CheckedChanged);
+            // 
+            // columnHeaderRegex
+            // 
+            this.columnHeaderRegex.Text = "Regex";
+            this.columnHeaderRegex.Width = 90;
+            // 
             // Form2_Highlight
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(540, 1067);
+            this.Controls.Add(this.checkBoxUseRegex);
             this.Controls.Add(this.button_deletepreset);
             this.Controls.Add(this.checkBox_italic);
             this.Controls.Add(this.checkBox_hide);
@@ -416,16 +436,18 @@
         private CheckBox checkBox_ignorecase;
         private CheckBox checkBox_bold;
         private Button button_bgcolor;
-        private ColumnHeader columnHeader1;
+        private ColumnHeader columnHeaderText;
         private ColorDialog colorDialog1;
         private Button button_preset_save;
         private Button button_preset_load;
         private Label label4;
-        private ColumnHeader columnHeader3;
+        private ColumnHeader columnHeaderHide;
         private CheckBox checkBox_hide;
         private CheckBox checkBox_italic;
         private Button button_deletepreset;
         private ComboBox comboBox_preset;
-        private ColumnHeader columnHeader2;
+        private ColumnHeader columnHeaderIgnore;
+        private CheckBox checkBoxUseRegex;
+        private ColumnHeader columnHeaderRegex;
     }
 }

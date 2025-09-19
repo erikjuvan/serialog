@@ -88,6 +88,11 @@ namespace serialog
             item.ForeColor = highlightEntry.ForeColor;
             item.BackColor = highlightEntry.BackColor;
 
+            if (highlightEntry.UseRegex)
+                item.SubItems.Add("*");
+            else
+                item.SubItems.Add("");
+
             if (highlightEntry.IgnoreCase)
                 item.SubItems.Add("*");
             else
@@ -137,6 +142,7 @@ namespace serialog
 
             HighlightEntry highlightEntry = new HighlightEntry();
             highlightEntry.Enabled = true;
+            highlightEntry.UseRegex = checkBoxUseRegex.Checked;
             highlightEntry.Text = textBox_string.Text;
             highlightEntry.ForeColor = fgcol;
             highlightEntry.BackColor = bgcol;
@@ -608,6 +614,7 @@ namespace serialog
             var entry = highlightEntries.Items[listView1.SelectedIndices[0]];
 
             textBox_string.Text = entry.Text;
+            checkBoxUseRegex.Checked = entry.UseRegex;
             comboBox_fgcolor.Text = ColorToNameOrHex(entry.ForeColor);
             comboBox_fgcolor.ForeColor = entry.ForeColor;
             comboBox_bgcolor.Text = ColorToNameOrHex(entry.BackColor);
@@ -674,6 +681,30 @@ namespace serialog
             highlightEntries.EndUpdate();
         }
 
+        private void checkBoxUseRegex_CheckedChanged(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count <= 0)
+            {
+                return;
+            }
+
+            highlightEntries.BeginUpdate();
+            foreach (ListViewItem item in listView1.SelectedItems)
+            {
+                if (checkBox_hide.Checked)
+                {
+                    item.SubItems[1].Text = "*";
+                    highlightEntries.Items[item.Index].UseRegex = true;
+                }
+                else
+                {
+                    item.SubItems[1].Text = "";
+                    highlightEntries.Items[item.Index].UseRegex = false;
+                }
+            }
+            highlightEntries.EndUpdate();
+        }
+
         private void checkBox_ignorecase_CheckedChanged(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count <= 0)
@@ -686,12 +717,12 @@ namespace serialog
             {
                 if (checkBox_ignorecase.Checked)
                 {
-                    item.SubItems[1].Text = "*";
+                    item.SubItems[2].Text = "*";
                     highlightEntries.Items[item.Index].IgnoreCase = true;
                 }
                 else
                 {
-                    item.SubItems[1].Text = "";
+                    item.SubItems[2].Text = "";
                     highlightEntries.Items[item.Index].IgnoreCase = false;
                 }
             }
@@ -710,12 +741,12 @@ namespace serialog
             {
                 if (checkBox_hide.Checked)
                 {
-                    item.SubItems[2].Text = "*";
+                    item.SubItems[3].Text = "*";
                     highlightEntries.Items[item.Index].Hide = true;
                 }
                 else
                 {
-                    item.SubItems[2].Text = "";
+                    item.SubItems[3].Text = "";
                     highlightEntries.Items[item.Index].Hide = false;
                 }
             }

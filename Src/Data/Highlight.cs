@@ -6,6 +6,7 @@ namespace serialog
     public class HighlightEntry : INotifyPropertyChanged
     {
         private bool _enabled = true;
+        private bool _use_regex = false;
         private string _text = "";
         private Color _foreColor = Color.Black;
         private Color _backColor = Color.White;
@@ -24,6 +25,11 @@ namespace serialog
         public bool Enabled {
             get => _enabled;
             set { if (_enabled != value) { _enabled = value; OnPropertyChanged(nameof(Enabled)); } }
+        }
+
+        public bool UseRegex {
+            get => _use_regex;
+            set { if (_use_regex != value) { _use_regex = value; OnPropertyChanged(nameof(UseRegex)); } }
         }
 
         public string Text {
@@ -69,6 +75,7 @@ namespace serialog
         public HighlightEntry(HighlightEntry entry)
         {
             Enabled = entry.Enabled;
+            UseRegex = entry.UseRegex;
             Text = entry.Text;
             ForeColor = entry.ForeColor;
             BackColor = entry.BackColor;

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
+using System.Text.RegularExpressions;
 
 namespace serialog
 {
@@ -101,7 +98,7 @@ namespace serialog
                 string haystack = highlight.IgnoreCase ? line.ToLowerInvariant() : line;
                 string pattern = highlight.IgnoreCase ? highlight.Text.ToLowerInvariant() : highlight.Text;
 
-                if (MatchesPattern(haystack, pattern))
+                if (MatchesPattern(haystack, pattern, highlight.UseRegex))
                 {
                     if (highlight.Hide)
                         return false;
@@ -121,22 +118,14 @@ namespace serialog
             return true;
         }
 
-        private bool MatchesPattern(string line, string pattern)
+        private bool MatchesPattern(string line, string pattern, bool useRegex)
         {
-            if (pattern.Contains("&"))
+            if (useRegex)
             {
-                var tokens = pattern.Split('&');
-                return tokens.All(token => line.Contains(token));
+                return Regex.IsMatch(line, pattern);
             }
-            else if (pattern.Contains("|"))
-            {
-                var tokens = pattern.Split('|');
-                return tokens.Any(token => line.Contains(token));
-            }
-            else
-            {
-                return line.Contains(pattern);
-            }
+
+            return line.Contains(pattern);
         }
 
         private void DrawLine(Graphics g, Rectangle bounds, string line, Color fore, Color back, FontStyle style)
