@@ -948,6 +948,16 @@ namespace serialog
                 Owner = this,
                 ShowInTaskbar = false,
             };
+
+            child.KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Escape)
+                {
+                    child.Close();
+                    e.Handled = true;
+                }
+            };
+
             child.Show();
         }
 
