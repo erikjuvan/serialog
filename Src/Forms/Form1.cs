@@ -817,10 +817,7 @@ namespace serialog
 
             if (fontDialog1.ShowDialog() == DialogResult.OK)
             {
-                listView1.Font.Dispose();
-                listView1.Font = fontDialog1.Font;
-
-                // Listview invalidate TODO
+                listView1.SetFont(fontDialog1.Font);
             }
         }
 

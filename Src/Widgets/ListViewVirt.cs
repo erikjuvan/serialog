@@ -202,5 +202,22 @@ namespace serialog
             if (sb.Length > 0)
                 Clipboard.SetText(sb.ToString());
         }
+
+        public void SetFont(Font baseFont)
+        {
+            // Dispose old fonts
+            foreach (var f in _fontCache.Values)
+                f.Dispose();
+            _fontCache.Clear();
+
+            // Add style variations
+            _fontCache[FontStyle.Regular] = new Font(baseFont, FontStyle.Regular);
+            _fontCache[FontStyle.Bold] = new Font(baseFont, FontStyle.Bold);
+            _fontCache[FontStyle.Italic] = new Font(baseFont, FontStyle.Italic);
+            _fontCache[FontStyle.Underline] = new Font(baseFont, FontStyle.Underline);
+            _fontCache[FontStyle.Strikeout] = new Font(baseFont, FontStyle.Strikeout);
+
+            Invalidate();
+        }
     }
 }
