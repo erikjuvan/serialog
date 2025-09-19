@@ -86,24 +86,6 @@ namespace serialog
             DrawLine(e.Graphics, e.Bounds, line, fore, back, style);
         }
 
-        private bool MatchesPattern(string line, string pattern)
-        {
-            if (pattern.Contains("&"))
-            {
-                var tokens = pattern.Split('&');
-                return tokens.All(token => line.Contains(token));
-            }
-            else if (pattern.Contains("|"))
-            {
-                var tokens = pattern.Split('|');
-                return tokens.Any(token => line.Contains(token));
-            }
-            else
-            {
-                return line.Contains(pattern);
-            }
-        }
-
         private bool TryGetHighlightStyle(string line, out Color fore, out Color back, out FontStyle style)
         {
             fore = this.ForeColor;
@@ -151,6 +133,24 @@ namespace serialog
             }
 
             return true;
+        }
+
+        private bool MatchesPattern(string line, string pattern)
+        {
+            if (pattern.Contains("&"))
+            {
+                var tokens = pattern.Split('&');
+                return tokens.All(token => line.Contains(token));
+            }
+            else if (pattern.Contains("|"))
+            {
+                var tokens = pattern.Split('|');
+                return tokens.Any(token => line.Contains(token));
+            }
+            else
+            {
+                return line.Contains(pattern);
+            }
         }
 
         private void DrawLine(Graphics g, Rectangle bounds, string line, Color fore, Color back, FontStyle style)
