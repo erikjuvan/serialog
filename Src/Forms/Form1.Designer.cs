@@ -62,7 +62,7 @@
             this.settingsFolderResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideNonPrintableCharsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.formHighlightsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsAddViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.formSendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.button_run = new System.Windows.Forms.Button();
@@ -96,6 +96,7 @@
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.column1});
             this.listView1.ContextMenuStrip = this.contextMenuStrip1;
+            this.listView1.DataLog = null;
             this.listView1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
@@ -106,7 +107,7 @@
             this.listView1.Name = "listView1";
             this.listView1.OwnerDraw = true;
             this.listView1.ShowGroups = false;
-            this.listView1.Size = new System.Drawing.Size(1268, 1479);
+            this.listView1.Size = new System.Drawing.Size(1304, 1479);
             this.listView1.TabIndex = 12;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -131,7 +132,7 @@
             this.hideUnhighlightedContextMenuItem,
             this.disableHighlightsContextMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(259, 235);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(259, 202);
             // 
             // selectAllContextMenuItem
             // 
@@ -364,23 +365,23 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.formHighlightsToolStripMenuItem,
+            this.toolsAddViewToolStripMenuItem,
             this.formSendToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(69, 29);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
-            // formHighlightsToolStripMenuItem
+            // toolsAddViewToolStripMenuItem
             // 
-            this.formHighlightsToolStripMenuItem.Name = "formHighlightsToolStripMenuItem";
-            this.formHighlightsToolStripMenuItem.Size = new System.Drawing.Size(207, 34);
-            this.formHighlightsToolStripMenuItem.Text = "Highlights...";
-            this.formHighlightsToolStripMenuItem.Click += new System.EventHandler(this.formHighlightsToolStripMenuItem_Click);
+            this.toolsAddViewToolStripMenuItem.Name = "toolsAddViewToolStripMenuItem";
+            this.toolsAddViewToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.toolsAddViewToolStripMenuItem.Text = "Add View...";
+            this.toolsAddViewToolStripMenuItem.Click += new System.EventHandler(this.toolsAddViewToolStripMenuItem_Click);
             // 
             // formSendToolStripMenuItem
             // 
             this.formSendToolStripMenuItem.Name = "formSendToolStripMenuItem";
-            this.formSendToolStripMenuItem.Size = new System.Drawing.Size(207, 34);
+            this.formSendToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.formSendToolStripMenuItem.Text = "Send...";
             this.formSendToolStripMenuItem.Click += new System.EventHandler(this.formSendToolStripMenuItem_Click);
             // 
@@ -658,7 +659,7 @@
         private Button button_prev_highlight;
         private Button button_next_highlight;
         private ToolStripMenuItem toolsToolStripMenuItem;
-        private ToolStripMenuItem formHighlightsToolStripMenuItem;
+        private ToolStripMenuItem toolsAddViewToolStripMenuItem;
         private ToolStripMenuItem formSendToolStripMenuItem;
         public ListViewVirt listView1;
         private ToolStripMenuItem settingsFolderToolStripMenuItem;

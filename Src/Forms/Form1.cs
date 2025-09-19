@@ -26,7 +26,6 @@ namespace serialog
         private Stopwatch upTime = new Stopwatch();
 
         private Form2_Highlight form2Highlight = null;
-        private Form3_Highlights form3Highlights = null;
         private Form4_Send form4Send = null;
         
         public Form1(Dictionary<string, string> options)
@@ -941,19 +940,14 @@ namespace serialog
             }
         }
 
-        private void formHighlightsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void toolsAddViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (form3Highlights == null || form3Highlights.IsDisposed)
+            var child = new FormView
             {
-                form3Highlights = new Form3_Highlights();
-                RegisterChild(form3Highlights);
-                form3Highlights.Show();
-            }
-            else
-            {
-                form3Highlights.Show();   // unhide if hidden
-                form3Highlights.Focus();
-            }
+                Owner = this,
+                ShowInTaskbar = false,
+            };
+            child.Show();
         }
 
         private void formSendToolStripMenuItem_Click(object sender, EventArgs e)
