@@ -33,7 +33,6 @@
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
             this.button_add = new System.Windows.Forms.Button();
             this.button_delete = new System.Windows.Forms.Button();
             this.button_moveup = new System.Windows.Forms.Button();
@@ -56,7 +55,6 @@
             this.checkBox_hide = new System.Windows.Forms.CheckBox();
             this.checkBox_italic = new System.Windows.Forms.CheckBox();
             this.button_deletepreset = new System.Windows.Forms.Button();
-            this.checkBox_remove = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // listView1
@@ -68,8 +66,7 @@
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
-            this.columnHeader3,
-            this.columnHeader4});
+            this.columnHeader3});
             this.listView1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
@@ -88,7 +85,7 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "Contains Text";
-            this.columnHeader1.Width = 235;
+            this.columnHeader1.Width = 320;
             // 
             // columnHeader2
             // 
@@ -101,12 +98,6 @@
             this.columnHeader3.Text = "Hide";
             this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader3.Width = 90;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Remove";
-            this.columnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader4.Width = 90;
             // 
             // button_add
             // 
@@ -247,7 +238,7 @@
             // 
             this.checkBox_ignorecase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBox_ignorecase.AutoSize = true;
-            this.checkBox_ignorecase.Location = new System.Drawing.Point(217, 883);
+            this.checkBox_ignorecase.Location = new System.Drawing.Point(309, 883);
             this.checkBox_ignorecase.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_ignorecase.Name = "checkBox_ignorecase";
             this.checkBox_ignorecase.Size = new System.Drawing.Size(132, 29);
@@ -335,7 +326,7 @@
             // 
             this.checkBox_hide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBox_hide.AutoSize = true;
-            this.checkBox_hide.Location = new System.Drawing.Point(351, 883);
+            this.checkBox_hide.Location = new System.Drawing.Point(455, 883);
             this.checkBox_hide.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_hide.Name = "checkBox_hide";
             this.checkBox_hide.Size = new System.Drawing.Size(75, 29);
@@ -369,25 +360,11 @@
             this.button_deletepreset.UseVisualStyleBackColor = true;
             this.button_deletepreset.Click += new System.EventHandler(this.button_deletepreset_Click);
             // 
-            // checkBox_remove
-            // 
-            this.checkBox_remove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkBox_remove.AutoSize = true;
-            this.checkBox_remove.Location = new System.Drawing.Point(433, 883);
-            this.checkBox_remove.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.checkBox_remove.Name = "checkBox_remove";
-            this.checkBox_remove.Size = new System.Drawing.Size(102, 29);
-            this.checkBox_remove.TabIndex = 26;
-            this.checkBox_remove.Text = "Remove";
-            this.checkBox_remove.UseVisualStyleBackColor = true;
-            this.checkBox_remove.CheckedChanged += new System.EventHandler(this.checkBox_remove_CheckedChanged);
-            // 
             // Form2_Highlight
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(540, 1067);
-            this.Controls.Add(this.checkBox_remove);
             this.Controls.Add(this.button_deletepreset);
             this.Controls.Add(this.checkBox_italic);
             this.Controls.Add(this.checkBox_hide);
@@ -449,8 +426,6 @@
         private CheckBox checkBox_italic;
         private Button button_deletepreset;
         private ComboBox comboBox_preset;
-        private ColumnHeader columnHeader4;
         private ColumnHeader columnHeader2;
-        private CheckBox checkBox_remove;
     }
 }

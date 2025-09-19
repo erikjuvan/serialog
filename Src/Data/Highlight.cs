@@ -13,7 +13,6 @@ namespace serialog
         private bool _bold = false;
         private bool _italic = false;
         private bool _hide = false;
-        private bool _remove = false;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -64,11 +63,6 @@ namespace serialog
             set { if (_hide != value) { _hide = value; OnPropertyChanged(nameof(Hide)); } }
         }
 
-        public bool Remove {
-            get => _remove;
-            set { if (_remove != value) { _remove = value; OnPropertyChanged(nameof(Remove)); } }
-        }
-
         // Constructors
         public HighlightEntry() { }
 
@@ -82,7 +76,6 @@ namespace serialog
             Bold = entry.Bold;
             Italic = entry.Italic;
             Hide = entry.Hide;
-            Remove = entry.Remove;
         }
 
         public HighlightEntry(string text)
@@ -100,7 +93,6 @@ namespace serialog
             {
                 IgnoreCase = listViewItem.SubItems[0].Text.Contains("*");
                 Hide = listViewItem.SubItems[1].Text.Contains("*");
-                Remove = listViewItem.SubItems[2].Text.Contains("*");
             }
             Bold = listViewItem.Font.Style.HasFlag(FontStyle.Bold);
             Italic = listViewItem.Font.Style.HasFlag(FontStyle.Italic);

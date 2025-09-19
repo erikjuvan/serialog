@@ -98,11 +98,6 @@ namespace serialog
             else
                 item.SubItems.Add("");
 
-            if (highlightEntry.Remove)
-                item.SubItems.Add("*");
-            else
-                item.SubItems.Add("");
-
             if (highlightEntry.Bold && highlightEntry.Italic)
                 item.Font = new Font("Courier New", 10, FontStyle.Bold | FontStyle.Italic);
             else if (highlightEntry.Bold)
@@ -111,40 +106,6 @@ namespace serialog
                 item.Font = new Font("Courier New", 10, FontStyle.Italic);
 
             var addedItem = listView.Items.Add(item);
-            addedItem.EnsureVisible();
-        }
-
-        private void InsertHighlightEntryToListView(ref ListView listView, int index, HighlightEntry highlightEntry)
-        {
-            ListViewItem item = new ListViewItem();
-            item.Checked = highlightEntry.Enabled;
-            item.Text = highlightEntry.Text;
-            item.ForeColor = highlightEntry.ForeColor;
-            item.BackColor = highlightEntry.BackColor;
-
-            if (highlightEntry.IgnoreCase)
-                item.SubItems.Add("*");
-            else
-                item.SubItems.Add("");
-
-            if (highlightEntry.Hide)
-                item.SubItems.Add("*");
-            else
-                item.SubItems.Add("");
-
-            if (highlightEntry.Remove)
-                item.SubItems.Add("*");
-            else
-                item.SubItems.Add("");
-
-            if (highlightEntry.Bold && highlightEntry.Italic)
-                item.Font = new Font("Courier New", 10, FontStyle.Bold | FontStyle.Italic);
-            else if (highlightEntry.Bold)
-                item.Font = new Font("Courier New", 10, FontStyle.Bold);
-            else if (highlightEntry.Italic)
-                item.Font = new Font("Courier New", 10, FontStyle.Italic);
-
-            var addedItem = listView.Items.Insert(index, item);
             addedItem.EnsureVisible();
         }
 
@@ -183,7 +144,6 @@ namespace serialog
             highlightEntry.Bold = checkBox_bold.Checked;
             highlightEntry.Italic = checkBox_italic.Checked;
             highlightEntry.Hide = checkBox_hide.Checked;
-            highlightEntry.Remove = checkBox_remove.Checked;
 
             highlightEntries.BeginUpdate();
             highlightEntries.Add(highlightEntry);
@@ -656,7 +616,6 @@ namespace serialog
             checkBox_bold.Checked = entry.Bold;
             checkBox_italic.Checked = entry.Italic;
             checkBox_hide.Checked = entry.Hide;
-            checkBox_remove.Checked = entry.Remove;
         }
 
         private void textBox_string_TextChanged(object sender, EventArgs e)
@@ -758,30 +717,6 @@ namespace serialog
                 {
                     item.SubItems[2].Text = "";
                     highlightEntries.Items[item.Index].Hide = false;
-                }
-            }
-            highlightEntries.EndUpdate();
-        }
-
-        private void checkBox_remove_CheckedChanged(object sender, EventArgs e)
-        {
-            if (listView1.SelectedItems.Count <= 0)
-            {
-                return;
-            }
-
-            highlightEntries.BeginUpdate();
-            foreach (ListViewItem item in listView1.SelectedItems)
-            {
-                if (checkBox_remove.Checked)
-                {
-                    item.SubItems[3].Text = "*";
-                    highlightEntries.Items[item.Index].Remove = true;
-                }
-                else
-                {
-                    item.SubItems[3].Text = "";
-                    highlightEntries.Items[item.Index].Remove = false;
                 }
             }
             highlightEntries.EndUpdate();

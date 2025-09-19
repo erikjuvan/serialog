@@ -783,28 +783,8 @@ namespace serialog
         {
             hideUnhighlightedToolStripMenuItem.Checked = !hideUnhighlightedToolStripMenuItem.Checked;
             hideUnhighlightedContextMenuItem.Checked = hideUnhighlightedToolStripMenuItem.Checked;
-            if (!hideUnhighlightedToolStripMenuItem.Checked)
-            {
-                alsoRemoveToolStripMenuItem.Checked = false;
-                alsoRemoveContextMenuItem.Checked = false;
-            }
 
             listView1.HideNonMatchingLines = hideUnhighlightedToolStripMenuItem.Checked;
-            listView1.AlsoRemoveNonMatchingLines = alsoRemoveToolStripMenuItem.Checked;
-        }
-
-        private void alsoRemoveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            alsoRemoveToolStripMenuItem.Checked = !alsoRemoveToolStripMenuItem.Checked;
-            alsoRemoveContextMenuItem.Checked = alsoRemoveToolStripMenuItem.Checked;
-            if (alsoRemoveToolStripMenuItem.Checked)
-            {
-                hideUnhighlightedToolStripMenuItem.Checked = true;
-                hideUnhighlightedContextMenuItem.Checked = true;
-            }
-
-            listView1.HideNonMatchingLines = hideUnhighlightedToolStripMenuItem.Checked;
-            listView1.AlsoRemoveNonMatchingLines = alsoRemoveToolStripMenuItem.Checked;
         }
 
         private void disableHighlightsToolStripMenuItem_Click(object sender, EventArgs e)

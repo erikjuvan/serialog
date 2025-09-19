@@ -11,7 +11,6 @@ namespace serialog
         public List<HighlightEntry> HighlightItems { get; set; } = new List<HighlightEntry>();
         public bool HighlightsDisabled { get; set; } = false;
         public bool HideNonMatchingLines { get; set; } = false;
-        public bool AlsoRemoveNonMatchingLines { get; set; } = false;
 
         private readonly Dictionary<FontStyle, Font> _fontCache = new Dictionary<FontStyle, Font>();
         private IReadOnlyList<DataEntry> _entries = Array.Empty<DataEntry>();
@@ -104,15 +103,8 @@ namespace serialog
 
                 if (MatchesPattern(haystack, pattern))
                 {
-                    if (highlight.Remove)
-                        return false;
-
                     if (highlight.Hide)
-                    {
-                        fore = Color.Transparent;
-                        back = Color.Transparent;
-                        return true;
-                    }
+                        return false;
 
                     fore = highlight.ForeColor;
                     back = highlight.BackColor;
@@ -124,13 +116,7 @@ namespace serialog
             }
 
             if (HideNonMatchingLines)
-            {
-                if (AlsoRemoveNonMatchingLines)
                     return false;
-
-                fore = Color.Transparent;
-                back = Color.Transparent;
-            }
 
             return true;
         }

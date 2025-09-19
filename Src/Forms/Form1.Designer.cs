@@ -39,7 +39,6 @@
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.formHighlightContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideUnhighlightedContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.alsoRemoveContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disableHighlightsContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,7 +54,6 @@
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.formHighlightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideUnhighlightedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.alsoRemoveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disableHighlightsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addStartStopTimestampToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,7 +89,6 @@
             // 
             // listView1
             // 
-            this.listView1.AlsoRemoveNonMatchingLines = false;
             this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -132,10 +129,9 @@
             this.toolStripMenuItem2,
             this.formHighlightContextMenuItem,
             this.hideUnhighlightedContextMenuItem,
-            this.alsoRemoveContextMenuItem,
             this.disableHighlightsContextMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(259, 234);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(259, 235);
             // 
             // selectAllContextMenuItem
             // 
@@ -178,13 +174,6 @@
             this.hideUnhighlightedContextMenuItem.Size = new System.Drawing.Size(258, 32);
             this.hideUnhighlightedContextMenuItem.Text = "Hide Unhighlighted";
             this.hideUnhighlightedContextMenuItem.Click += new System.EventHandler(this.hideUnhighlightedToolStripMenuItem_Click);
-            // 
-            // alsoRemoveContextMenuItem
-            // 
-            this.alsoRemoveContextMenuItem.Name = "alsoRemoveContextMenuItem";
-            this.alsoRemoveContextMenuItem.Size = new System.Drawing.Size(258, 32);
-            this.alsoRemoveContextMenuItem.Text = "    ↪ Also Remove";
-            this.alsoRemoveContextMenuItem.Click += new System.EventHandler(this.alsoRemoveToolStripMenuItem_Click);
             // 
             // disableHighlightsContextMenuItem
             // 
@@ -297,7 +286,6 @@
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.formHighlightToolStripMenuItem,
             this.hideUnhighlightedToolStripMenuItem,
-            this.alsoRemoveToolStripMenuItem,
             this.disableHighlightsToolStripMenuItem,
             this.addStartStopTimestampToolStripMenuItem,
             this.fontToolStripMenuItem,
@@ -321,13 +309,6 @@
             this.hideUnhighlightedToolStripMenuItem.Size = new System.Drawing.Size(326, 34);
             this.hideUnhighlightedToolStripMenuItem.Text = "Hide Unhighlighted";
             this.hideUnhighlightedToolStripMenuItem.Click += new System.EventHandler(this.hideUnhighlightedToolStripMenuItem_Click);
-            // 
-            // alsoRemoveToolStripMenuItem
-            // 
-            this.alsoRemoveToolStripMenuItem.Name = "alsoRemoveToolStripMenuItem";
-            this.alsoRemoveToolStripMenuItem.Size = new System.Drawing.Size(326, 34);
-            this.alsoRemoveToolStripMenuItem.Text = "    ↪ Also Remove";
-            this.alsoRemoveToolStripMenuItem.Click += new System.EventHandler(this.alsoRemoveToolStripMenuItem_Click);
             // 
             // disableHighlightsToolStripMenuItem
             // 
@@ -663,14 +644,12 @@
         private ToolStripMenuItem addStartStopTimestampToolStripMenuItem;
         private FontDialog fontDialog1;
         private ToolStripMenuItem fontToolStripMenuItem;
-        private ToolStripMenuItem alsoRemoveToolStripMenuItem;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem selectAllContextMenuItem;
         private ToolStripMenuItem clearAllContextMenuItem;
         private ToolStripSeparator toolStripMenuItem2;
         private ToolStripMenuItem formHighlightContextMenuItem;
         private ToolStripMenuItem hideUnhighlightedContextMenuItem;
-        private ToolStripMenuItem alsoRemoveContextMenuItem;
         private ToolStripMenuItem saveSerialAsToolStripMenuItem;
         private ToolStripMenuItem disableHighlightsToolStripMenuItem;
         private ToolStripMenuItem disableHighlightsContextMenuItem;
