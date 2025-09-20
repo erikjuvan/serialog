@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "serialog": {
+      "commandName": "Project",
+      "commandLineArgs": "--load-highlight-preset=default --load-serial-preset=default"
+    }
+  }
+}

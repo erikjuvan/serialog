@@ -471,7 +471,6 @@ namespace serialog
             }
         }
 
-
         private void button_preset_save_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(comboBox_preset.Text))
@@ -505,16 +504,9 @@ namespace serialog
                 MessageBoxIcon.Information);
         }
 
-        private void button_preset_load_Click(object sender, EventArgs e)
+        public void LoadPreset(string presetFileName)
         {
-            if (string.IsNullOrWhiteSpace(comboBox_preset.Text))
-            {
-                MessageBox.Show("Select a preset to load.", "Warning",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            string fullpath = Path.Combine(AppSettings.SettingsFolder, comboBox_preset.Text + _highlightsFileExtension);
+            string fullpath = Path.Combine(AppSettings.SettingsFolder, presetFileName + _highlightsFileExtension);
 
             if (!File.Exists(fullpath))
             {
@@ -522,6 +514,8 @@ namespace serialog
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            comboBox_preset.Text = presetFileName;
 
             try
             {
@@ -544,6 +538,18 @@ namespace serialog
                 MessageBox.Show($"Failed to load preset: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void button_preset_load_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(comboBox_preset.Text))
+            {
+                MessageBox.Show("Select a preset to load.", "Warning",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            LoadPreset(comboBox_preset.Text);
         }
 
         private void button_deletepreset_Click(object sender, EventArgs e)

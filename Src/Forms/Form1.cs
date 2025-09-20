@@ -28,6 +28,9 @@ namespace serialog
         private Stopwatch runTime = new Stopwatch();
         private Stopwatch upTime = new Stopwatch();
 
+        private string _cmdlineHighlightPresetFilename = "";
+        private string _cmdlineSerialPresetFilename = "";
+
         // Forms
         private FormHighlight formHighlight = null;
         private FormSerialSend formSerialSend = null;
@@ -61,6 +64,21 @@ namespace serialog
             _serialReader = new SerialReader(_serialPort, _serialDataBuffer, _serialRXDataParser);
 
             upTime.Start();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // Create Highlight form and load preset
+            formHighlight = new FormHighlight();
+            RegisterChild(formHighlight);
+            if (_cmdlineHighlightPresetFilename != "")
+                formHighlight.LoadPreset(_cmdlineHighlightPresetFilename);
+
+            // Create Serial Send form
+            formSerialSend = new FormSerialSend(this, _serialPort, _dataLog);
+            RegisterChild(formSerialSend);
+            if (_cmdlineSerialPresetFilename != "")
+                formSerialSend.LoadPreset(_cmdlineSerialPresetFilename);
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -142,6 +160,16 @@ namespace serialog
                 {
                     button_run_Click(this, EventArgs.Empty);
                 }
+            }
+
+            if (options.TryGetValue("load-highlight-preset", out var highlightPresetFilename))
+            {
+                _cmdlineHighlightPresetFilename = highlightPresetFilename.ToString();
+            }
+
+            if (options.TryGetValue("load-serial-preset", out var serialPresetFilename))
+            {
+                _cmdlineSerialPresetFilename = serialPresetFilename.ToString();
             }
         }
 
@@ -797,17 +825,8 @@ namespace serialog
 
         private void formHighlightToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (formHighlight == null || formHighlight.IsDisposed)
-            {
-                formHighlight = new FormHighlight();
-                RegisterChild(formHighlight);
-                formHighlight.Show();
-            }
-            else
-            {
-                formHighlight.Show();   // unhide if hidden
-                formHighlight.Focus();
-            }
+            formHighlight.Show();   // unhide if hidden
+            formHighlight.Focus();
         }
 
         private void toolsAddViewToolStripMenuItem_Click(object sender, EventArgs e)
@@ -832,17 +851,8 @@ namespace serialog
 
         private void toolsSerialSendToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (formSerialSend == null || formSerialSend.IsDisposed)
-            {
-                formSerialSend = new FormSerialSend(this, _serialPort, _dataLog);
-                RegisterChild(formSerialSend);
-                formSerialSend.Show();
-            }
-            else
-            {
-                formSerialSend.Show();   // unhide if hidden
-                formSerialSend.Focus();
-            }
+            formSerialSend.Show();   // unhide if hidden
+            formSerialSend.Focus();
         }
 
         private void checkBoxRegex_CheckedChanged(object sender, EventArgs e)

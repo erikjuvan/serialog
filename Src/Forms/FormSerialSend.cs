@@ -222,16 +222,9 @@
                 MessageBoxIcon.Information);
         }
 
-        private async void button_file_load_Click(object sender, EventArgs e)
+        public async void LoadPreset(string presetFileName)
         {
-            if (string.IsNullOrWhiteSpace(comboBox_file.Text))
-            {
-                MessageBox.Show("Select a file to load.", "Warning",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            string fullpath = Path.Combine(AppSettings.SettingsFolder, comboBox_file.Text + _sendFileExtension);
+            string fullpath = Path.Combine(AppSettings.SettingsFolder, presetFileName + _sendFileExtension);
 
             if (!File.Exists(fullpath))
             {
@@ -239,6 +232,8 @@
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            comboBox_file.Text = presetFileName;
 
             var json = await File.ReadAllTextAsync(fullpath);
             var rows = System.Text.Json.JsonSerializer.Deserialize<List<DataRowModel>>(json);
@@ -249,6 +244,18 @@
                 dataGridView1.Rows.Add(row.Description, row.HexData);
             }
             dataGridView1.ResumeLayout();
+        }
+
+        private void button_file_load_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(comboBox_file.Text))
+            {
+                MessageBox.Show("Select a file to load.", "Warning",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            LoadPreset(comboBox_file.Text);
         }
 
         private void button_file_delete_Click(object sender, EventArgs e)
