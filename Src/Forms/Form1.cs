@@ -535,7 +535,8 @@ namespace serialog
                 lines.Length,
                 async (i) =>
                 {
-                    AddLogEntry(new DataEntry(lines[i]));
+                    DataEntryParser.TryParse(lines[i], out var entry);
+                    AddLogEntry(entry);
 
                     await Task.Yield(); // keep UI responsive
                 },
