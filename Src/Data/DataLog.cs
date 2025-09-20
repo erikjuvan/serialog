@@ -4,6 +4,7 @@
     {
         Line,
         DateLine,
+        SourceLine,
         DateSourceLine
     }
 
@@ -44,34 +45,42 @@
             Format = DataEntryFormat.Line;
         }
 
-        public DataEntry(string line, DateTime timestamp)
+        public DataEntry(DateTime timestamp, string line)
         {
-            Line = line;
             Timestamp = timestamp;
+            Line = line;
             Format = DataEntryFormat.DateLine;
         }
 
-        public DataEntry(string line, DateTime timestamp, DataEntrySource source)
+        public DataEntry(DataEntrySource source, string line)
         {
+            Source = source;
             Line = line;
+            Format = DataEntryFormat.SourceLine;
+        }
+
+        public DataEntry(DateTime timestamp, DataEntrySource source, string line)
+        {
             Timestamp = timestamp;
             Source = source;
+            Line = line;
             Format = DataEntryFormat.DateSourceLine;
         }
 
         public override string ToString()
         {
-            if (Format == DataEntryFormat.DateSourceLine)
+            switch (Format)
             {
-                return $"[{Timestamp:dd/MM/yyyy HH:mm:ss} {Source.ToShortString()}] {Line}";
-            }
-            else if (Format == DataEntryFormat.Line)
-            {
-                return Line;
-            }
-            else // (Format == DataEntryFormat.DateLine)
-            {
-                return $"[{Timestamp:dd/MM/yyyy HH:mm:ss} {Line}";
+                case DataEntryFormat.Line:
+                    return Line;
+                case DataEntryFormat.DateLine:
+                    return $"[{Timestamp:dd/MM/yyyy HH:mm:ss}] {Line}";
+                case DataEntryFormat.SourceLine:
+                    return $"[{Source.ToShortString()}] {Line}";
+                case DataEntryFormat.DateSourceLine:
+                   return $"[{Timestamp:dd/MM/yyyy HH:mm:ss} {Source.ToShortString()}] {Line}";
+                default:
+                    return Line;
             }
         }
 

@@ -57,7 +57,7 @@ namespace serialog
             {
                 string line = FormatHelpers.BytesToDisplayString(bytes, false, DisplayNonPrintableCharsAsHex);
 
-                AddLogEntry(new DataEntry(line, DateTime.Now, DataEntrySource.SerialRX));
+                AddLogEntry(new DataEntry(DateTime.Now, DataEntrySource.SerialRX, line));
             };
 
             // Set up serial reader
@@ -234,7 +234,7 @@ namespace serialog
 
                 if (addStartStopTimestampToolStripMenuItem.Checked)
                 {
-                    AddLogEntry(new DataEntry("ACQUISITION STOPPED", DateTime.Now, DataEntrySource.User));
+                    AddLogEntry(new DataEntry(DateTime.Now, DataEntrySource.User, "ACQUISITION STOPPED"));
                 }
             }
         }
@@ -351,7 +351,7 @@ namespace serialog
 
                 if (addStartStopTimestampToolStripMenuItem.Checked)
                 {
-                    AddLogEntry(new DataEntry("ACQUISITION STARTED", DateTime.Now, DataEntrySource.User));
+                    AddLogEntry(new DataEntry(DateTime.Now, DataEntrySource.User, "ACQUISITION STARTED"));
                 }
 
                 runTime.Start();
@@ -522,7 +522,7 @@ namespace serialog
             if (openFileDialog1.ShowDialog() != DialogResult.OK) return;
 
             string filePath = openFileDialog1.FileName;
-            AddLogEntry(new DataEntry("Opening file: " + filePath, DateTime.Now, DataEntrySource.User));
+            AddLogEntry(new DataEntry(DateTime.Now, DataEntrySource.User, "Opening file: " + filePath));
 
             string[] lines = await System.IO.File.ReadAllLinesAsync(filePath);
 
@@ -542,7 +542,7 @@ namespace serialog
                 onUIThread: true
             );
 
-            AddLogEntry(new DataEntry("End of file: " + filePath, DateTime.Now, DataEntrySource.User));
+            AddLogEntry(new DataEntry(DateTime.Now, DataEntrySource.User, "End of file: " + filePath));
 
             listView1.RefreshEntries();
         }
@@ -718,7 +718,7 @@ namespace serialog
 
             if (result == DialogResult.OK)
             {
-                AddLogEntry(new DataEntry(input, DateTime.Now, DataEntrySource.User));
+                AddLogEntry(new DataEntry(DateTime.Now, DataEntrySource.User, input));
             }
         }
 

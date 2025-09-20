@@ -80,7 +80,7 @@
 
                     // Add to log and view
                     string sendString = FormatHelpers.BytesToDisplayString(bytes, false, _parentForm.DisplayNonPrintableCharsAsHex);
-                    _parentForm.AddLogEntry(new DataEntry(sendString, DateTime.Now, DataEntrySource.SerialTX));
+                    _parentForm.AddLogEntry(new DataEntry(DateTime.Now, DataEntrySource.SerialTX, sendString));
                 }
                 catch (FormatException)
                 {
