@@ -2,14 +2,6 @@
 
 namespace serialog
 {
-    public enum DataEntryFormat
-    {
-        Line,
-        DateLine,
-        SourceLine,
-        DateSourceLine
-    }
-
     public enum DataEntrySource
     {
         SerialRX,
@@ -52,54 +44,48 @@ namespace serialog
 
     public class DataEntry
     {
-        public string Line { get; }
-        public DateTime Timestamp { get; }
-        public DataEntrySource Source { get; }
-        public DataEntryFormat Format { get; }
-        private string toString { get; }
+        public string Content { get; }
+        public DateTime? Timestamp { get; }
+        public DataEntrySource? Source { get; }
 
-        // Raw entry
-        public DataEntry(string line)
+        private string _formattedLine;
+
+        // Computed once on first access, then cached
+        public string FormattedLine => _formattedLine ??= (Timestamp, Source) switch
         {
-            Line = line;
-            Format = DataEntryFormat.Line;
-            toString = line;
+            (DateTime ts, DataEntrySource s) => $"[{ts:dd/MM/yyyy HH:mm:ss} {s.ToShortString()}] {Content}",
+            (DateTime ts, null) => $"[{ts:dd/MM/yyyy HH:mm:ss}] {Content}",
+            (null, DataEntrySource s) => $"[{s.ToShortString()}] {Content}",
+            _ => Content
+        };
+
+        public DataEntry(string content)
+        {
+            Content = content ?? throw new ArgumentNullException(nameof(content));
         }
 
-        public DataEntry(DateTime timestamp, string line)
-        {
-            Timestamp = timestamp;
-            Line = line;
-            Format = DataEntryFormat.DateLine;
-            toString = $"[{Timestamp:dd/MM/yyyy HH:mm:ss}] {Line}";
-        }
-
-        public DataEntry(DataEntrySource source, string line)
-        {
-            Source = source;
-            Line = line;
-            Format = DataEntryFormat.SourceLine;
-            toString = $"[{Source.ToShortString()}] {Line}";
-        }
-
-        public DataEntry(DateTime timestamp, DataEntrySource source, string line)
+        public DataEntry(DateTime timestamp, string content)
         {
             Timestamp = timestamp;
+            Content = content ?? throw new ArgumentNullException(nameof(content));
+        }
+
+        public DataEntry(DataEntrySource source, string content)
+        {
             Source = source;
-            Line = line;
-            Format = DataEntryFormat.DateSourceLine;
-            toString = $"[{Timestamp:dd/MM/yyyy HH:mm:ss} {Source.ToShortString()}] {Line}";
+            Content = content ?? throw new ArgumentNullException(nameof(content));
         }
 
-        public override string ToString()
+        public DataEntry(DateTime timestamp, DataEntrySource source, string content)
         {
-            return toString;
+            Timestamp = timestamp;
+            Source = source;
+            Content = content ?? throw new ArgumentNullException(nameof(content));
         }
 
-        public string ToSearchString()
-        {
-            return Line;
-        }
+        public override string ToString() => FormattedLine;
+
+        public string GetContent() => Content;
     }
 
     public static class DataEntryParser

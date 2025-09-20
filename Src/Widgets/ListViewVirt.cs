@@ -58,8 +58,7 @@ namespace serialog
         private void OnDrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             var entry = DataLog[e.ItemIndex];
-            string line = entry.ToString();
-            string searchString = entry.ToSearchString();
+            string searchString = entry.GetContent();
 
             // Get highlight style
             if (!TryGetHighlightStyle(searchString, out Color fore, out Color back, out FontStyle style))
@@ -72,6 +71,7 @@ namespace serialog
                 fore = SystemColors.HighlightText;
             }
 
+            string line = entry.ToString();
             DrawLine(e.Graphics, e.Bounds, line, fore, back, style);
         }
 
