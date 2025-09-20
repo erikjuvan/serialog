@@ -37,12 +37,14 @@
         public DateTime Timestamp { get; }
         public DataEntrySource Source { get; }
         public DataEntryFormat Format { get; }
+        private string toString { get; }
 
         // Raw entry
         public DataEntry(string line)
         {
             Line = line;
             Format = DataEntryFormat.Line;
+            toString = line;
         }
 
         public DataEntry(DateTime timestamp, string line)
@@ -50,6 +52,7 @@
             Timestamp = timestamp;
             Line = line;
             Format = DataEntryFormat.DateLine;
+            toString = $"[{Timestamp:dd/MM/yyyy HH:mm:ss}] {Line}";
         }
 
         public DataEntry(DataEntrySource source, string line)
@@ -57,6 +60,7 @@
             Source = source;
             Line = line;
             Format = DataEntryFormat.SourceLine;
+            toString = $"[{Source.ToShortString()}] {Line}";
         }
 
         public DataEntry(DateTime timestamp, DataEntrySource source, string line)
@@ -65,23 +69,12 @@
             Source = source;
             Line = line;
             Format = DataEntryFormat.DateSourceLine;
+            toString = $"[{Timestamp:dd/MM/yyyy HH:mm:ss} {Source.ToShortString()}] {Line}";
         }
 
         public override string ToString()
         {
-            switch (Format)
-            {
-                case DataEntryFormat.Line:
-                    return Line;
-                case DataEntryFormat.DateLine:
-                    return $"[{Timestamp:dd/MM/yyyy HH:mm:ss}] {Line}";
-                case DataEntryFormat.SourceLine:
-                    return $"[{Source.ToShortString()}] {Line}";
-                case DataEntryFormat.DateSourceLine:
-                   return $"[{Timestamp:dd/MM/yyyy HH:mm:ss} {Source.ToShortString()}] {Line}";
-                default:
-                    return Line;
-            }
+            return toString;
         }
 
         public string ToSearchString()
