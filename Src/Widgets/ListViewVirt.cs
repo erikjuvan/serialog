@@ -61,7 +61,7 @@ namespace serialog
             string searchString = entry.GetContent();
 
             // Get highlight style
-            if (!TryGetHighlightStyle(searchString, out Color fore, out Color back, out FontStyle style))
+            if (!GetHighlightStyle(searchString, out Color fore, out Color back, out FontStyle style))
                 return;
 
             // Selection overrides
@@ -75,15 +75,38 @@ namespace serialog
             DrawLine(e.Graphics, e.Bounds, line, fore, back, style);
         }
 
-        private bool TryGetHighlightStyle(string line, out Color fore, out Color back, out FontStyle style)
+        private bool GetHighlightStyle(string line, out Color fore, out Color back, out FontStyle style)
         {
+            // Defaults
             fore = this.ForeColor;
             back = this.BackColor;
             style = FontStyle.Regular;
 
             if (HighlightsDisabled)
-                return true;
+                return true; // Just use defaults
 
+            var match = FindHighlightMatch(line);
+
+            if (match == null) // No highlight matched
+            {
+                if (HideNonMatchingLines) return false; // Hide it
+                else return true; // Just use defaults
+            }
+
+            if (match.Hide)
+                return false;
+
+            // Apply style from the match
+            fore = match.ForeColor;
+            back = match.BackColor;
+            if (match.Bold) style |= FontStyle.Bold;
+            if (match.Italic) style |= FontStyle.Italic;
+
+            return true;
+        }
+
+        public HighlightEntry? FindHighlightMatch(string line)
+        {
             foreach (HighlightEntry highlight in HighlightItems)
             {
                 if (!highlight.Enabled) continue;
@@ -92,23 +115,10 @@ namespace serialog
                 string pattern = highlight.IgnoreCase ? highlight.Text.ToLowerInvariant() : highlight.Text;
 
                 if (Helpers.MatchesPattern(haystack, pattern, highlight.UseRegex))
-                {
-                    if (highlight.Hide)
-                        return false;
-
-                    fore = highlight.ForeColor;
-                    back = highlight.BackColor;
-                    if (highlight.Bold) style |= FontStyle.Bold;
-                    if (highlight.Italic) style |= FontStyle.Italic;
-
-                    return true; // first match wins
-                }
+                    return highlight; // first match wins
             }
 
-            if (HideNonMatchingLines)
-                    return false;
-
-            return true;
+            return null;
         }
 
         private void DrawLine(Graphics g, Rectangle bounds, string line, Color fore, Color back, FontStyle style)
