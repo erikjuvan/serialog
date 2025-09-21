@@ -629,6 +629,8 @@ namespace serialog
             checkBox_bold.Checked = entry.Bold;
             checkBox_italic.Checked = entry.Italic;
             checkBox_hide.Checked = entry.Hide;
+
+            textBox_string.Focus();
         }
 
         private void textBox_string_TextChanged(object sender, EventArgs e)
