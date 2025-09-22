@@ -673,6 +673,8 @@ namespace serialog
             hideUnhighlightedContextMenuItem.Checked = hideUnhighlightedToolStripMenuItem.Checked;
 
             listView1.HideNonMatchingLines = hideUnhighlightedToolStripMenuItem.Checked;
+
+            listView1.Invalidate();
         }
 
         private void disableHighlightsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -681,6 +683,8 @@ namespace serialog
             disableHighlightsContextMenuItem.Checked = disableHighlightsToolStripMenuItem.Checked;
 
             listView1.HighlightsDisabled = disableHighlightsToolStripMenuItem.Checked;
+
+            listView1.Invalidate();
         }
 
         private void fontToolStripMenuItem_Click(object sender, EventArgs e)
