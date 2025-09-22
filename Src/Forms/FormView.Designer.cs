@@ -58,6 +58,7 @@
             this.listView1.ContextMenuStrip = this.contextMenuStrip1;
             this.listView1.DataLog = null;
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.listView1.HideNonMatchingLines = false;
             this.listView1.HighlightsDisabled = false;
