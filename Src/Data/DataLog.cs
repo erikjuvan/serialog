@@ -59,6 +59,22 @@ namespace serialog
             _ => Content
         };
 
+        // Cached style
+        public int HighlightVersion { get; private set; } = -1;
+        public HighlightStyle? Style { get; private set; }
+
+        public void EnsureHighlightUpToDate()
+        {
+            if (HighlightVersion == FormHighlight.Highlights.CurrentVersion)
+                return;
+
+            Style = FormHighlight.Highlights.GetStyle(GetContent());
+
+            HighlightVersion = FormHighlight.Highlights.CurrentVersion;
+        }
+
+        // Constructors
+
         public DataEntry(string content)
         {
             Content = content ?? throw new ArgumentNullException(nameof(content));

@@ -6,7 +6,7 @@ namespace serialog
 {
     public partial class FormHighlight : Form
     {
-        static public HighlightEntries highlightEntries = new HighlightEntries();
+        public static Highlights Highlights = new Highlights();
         private Color hlBgColor;
         private Color hlFgColor;
         private string _highlightsFileExtension = ".highlight";
@@ -80,35 +80,23 @@ namespace serialog
             }));
         }
 
-        private void AddHighlightEntryToListView(ref ListView listView, HighlightEntry highlightEntry)
+        private void AddHighlightEntryToListView(ref ListView listView, Highlight highlightEntry)
         {
-            ListViewItem item = new ListViewItem();
-            item.Checked = highlightEntry.Enabled;
-            item.Text = highlightEntry.Text;
-            item.ForeColor = highlightEntry.ForeColor;
-            item.BackColor = highlightEntry.BackColor;
+            ListViewItem item = new ListViewItem
+            {
+                Checked = highlightEntry.Enabled,
+                Text = highlightEntry.Text,
+                ForeColor = highlightEntry.ForeColor,
+                BackColor = highlightEntry.BackColor,
+            };
 
-            if (highlightEntry.UseRegex)
-                item.SubItems.Add("*");
-            else
-                item.SubItems.Add("");
+            // Optional markers for regex / ignorecase / hide
+            item.SubItems.Add(highlightEntry.UseRegex ? "*" : "");
+            item.SubItems.Add(highlightEntry.IgnoreCase ? "*" : "");
+            item.SubItems.Add(highlightEntry.Hide ? "*" : "");
 
-            if (highlightEntry.IgnoreCase)
-                item.SubItems.Add("*");
-            else
-                item.SubItems.Add("");
-
-            if (highlightEntry.Hide)
-                item.SubItems.Add("*");
-            else
-                item.SubItems.Add("");
-
-            if (highlightEntry.Bold && highlightEntry.Italic)
-                item.Font = new Font("Courier New", 10, FontStyle.Bold | FontStyle.Italic);
-            else if (highlightEntry.Bold)
-                item.Font = new Font("Courier New", 10, FontStyle.Bold);
-            else if (highlightEntry.Italic)
-                item.Font = new Font("Courier New", 10, FontStyle.Italic);
+            var style = highlightEntry.Style ?? new HighlightStyle { FontStyle = FontStyle.Regular };
+            item.Font = new Font("Courier New", 10, style.FontStyle);
 
             var addedItem = listView.Items.Add(item);
             addedItem.EnsureVisible();
@@ -140,21 +128,26 @@ namespace serialog
             else
                 fgcol = hlFgColor;
 
-            HighlightEntry highlightEntry = new HighlightEntry();
-            highlightEntry.Enabled = true;
-            highlightEntry.UseRegex = checkBoxUseRegex.Checked;
-            highlightEntry.Text = textBox_string.Text;
-            highlightEntry.ForeColor = fgcol;
-            highlightEntry.BackColor = bgcol;
-            highlightEntry.IgnoreCase = checkBox_ignorecase.Checked;
-            highlightEntry.Bold = checkBox_bold.Checked;
-            highlightEntry.Italic = checkBox_italic.Checked;
-            highlightEntry.Hide = checkBox_hide.Checked;
+            Highlight highlightEntry = new Highlight
+            {
+                Enabled = true,
+                UseRegex = checkBoxUseRegex.Checked,
+                Text = textBox_string.Text,
+                IgnoreCase = checkBox_ignorecase.Checked,
+                Style = new HighlightStyle
+                {
+                    ForeColor = fgcol,
+                    BackColor = bgcol,
+                    FontStyle = (checkBox_bold.Checked ? FontStyle.Bold : FontStyle.Regular)
+                              | (checkBox_italic.Checked ? FontStyle.Italic : FontStyle.Regular),
+                    Hide = checkBox_hide.Checked
+                }
+            };
 
-            highlightEntries.BeginUpdate();
-            highlightEntries.Add(highlightEntry);
+            Highlights.BeginUpdate();
+            Highlights.Add(highlightEntry);
             AddHighlightEntryToListView(ref listView1, highlightEntry);
-            highlightEntries.EndUpdate();
+            Highlights.EndUpdate();
         }
 
         private void button_delete_Click(object sender, EventArgs e)
@@ -162,14 +155,14 @@ namespace serialog
             if (listView1.SelectedIndices.Count == 0)
                 return;
 
-            highlightEntries.BeginUpdate();
+            Highlights.BeginUpdate();
             while (listView1.SelectedIndices.Count > 0)
             {
                 int idx = listView1.SelectedIndices[listView1.SelectedIndices.Count - 1];
-                highlightEntries.RemoveAt(idx);
+                Highlights.RemoveAt(idx);
                 listView1.Items.RemoveAt(idx);
             }
-            highlightEntries.EndUpdate();
+            Highlights.EndUpdate();
         }
 
         private void button_fgcolor_Click(object sender, EventArgs e)
@@ -246,46 +239,44 @@ namespace serialog
 
         private void MoveItemUp()
         {
-            highlightEntries.BeginUpdate();
+            Highlights.BeginUpdate();
             foreach (ListViewItem lvi in listView1.SelectedItems)
             {
                 if (lvi.Index > 0)
                 {
                     int indexTo = lvi.Index - 1;
                     int indexFrom = lvi.Index;
+
                     listView1.Items.RemoveAt(indexFrom);
                     listView1.Items.Insert(indexTo, lvi);
                     listView1.Items[indexTo].Focused = true;
 
-                    // Swap
-                    var tmpEntry = highlightEntries.Items[indexTo];
-                    highlightEntries.Items[indexTo] = highlightEntries.Items[indexFrom];
-                    highlightEntries.Items[indexFrom] = tmpEntry;
+                    // Swap in Highlights
+                    Highlights.Move(indexFrom, indexTo);
                 }
             }
-            highlightEntries.EndUpdate();
+            Highlights.EndUpdate();
         }
 
         private void MoveItemDown()
         {
-            highlightEntries.BeginUpdate();
+            Highlights.BeginUpdate();
             foreach (ListViewItem lvi in listView1.SelectedItems)
             {
                 if (lvi.Index < listView1.Items.Count - 1)
                 {
                     int indexTo = lvi.Index + 1;
                     int indexFrom = lvi.Index;
+
                     listView1.Items.RemoveAt(indexFrom);
                     listView1.Items.Insert(indexTo, lvi);
                     listView1.Items[indexTo].Focused = true;
 
-                    // Swap
-                    var tmpEntry = highlightEntries.Items[indexTo];
-                    highlightEntries.Items[indexTo] = highlightEntries.Items[indexFrom];
-                    highlightEntries.Items[indexFrom] = tmpEntry;
+                    // Swap in Highlights
+                    Highlights.Move(indexFrom, indexTo);
                 }
             }
-            highlightEntries.EndUpdate();
+            Highlights.EndUpdate();
         }
 
         private void listView1_KeyDown(object sender, KeyEventArgs e)
@@ -353,13 +344,13 @@ namespace serialog
 
                 Color fgcol = Helpers.ParseColorInput(comboBox_fgcolor.Text, ListView.DefaultForeColor);
 
-                highlightEntries.BeginUpdate();
+                Highlights.BeginUpdate();
                 foreach (ListViewItem item in listView1.SelectedItems)
                 {
                     item.ForeColor = fgcol;
-                    highlightEntries.Items[item.Index].ForeColor = fgcol;
+                    Highlights.Items[item.Index].ForeColor = fgcol;
                 }
-                highlightEntries.EndUpdate();
+                Highlights.EndUpdate();
             }
         }
 
@@ -376,13 +367,13 @@ namespace serialog
 
                 Color bgcol = Helpers.ParseColorInput(comboBox_bgcolor.Text, ListView.DefaultBackColor);
 
-                highlightEntries.BeginUpdate();
+                Highlights.BeginUpdate();
                 foreach (ListViewItem item in listView1.SelectedItems)
                 {
                     item.BackColor = bgcol;
-                    highlightEntries.Items[item.Index].BackColor = bgcol;
+                    Highlights.Items[item.Index].BackColor = bgcol;
                 }
-                highlightEntries.EndUpdate();
+                Highlights.EndUpdate();
             }
         }
 
@@ -449,7 +440,7 @@ namespace serialog
             }
 
             var options = new JsonSerializerOptions { WriteIndented = true };
-            string json = JsonSerializer.Serialize(highlightEntries.Items, options);
+            string json = JsonSerializer.Serialize(Highlights.Items, options);
             File.WriteAllText(fullpath, json);
 
             MessageBox.Show(
@@ -475,17 +466,17 @@ namespace serialog
             try
             {
                 string json = File.ReadAllText(fullpath);
-                var entries = JsonSerializer.Deserialize<List<HighlightEntry>>(json);
+                var entries = JsonSerializer.Deserialize<List<Highlight>>(json);
 
                 if (entries != null)
                 {
-                    highlightEntries.BeginUpdate();
+                    Highlights.BeginUpdate();
                     foreach (var entry in entries)
                     {
-                        highlightEntries.Add(entry);
+                        Highlights.Add(entry);
                         AddHighlightEntryToListView(ref listView1, entry);
                     }
-                    highlightEntries.EndUpdate();
+                    Highlights.EndUpdate();
                 }
             }
             catch (Exception ex)
@@ -556,7 +547,7 @@ namespace serialog
 
         private void listView1_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
-            highlightEntries.Items[e.Item.Index].Enabled = e.Item.Checked;
+            Highlights.Items[e.Item.Index].Enabled = e.Item.Checked;
         }
 
         private string ColorToNameOrHex(Color color)
@@ -572,7 +563,7 @@ namespace serialog
             if (listView1.SelectedItems.Count != 1)
                 return;
 
-            var entry = highlightEntries.Items[listView1.SelectedIndices[0]];
+            var entry = Highlights.Items[listView1.SelectedIndices[0]];
 
             textBox_string.Text = entry.Text;
             checkBoxUseRegex.Checked = entry.UseRegex;
@@ -581,8 +572,8 @@ namespace serialog
             comboBox_bgcolor.Text = ColorToNameOrHex(entry.BackColor);
             comboBox_bgcolor.BackColor = entry.BackColor;
             checkBox_ignorecase.Checked = entry.IgnoreCase;
-            checkBox_bold.Checked = entry.Bold;
-            checkBox_italic.Checked = entry.Italic;
+            checkBox_bold.Checked = entry.Style.FontStyle.HasFlag(FontStyle.Bold);
+            checkBox_italic.Checked = entry.Style.FontStyle.HasFlag(FontStyle.Italic);
             checkBox_hide.Checked = entry.Hide;
 
             textBox_string.Focus();
@@ -595,22 +586,25 @@ namespace serialog
                 return;
             }
 
-            highlightEntries.BeginUpdate();
+            Highlights.BeginUpdate();
             foreach (ListViewItem item in listView1.SelectedItems)
             {
                 item.Text = textBox_string.Text;
-                highlightEntries.Items[item.Index].Text = item.Text;
+                Highlights.Items[item.Index].Text = item.Text;
             }
-            highlightEntries.EndUpdate();
+            Highlights.EndUpdate();
         }
 
         private void checkBox_bold_CheckedChanged(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count <= 0) return;
 
-            highlightEntries.BeginUpdate();
+            Highlights.BeginUpdate();
             foreach (ListViewItem item in listView1.SelectedItems)
             {
+                var entry = Highlights.Items[item.Index];
+
+                // Start with the existing font style
                 FontStyle style = item.Font.Style;
 
                 if (checkBox_bold.Checked)
@@ -618,19 +612,25 @@ namespace serialog
                 else
                     style &= ~FontStyle.Bold; // remove bold
 
+                // Apply to the ListView item
                 item.Font = new Font(item.Font, style);
-                highlightEntries.Items[item.Index].Bold = checkBox_bold.Checked;
+
+                // Update the entry's HighlightStyle
+                entry.Style.FontStyle = style;
             }
-            highlightEntries.EndUpdate();
+            Highlights.EndUpdate();
         }
 
         private void checkBox_italic_CheckedChanged(object sender, EventArgs e)
         {
             if (listView1.SelectedItems.Count <= 0) return;
 
-            highlightEntries.BeginUpdate();
+            Highlights.BeginUpdate();
             foreach (ListViewItem item in listView1.SelectedItems)
             {
+                var entry = Highlights.Items[item.Index];
+
+                // Start with the existing font style
                 FontStyle style = item.Font.Style;
 
                 if (checkBox_italic.Checked)
@@ -638,10 +638,13 @@ namespace serialog
                 else
                     style &= ~FontStyle.Italic; // remove italic
 
+                // Apply to the ListView item
                 item.Font = new Font(item.Font, style);
-                highlightEntries.Items[item.Index].Italic = checkBox_italic.Checked;
+
+                // Update the entry's HighlightStyle
+                entry.Style.FontStyle = style;
             }
-            highlightEntries.EndUpdate();
+            Highlights.EndUpdate();
         }
 
         private void checkBoxUseRegex_CheckedChanged(object sender, EventArgs e)
@@ -651,21 +654,21 @@ namespace serialog
                 return;
             }
 
-            highlightEntries.BeginUpdate();
+            Highlights.BeginUpdate();
             foreach (ListViewItem item in listView1.SelectedItems)
             {
                 if (checkBoxUseRegex.Checked)
                 {
                     item.SubItems[1].Text = "*";
-                    highlightEntries.Items[item.Index].UseRegex = true;
+                    Highlights.Items[item.Index].UseRegex = true;
                 }
                 else
                 {
                     item.SubItems[1].Text = "";
-                    highlightEntries.Items[item.Index].UseRegex = false;
+                    Highlights.Items[item.Index].UseRegex = false;
                 }
             }
-            highlightEntries.EndUpdate();
+            Highlights.EndUpdate();
         }
 
         private void checkBox_ignorecase_CheckedChanged(object sender, EventArgs e)
@@ -675,21 +678,21 @@ namespace serialog
                 return;
             }
 
-            highlightEntries.BeginUpdate();
+            Highlights.BeginUpdate();
             foreach (ListViewItem item in listView1.SelectedItems)
             {
                 if (checkBox_ignorecase.Checked)
                 {
                     item.SubItems[2].Text = "*";
-                    highlightEntries.Items[item.Index].IgnoreCase = true;
+                    Highlights.Items[item.Index].IgnoreCase = true;
                 }
                 else
                 {
                     item.SubItems[2].Text = "";
-                    highlightEntries.Items[item.Index].IgnoreCase = false;
+                    Highlights.Items[item.Index].IgnoreCase = false;
                 }
             }
-            highlightEntries.EndUpdate();
+            Highlights.EndUpdate();
         }
 
         private void checkBox_hide_CheckedChanged(object sender, EventArgs e)
@@ -699,21 +702,21 @@ namespace serialog
                 return;
             }
 
-            highlightEntries.BeginUpdate();
+            Highlights.BeginUpdate();
             foreach (ListViewItem item in listView1.SelectedItems)
             {
                 if (checkBox_hide.Checked)
                 {
                     item.SubItems[3].Text = "*";
-                    highlightEntries.Items[item.Index].Hide = true;
+                    Highlights.Items[item.Index].Hide = true;
                 }
                 else
                 {
                     item.SubItems[3].Text = "";
-                    highlightEntries.Items[item.Index].Hide = false;
+                    Highlights.Items[item.Index].Hide = false;
                 }
             }
-            highlightEntries.EndUpdate();
+            Highlights.EndUpdate();
         }
     }
 }
