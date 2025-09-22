@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
 
 namespace serialog
 {
@@ -11,6 +11,13 @@ namespace serialog
 
         public DataLog DataLog { get;  set; }
         private readonly Dictionary<FontStyle, Font> _fontCache = new Dictionary<FontStyle, Font>();
+
+        // Smoother mouse scrolling
+        [DllImport("user32.dll")]
+        private static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+        private const int WM_VSCROLL = 0x0115;
+        private const int SB_LINEUP = 0;
+        private const int SB_LINEDOWN = 1;
 
         public ListViewVirt()
         {
@@ -26,6 +33,7 @@ namespace serialog
             this.DrawItem += OnDrawItem;
             this.DrawSubItem += OnDrawSubItem;
             this.KeyDown += OnKeyDown;
+            this.MouseWheel += OnMouseWheel;
         }
 
         /// <summary>Refresh when new entries were added to the log.</summary>
@@ -222,6 +230,22 @@ namespace serialog
             {
                 this.EnsureVisible(VirtualListSize - 1);
             }
+        }
+
+        private void OnMouseWheel(object sender, MouseEventArgs e)
+        {
+            int linesToMove = e.Delta / 120;
+
+            if ((ModifierKeys & Keys.Control) == Keys.Control)
+                linesToMove *= 15;
+
+            for (int i = 0; i < Math.Abs(linesToMove); i++)
+            {
+                int command = linesToMove > 0 ? SB_LINEUP : SB_LINEDOWN;
+                SendMessage(Handle, WM_VSCROLL, command, 0);
+            }
+
+            ((HandledMouseEventArgs)e).Handled = true;
         }
     }
 }
