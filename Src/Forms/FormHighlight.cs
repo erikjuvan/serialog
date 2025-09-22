@@ -340,51 +340,6 @@ namespace serialog
             }
         }
 
-        private Color ParseColorInput(string input, Color fallback)
-        {
-            if (string.IsNullOrWhiteSpace(input))
-                return fallback;
-
-            input = input.Trim();
-
-            // Hex input?
-            if (input.StartsWith("#"))
-            {
-                string hex = input.Substring(1);
-
-                // #RRGGBB
-                if (hex.Length == 6 &&
-                    int.TryParse(hex, System.Globalization.NumberStyles.HexNumber, null, out int rgb))
-                {
-                    return Color.FromArgb(
-                        (rgb >> 16) & 0xFF,
-                        (rgb >> 8) & 0xFF,
-                        rgb & 0xFF
-                    );
-                }
-
-                // #AARRGGBB
-                if (hex.Length == 8 &&
-                    int.TryParse(hex, System.Globalization.NumberStyles.HexNumber, null, out int argb))
-                {
-                    return Color.FromArgb(
-                        (argb >> 24) & 0xFF,
-                        (argb >> 16) & 0xFF,
-                        (argb >> 8) & 0xFF,
-                        argb & 0xFF
-                    );
-                }
-            }
-
-            // Named color
-            var named = Color.FromName(input);
-            if (!named.IsEmpty)
-                return named;
-
-            // Fallback if nothing matched
-            return fallback;
-        }
-
         private void comboBox_fgcolor_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Tab)
@@ -396,7 +351,7 @@ namespace serialog
                     return;
                 }
 
-                Color fgcol = ParseColorInput(comboBox_fgcolor.Text, ListView.DefaultForeColor);
+                Color fgcol = Helpers.ParseColorInput(comboBox_fgcolor.Text, ListView.DefaultForeColor);
 
                 highlightEntries.BeginUpdate();
                 foreach (ListViewItem item in listView1.SelectedItems)
@@ -419,7 +374,7 @@ namespace serialog
                     return;
                 }
 
-                Color bgcol = ParseColorInput(comboBox_bgcolor.Text, ListView.DefaultBackColor);
+                Color bgcol = Helpers.ParseColorInput(comboBox_bgcolor.Text, ListView.DefaultBackColor);
 
                 highlightEntries.BeginUpdate();
                 foreach (ListViewItem item in listView1.SelectedItems)

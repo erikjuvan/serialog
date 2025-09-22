@@ -55,5 +55,50 @@ namespace serialog
 
             return line.Contains(pattern);
         }
+
+        public static Color ParseColorInput(string input, Color fallback)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return fallback;
+
+            input = input.Trim();
+
+            // Hex input?
+            if (input.StartsWith("#"))
+            {
+                string hex = input.Substring(1);
+
+                // #RRGGBB
+                if (hex.Length == 6 &&
+                    int.TryParse(hex, System.Globalization.NumberStyles.HexNumber, null, out int rgb))
+                {
+                    return Color.FromArgb(
+                        (rgb >> 16) & 0xFF,
+                        (rgb >> 8) & 0xFF,
+                        rgb & 0xFF
+                    );
+                }
+
+                // #AARRGGBB
+                if (hex.Length == 8 &&
+                    int.TryParse(hex, System.Globalization.NumberStyles.HexNumber, null, out int argb))
+                {
+                    return Color.FromArgb(
+                        (argb >> 24) & 0xFF,
+                        (argb >> 16) & 0xFF,
+                        (argb >> 8) & 0xFF,
+                        argb & 0xFF
+                    );
+                }
+            }
+
+            // Named color
+            var named = Color.FromName(input);
+            if (!named.IsEmpty)
+                return named;
+
+            // Fallback if nothing matched
+            return fallback;
+        }
     }
 }
