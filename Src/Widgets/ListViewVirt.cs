@@ -21,7 +21,7 @@ namespace serialog
         public ListViewVirt()
         {
             this.View = View.Details;
-            this.FullRowSelect = true;
+            this.FullRowSelect = false;
             this.GridLines = false;
             this.VirtualMode = true;
             this.VirtualListSize = 0;

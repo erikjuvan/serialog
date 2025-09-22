@@ -101,7 +101,6 @@
             this.listView1.DataLog = null;
             this.listView1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.listView1.ForeColor = System.Drawing.SystemColors.ButtonShadow;
-            this.listView1.FullRowSelect = true;
             this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.listView1.HideNonMatchingLines = false;
             this.listView1.HighlightsDisabled = false;

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormView));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.hideUnhighlightedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listView1 = new serialog.ListViewVirt();
@@ -63,7 +62,6 @@
             this.listView1.DataLog = null;
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.ForeColor = System.Drawing.SystemColors.ButtonShadow;
-            this.listView1.FullRowSelect = true;
             this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.listView1.HideNonMatchingLines = false;
             this.listView1.HighlightsDisabled = false;
