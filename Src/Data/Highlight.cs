@@ -101,20 +101,6 @@ namespace serialog
                 Hide = entry.Hide
             };
         }
-
-        public Highlight(ListViewItem listViewItem)
-        {
-            Enabled = listViewItem.Checked;
-            Text = listViewItem.Text;
-            ForeColor = listViewItem.ForeColor;
-            BackColor = listViewItem.BackColor;
-            if (listViewItem.SubItems.Count == 3)
-            {
-                IgnoreCase = listViewItem.SubItems[0].Text.Contains("*");
-                Hide = listViewItem.SubItems[1].Text.Contains("*");
-            }
-            FontStyle = listViewItem.Font.Style;
-        }
     }
 
     public class Highlights
@@ -194,25 +180,17 @@ namespace serialog
             OnEntriesChanged();
         }
 
-        public void Add(Highlight highlightEntry)
+        public void Add(Highlight entry)
         {
-            var entryCopy = new Highlight(highlightEntry);
+            var entryCopy = new Highlight(entry);
             _items.Add(entryCopy);
             SubscribeToEntry(entryCopy);
             OnEntriesChanged();
         }
 
-        public void Insert(int index, Highlight highlightEntry)
+        public void Insert(int index, Highlight entry)
         {
-            var entryCopy = new Highlight(highlightEntry);
-            _items.Insert(index, entryCopy);
-            SubscribeToEntry(entryCopy);
-            OnEntriesChanged();
-        }
-
-        public void Insert(int index, ListViewItem listViewItem)
-        {
-            var entryCopy = new Highlight(listViewItem);
+            var entryCopy = new Highlight(entry);
             _items.Insert(index, entryCopy);
             SubscribeToEntry(entryCopy);
             OnEntriesChanged();
