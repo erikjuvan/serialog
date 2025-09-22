@@ -3,33 +3,44 @@ using System.Text.Json.Serialization;
 
 namespace serialog
 {
+    public class HighlightStyle
+    {
+        [JsonConverter(typeof(ColorJsonConverter))]
+        public Color ForeColor { get; set; }
+        [JsonConverter(typeof(ColorJsonConverter))]
+        public Color BackColor { get; set; }
+        public FontStyle FontStyle { get; set; }
+        public bool Hide { get; set; }
+    }
+
     public class Highlight : INotifyPropertyChanged
     {
         private bool _enabled = true;
-        private bool _use_regex = false;
+        private bool _useRegex = false;
         private string _text = "";
-        private Color _foreColor = Color.Black;
-        private Color _backColor = Color.White;
         private bool _ignoreCase = false;
-        private bool _bold = false;
-        private bool _italic = false;
-        private bool _hide = false;
+        private HighlightStyle _style = new HighlightStyle
+        {
+            ForeColor = Color.Black,
+            BackColor = Color.White,
+            FontStyle = FontStyle.Regular,
+            Hide = false
+        };
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
+        // Basic properties
         public bool Enabled {
             get => _enabled;
             set { if (_enabled != value) { _enabled = value; OnPropertyChanged(nameof(Enabled)); } }
         }
 
         public bool UseRegex {
-            get => _use_regex;
-            set { if (_use_regex != value) { _use_regex = value; OnPropertyChanged(nameof(UseRegex)); } }
+            get => _useRegex;
+            set { if (_useRegex != value) { _useRegex = value; OnPropertyChanged(nameof(UseRegex)); } }
         }
 
         public string Text {
@@ -37,36 +48,40 @@ namespace serialog
             set { if (_text != value) { _text = value; OnPropertyChanged(nameof(Text)); } }
         }
 
-        [JsonConverter(typeof(ColorJsonConverter))]
-        public Color ForeColor {
-            get => _foreColor;
-            set { if (_foreColor != value) { _foreColor = value; OnPropertyChanged(nameof(ForeColor)); } }
-        }
-
-        [JsonConverter(typeof(ColorJsonConverter))]
-        public Color BackColor {
-            get => _backColor;
-            set { if (_backColor != value) { _backColor = value; OnPropertyChanged(nameof(BackColor)); } }
-        }
-
         public bool IgnoreCase {
             get => _ignoreCase;
             set { if (_ignoreCase != value) { _ignoreCase = value; OnPropertyChanged(nameof(IgnoreCase)); } }
         }
 
-        public bool Bold {
-            get => _bold;
-            set { if (_bold != value) { _bold = value; OnPropertyChanged(nameof(Bold)); } }
+        // Style property exposing HighlightStyle
+        public HighlightStyle Style {
+            get => _style;
+            set { if (_style != value) { _style = value; OnPropertyChanged(nameof(Style)); } }
         }
 
-        public bool Italic {
-            get => _italic;
-            set { if (_italic != value) { _italic = value; OnPropertyChanged(nameof(Italic)); } }
+        // Convenience properties forwarding to Style
+        [JsonIgnore]
+        public Color ForeColor {
+            get => _style.ForeColor;
+            set { if (_style.ForeColor != value) { _style.ForeColor = value; OnPropertyChanged(nameof(ForeColor)); } }
         }
 
+        [JsonIgnore]
+        public Color BackColor {
+            get => _style.BackColor;
+            set { if (_style.BackColor != value) { _style.BackColor = value; OnPropertyChanged(nameof(BackColor)); } }
+        }
+
+        [JsonIgnore]
+        public FontStyle FontStyle {
+            get => _style.FontStyle;
+            set { if (_style.FontStyle != value) { _style.FontStyle = value; OnPropertyChanged(nameof(FontStyle)); } }
+        }
+
+        [JsonIgnore]
         public bool Hide {
-            get => _hide;
-            set { if (_hide != value) { _hide = value; OnPropertyChanged(nameof(Hide)); } }
+            get => _style.Hide;
+            set { if (_style.Hide != value) { _style.Hide = value; OnPropertyChanged(nameof(Hide)); } }
         }
 
         // Constructors
@@ -77,17 +92,14 @@ namespace serialog
             Enabled = entry.Enabled;
             UseRegex = entry.UseRegex;
             Text = entry.Text;
-            ForeColor = entry.ForeColor;
-            BackColor = entry.BackColor;
             IgnoreCase = entry.IgnoreCase;
-            Bold = entry.Bold;
-            Italic = entry.Italic;
-            Hide = entry.Hide;
-        }
-
-        public Highlight(string text)
-        {
-            Text = text;
+            Style = new HighlightStyle
+            {
+                ForeColor = entry.ForeColor,
+                BackColor = entry.BackColor,
+                FontStyle = entry.FontStyle,
+                Hide = entry.Hide
+            };
         }
 
         public Highlight(ListViewItem listViewItem)
@@ -101,27 +113,30 @@ namespace serialog
                 IgnoreCase = listViewItem.SubItems[0].Text.Contains("*");
                 Hide = listViewItem.SubItems[1].Text.Contains("*");
             }
-            Bold = listViewItem.Font.Style.HasFlag(FontStyle.Bold);
-            Italic = listViewItem.Font.Style.HasFlag(FontStyle.Italic);
+            FontStyle = listViewItem.Font.Style;
         }
     }
 
     public class Highlights
     {
-        private List<Highlight> items = new List<Highlight>();
+        private List<Highlight> _items = new List<Highlight>();
+        public IReadOnlyList<Highlight> Items => _items.AsReadOnly();
 
         // Event that fires when the collection or any entry changes
         public event EventHandler? EntriesChanged;
+        public int CurrentVersion { get; private set; } = 0;
 
         private bool _suspendNotifications = false;
         private bool _hasChangesDuringSuspend = false;
+
+        public int Count => _items.Count;
 
         public Highlights() { }
 
         public Highlights(Highlights highlights)
         {
             BeginUpdate();
-            foreach (Highlight item in highlights.items)
+            foreach (Highlight item in highlights._items)
             {
                 Add(item); // Use Add so PropertyChanged subscription is set
             }
@@ -145,7 +160,7 @@ namespace serialog
             _suspendNotifications = false;
             if (_hasChangesDuringSuspend)
             {
-                EntriesChanged?.Invoke(this, EventArgs.Empty);
+                OnEntriesChanged();
                 _hasChangesDuringSuspend = false;
             }
         }
@@ -158,6 +173,7 @@ namespace serialog
             }
             else
             {
+                CurrentVersion++;
                 EntriesChanged?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -181,7 +197,7 @@ namespace serialog
         public void Add(Highlight highlightEntry)
         {
             var entryCopy = new Highlight(highlightEntry);
-            items.Add(entryCopy);
+            _items.Add(entryCopy);
             SubscribeToEntry(entryCopy);
             OnEntriesChanged();
         }
@@ -189,7 +205,7 @@ namespace serialog
         public void Insert(int index, Highlight highlightEntry)
         {
             var entryCopy = new Highlight(highlightEntry);
-            items.Insert(index, entryCopy);
+            _items.Insert(index, entryCopy);
             SubscribeToEntry(entryCopy);
             OnEntriesChanged();
         }
@@ -197,39 +213,68 @@ namespace serialog
         public void Insert(int index, ListViewItem listViewItem)
         {
             var entryCopy = new Highlight(listViewItem);
-            items.Insert(index, entryCopy);
+            _items.Insert(index, entryCopy);
             SubscribeToEntry(entryCopy);
             OnEntriesChanged();
         }
 
         public void RemoveAt(int index)
         {
-            UnsubscribeFromEntry(items[index]);
-            items.RemoveAt(index);
+            UnsubscribeFromEntry(_items[index]);
+            _items.RemoveAt(index);
             OnEntriesChanged();
         }
 
         public void Clear()
         {
-            foreach (var entry in items)
+            foreach (var entry in _items)
                 UnsubscribeFromEntry(entry);
-            items.Clear();
+            _items.Clear();
             OnEntriesChanged();
         }
 
-        public List<Highlight> Items => items;
-
         public Highlight this[int index] {
-            get => items[index];
+            get => _items[index];
             set {
-                UnsubscribeFromEntry(items[index]);
+                UnsubscribeFromEntry(_items[index]);
                 var entryCopy = new Highlight(value);
-                items[index] = entryCopy;
+                _items[index] = entryCopy;
                 SubscribeToEntry(entryCopy);
                 OnEntriesChanged();
             }
         }
 
-        public int Count => items.Count;
+        public void Move(int oldIndex, int newIndex)
+        {
+            if (oldIndex < 0 || oldIndex >= _items.Count) return;
+            if (newIndex < 0 || newIndex >= _items.Count) return;
+            if (oldIndex == newIndex) return;
+
+            var item = _items[oldIndex];
+            _items.RemoveAt(oldIndex);
+            _items.Insert(newIndex, item);
+            OnEntriesChanged(); // notify UI
+        }
+
+        public HighlightStyle? GetStyle(string line)
+        {
+            return FindMatch(line)?.Style;
+        }
+
+        public Highlight? FindMatch(string line)
+        {
+            foreach (Highlight highlight in Items)
+            {
+                if (!highlight.Enabled) continue;
+
+                string haystack = highlight.IgnoreCase ? line.ToLowerInvariant() : line;
+                string pattern = highlight.IgnoreCase ? highlight.Text.ToLowerInvariant() : highlight.Text;
+
+                if (Helpers.MatchesPattern(haystack, pattern, highlight.UseRegex))
+                    return highlight; // first match wins
+            }
+
+            return null;
+        }
     }
 }
