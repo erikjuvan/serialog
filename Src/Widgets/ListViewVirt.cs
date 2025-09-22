@@ -5,7 +5,6 @@ namespace serialog
 {
     public class ListViewVirt : ListViewNF
     {
-        public List<Highlight> HighlightItems { get; set; } = new List<Highlight>();
         public bool HighlightsDisabled { get; set; } = false;
         public bool HideNonMatchingLines { get; set; } = false;
 
@@ -66,67 +65,46 @@ namespace serialog
         private void OnDrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
             var entry = DataLog[e.ItemIndex];
-            string searchString = entry.GetContent();
 
-            // Get highlight style
-            if (!GetHighlightStyle(searchString, out Color fore, out Color back, out FontStyle style))
-                return;
+            // Compute or reuse highlight
+            entry.EnsureHighlightUpToDate();
+
+            // Default
+            HighlightStyle style = new HighlightStyle
+            {
+                ForeColor = Color.FromKnownColor(KnownColor.ButtonShadow),
+                BackColor = Color.FromArgb(30, 30, 30),
+                FontStyle = FontStyle.Regular,
+                Hide = false
+            };
+            
+            if (!HighlightsDisabled)
+            {
+                var effective = entry.Style;
+
+                if (effective == null) // No highlight match
+                {
+                    if (HideNonMatchingLines)
+                        return; // skip drawing completely
+                }
+                else
+                {
+                    style = effective;
+                }
+
+                if (style.Hide)
+                    return;
+            }
 
             // Selection overrides
-            if (this.SelectedIndices.Contains(e.ItemIndex))
+            if (SelectedIndices.Contains(e.ItemIndex))
             {
-                back = SystemColors.Highlight;
-                fore = SystemColors.HighlightText;
+                style.ForeColor = SystemColors.HighlightText;
+                style.BackColor = SystemColors.Highlight;
             }
 
             string line = entry.ToString();
-            DrawLine(e.Graphics, e.Bounds, line, fore, back, style);
-        }
-
-        private bool GetHighlightStyle(string line, out Color fore, out Color back, out FontStyle style)
-        {
-            // Defaults
-            fore = this.ForeColor;
-            back = this.BackColor;
-            style = FontStyle.Regular;
-
-            if (HighlightsDisabled)
-                return true; // Just use defaults
-
-            var match = FindHighlightMatch(line);
-
-            if (match == null) // No highlight matched
-            {
-                if (HideNonMatchingLines) return false; // Hide it
-                else return true; // Just use defaults
-            }
-
-            if (match.Hide)
-                return false;
-
-            // Apply style from the match
-            fore = match.ForeColor;
-            back = match.BackColor;
-            if (match.Bold) style |= FontStyle.Bold;
-            if (match.Italic) style |= FontStyle.Italic;
-
-            return true;
-        }
-
-        public Highlight? FindHighlightMatch(string line)
-        {
-            foreach (Highlight highlight in HighlightItems)
-            {
-                if (!highlight.Enabled) continue;
-
-                string haystack = highlight.IgnoreCase ? line.ToLowerInvariant() : line;
-                string pattern = highlight.IgnoreCase ? highlight.Text.ToLowerInvariant() : highlight.Text;
-
-                if (Helpers.MatchesPattern(haystack, pattern, highlight.UseRegex))
-                    return highlight; // first match wins
-            }
-
-            return null;
+            DrawLine(e.Graphics, e.Bounds, line, style.ForeColor, style.BackColor, style.FontStyle);
         }
 
         private void DrawLine(Graphics g, Rectangle bounds, string line, Color fore, Color back, FontStyle style)

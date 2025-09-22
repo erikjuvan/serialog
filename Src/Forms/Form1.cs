@@ -44,12 +44,9 @@ namespace serialog
             ParseCommandLineArguments(options);
 
             // Subscribe to highlight changes
-            FormHighlight.highlightEntries.EntriesChanged += HighlightEntries_Changed;
+            FormHighlight.Highlights.EntriesChanged += HighlightEntries_Changed;
 
             listView1.DataLog = _dataLogEditable;
-
-            // Let listview see the Highlights 
-            listView1.HighlightItems = FormHighlight.highlightEntries.Items;
 
             // Attach parser to UI updates
             _serialRXDataParser.LineParsed += bytes =>
@@ -189,10 +186,7 @@ namespace serialog
 
         public void AddLogEntry(DataEntry entry)
         {
-            // Add to master log (assumed thread-safe)
             _dataLog.Add(entry);
-
-            // Add to editable log connected to listview (thread-safe)
             _dataLogEditable.Add(entry);
 
             // Try to schedule one UI update if none is queued yet

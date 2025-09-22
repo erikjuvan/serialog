@@ -132,7 +132,7 @@
             int i = startIndex;
             while (i >= 0 && i < listView.DataLog.Count)
             {
-                if (listView.FindHighlightMatch(listView.DataLog[i].GetContent()) != null)
+                if (FormHighlight.Highlights.FindMatch(listView.DataLog[i].GetContent()) != null)
                 {
                     listView.SelectedIndices.Clear();
                     listView.SelectedIndices.Add(i);
