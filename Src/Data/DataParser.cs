@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace serialog
+﻿namespace serialog
 {
     public class DataParser
     {

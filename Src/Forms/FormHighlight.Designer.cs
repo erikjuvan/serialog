@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHighlight));
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeaderText = new System.Windows.Forms.ColumnHeader();
+            this.columnHeaderRegex = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderIgnore = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderHide = new System.Windows.Forms.ColumnHeader();
             this.button_add = new System.Windows.Forms.Button();
@@ -56,7 +57,6 @@
             this.checkBox_italic = new System.Windows.Forms.CheckBox();
             this.button_deletepreset = new System.Windows.Forms.Button();
             this.checkBoxUseRegex = new System.Windows.Forms.CheckBox();
-            this.columnHeaderRegex = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
             // listView1
@@ -89,6 +89,11 @@
             // 
             this.columnHeaderText.Text = "Contains Text";
             this.columnHeaderText.Width = 230;
+            // 
+            // columnHeaderRegex
+            // 
+            this.columnHeaderRegex.Text = "Regex";
+            this.columnHeaderRegex.Width = 90;
             // 
             // columnHeaderIgnore
             // 
@@ -365,6 +370,7 @@
             // 
             // checkBoxUseRegex
             // 
+            this.checkBoxUseRegex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBoxUseRegex.AutoSize = true;
             this.checkBoxUseRegex.Location = new System.Drawing.Point(83, 806);
             this.checkBoxUseRegex.Name = "checkBoxUseRegex";
@@ -374,12 +380,7 @@
             this.checkBoxUseRegex.UseVisualStyleBackColor = true;
             this.checkBoxUseRegex.CheckedChanged += new System.EventHandler(this.checkBoxUseRegex_CheckedChanged);
             // 
-            // columnHeaderRegex
-            // 
-            this.columnHeaderRegex.Text = "Regex";
-            this.columnHeaderRegex.Width = 90;
-            // 
-            // Form2_Highlight
+            // FormHighlight
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -412,7 +413,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(562, 796);
-            this.Name = "Form2_Highlight";
+            this.Name = "FormHighlight";
             this.Text = "Highlight";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form2_Highlight_KeyDown);
             this.ResumeLayout(false);

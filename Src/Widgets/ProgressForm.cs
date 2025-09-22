@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-public class ProgressForm : Form
+﻿public class ProgressForm : Form
 {
     public ProgressBar ProgressBar { get; private set; }
     private Label lblStatus;
