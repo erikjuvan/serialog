@@ -93,14 +93,13 @@
             this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.listView1.BackColor = System.Drawing.SystemColors.Window;
             this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.column1});
             this.listView1.ContextMenuStrip = this.contextMenuStrip1;
             this.listView1.DataLog = null;
             this.listView1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.listView1.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.listView1.HideNonMatchingLines = false;
             this.listView1.HighlightsDisabled = false;
@@ -120,11 +119,10 @@
             // column1
             // 
             this.column1.Text = "";
-            this.column1.Width = 1900;
+            this.column1.Width = 2000;
             // 
             // contextMenuStrip1
             // 
-            this.contextMenuStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectAllContextMenuItem,
@@ -139,7 +137,6 @@
             // 
             // selectAllContextMenuItem
             // 
-            this.selectAllContextMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.selectAllContextMenuItem.Name = "selectAllContextMenuItem";
             this.selectAllContextMenuItem.Size = new System.Drawing.Size(258, 32);
             this.selectAllContextMenuItem.Text = "Select All";
@@ -147,7 +144,6 @@
             // 
             // clearAllContextMenuItem
             // 
-            this.clearAllContextMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.clearAllContextMenuItem.Name = "clearAllContextMenuItem";
             this.clearAllContextMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
             this.clearAllContextMenuItem.Size = new System.Drawing.Size(258, 32);
@@ -156,7 +152,6 @@
             // 
             // addCustomRowContextMenuItem
             // 
-            this.addCustomRowContextMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.addCustomRowContextMenuItem.Name = "addCustomRowContextMenuItem";
             this.addCustomRowContextMenuItem.Size = new System.Drawing.Size(258, 32);
             this.addCustomRowContextMenuItem.Text = "Add Custom Row...";
@@ -169,7 +164,6 @@
             // 
             // formHighlightContextMenuItem
             // 
-            this.formHighlightContextMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.formHighlightContextMenuItem.Name = "formHighlightContextMenuItem";
             this.formHighlightContextMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
             this.formHighlightContextMenuItem.Size = new System.Drawing.Size(258, 32);
@@ -178,7 +172,6 @@
             // 
             // hideUnhighlightedContextMenuItem
             // 
-            this.hideUnhighlightedContextMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.hideUnhighlightedContextMenuItem.Name = "hideUnhighlightedContextMenuItem";
             this.hideUnhighlightedContextMenuItem.Size = new System.Drawing.Size(258, 32);
             this.hideUnhighlightedContextMenuItem.Text = "Hide Unhighlighted";
@@ -186,7 +179,6 @@
             // 
             // disableHighlightsContextMenuItem
             // 
-            this.disableHighlightsContextMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.disableHighlightsContextMenuItem.Name = "disableHighlightsContextMenuItem";
             this.disableHighlightsContextMenuItem.Size = new System.Drawing.Size(258, 32);
             this.disableHighlightsContextMenuItem.Text = "Disable Highlighting";
@@ -194,7 +186,6 @@
             // 
             // menuStrip1
             // 
-            this.menuStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
@@ -216,15 +207,12 @@
             this.saveSelectedToolStripMenuItem,
             this.saveSerialAsToolStripMenuItem,
             this.exitToolStripMenuItem});
-            this.fileToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(54, 29);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // openToolStripMenuItem
             // 
-            this.openToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.openToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.openToolStripMenuItem.Size = new System.Drawing.Size(368, 34);
@@ -233,8 +221,6 @@
             // 
             // saveAsToolStripMenuItem
             // 
-            this.saveAsToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.saveAsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(368, 34);
@@ -243,8 +229,6 @@
             // 
             // saveSelectedToolStripMenuItem
             // 
-            this.saveSelectedToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.saveSelectedToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.saveSelectedToolStripMenuItem.Name = "saveSelectedToolStripMenuItem";
             this.saveSelectedToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.S)));
@@ -254,8 +238,6 @@
             // 
             // saveSerialAsToolStripMenuItem
             // 
-            this.saveSerialAsToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.saveSerialAsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.saveSerialAsToolStripMenuItem.Name = "saveSerialAsToolStripMenuItem";
             this.saveSerialAsToolStripMenuItem.Size = new System.Drawing.Size(368, 34);
             this.saveSerialAsToolStripMenuItem.Text = "Save \"Serial\" As ...";
@@ -263,8 +245,6 @@
             // 
             // exitToolStripMenuItem
             // 
-            this.exitToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.exitToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(368, 34);
@@ -277,15 +257,12 @@
             this.selectAllToolStripMenuItem,
             this.clearAllToolStripMenuItem,
             this.addCustomRowToolStripMenuItem});
-            this.editToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(58, 29);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // selectAllToolStripMenuItem
             // 
-            this.selectAllToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.selectAllToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
             this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(266, 34);
             this.selectAllToolStripMenuItem.Text = "Select All";
@@ -293,8 +270,6 @@
             // 
             // clearAllToolStripMenuItem
             // 
-            this.clearAllToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.clearAllToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
             this.clearAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
             this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(266, 34);
@@ -303,8 +278,6 @@
             // 
             // addCustomRowToolStripMenuItem
             // 
-            this.addCustomRowToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.addCustomRowToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.addCustomRowToolStripMenuItem.Name = "addCustomRowToolStripMenuItem";
             this.addCustomRowToolStripMenuItem.Size = new System.Drawing.Size(266, 34);
             this.addCustomRowToolStripMenuItem.Text = "Add Custom Row...";
@@ -312,7 +285,6 @@
             // 
             // settingsToolStripMenuItem
             // 
-            this.settingsToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.formHighlightToolStripMenuItem,
             this.hideUnhighlightedToolStripMenuItem,
@@ -321,15 +293,12 @@
             this.fontToolStripMenuItem,
             this.settingsFolderToolStripMenuItem,
             this.nonPrintableCharsAsHexToolStripMenuItem});
-            this.settingsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(92, 29);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // formHighlightToolStripMenuItem
             // 
-            this.formHighlightToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.formHighlightToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.formHighlightToolStripMenuItem.Name = "formHighlightToolStripMenuItem";
             this.formHighlightToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
             this.formHighlightToolStripMenuItem.Size = new System.Drawing.Size(330, 34);
@@ -338,8 +307,6 @@
             // 
             // hideUnhighlightedToolStripMenuItem
             // 
-            this.hideUnhighlightedToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.hideUnhighlightedToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.hideUnhighlightedToolStripMenuItem.Name = "hideUnhighlightedToolStripMenuItem";
             this.hideUnhighlightedToolStripMenuItem.Size = new System.Drawing.Size(330, 34);
             this.hideUnhighlightedToolStripMenuItem.Text = "Hide Unhighlighted";
@@ -347,8 +314,6 @@
             // 
             // disableHighlightsToolStripMenuItem
             // 
-            this.disableHighlightsToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.disableHighlightsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.disableHighlightsToolStripMenuItem.Name = "disableHighlightsToolStripMenuItem";
             this.disableHighlightsToolStripMenuItem.Size = new System.Drawing.Size(330, 34);
             this.disableHighlightsToolStripMenuItem.Text = "Disable Highlighting";
@@ -356,17 +321,13 @@
             // 
             // addStartStopTimestampToolStripMenuItem
             // 
-            this.addStartStopTimestampToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.addStartStopTimestampToolStripMenuItem.CheckOnClick = true;
-            this.addStartStopTimestampToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.addStartStopTimestampToolStripMenuItem.Name = "addStartStopTimestampToolStripMenuItem";
             this.addStartStopTimestampToolStripMenuItem.Size = new System.Drawing.Size(330, 34);
             this.addStartStopTimestampToolStripMenuItem.Text = "Add Start/Stop Timestamp";
             // 
             // fontToolStripMenuItem
             // 
-            this.fontToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.fontToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
             this.fontToolStripMenuItem.Size = new System.Drawing.Size(330, 34);
             this.fontToolStripMenuItem.Text = "Font...";
@@ -374,11 +335,9 @@
             // 
             // settingsFolderToolStripMenuItem
             // 
-            this.settingsFolderToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.settingsFolderToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsFolderChangeToolStripMenuItem,
             this.settingsFolderResetToolStripMenuItem});
-            this.settingsFolderToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.settingsFolderToolStripMenuItem.Name = "settingsFolderToolStripMenuItem";
             this.settingsFolderToolStripMenuItem.Size = new System.Drawing.Size(330, 34);
             this.settingsFolderToolStripMenuItem.Text = "Settings folder";
@@ -399,9 +358,7 @@
             // 
             // nonPrintableCharsAsHexToolStripMenuItem
             // 
-            this.nonPrintableCharsAsHexToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.nonPrintableCharsAsHexToolStripMenuItem.CheckOnClick = true;
-            this.nonPrintableCharsAsHexToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.nonPrintableCharsAsHexToolStripMenuItem.Name = "nonPrintableCharsAsHexToolStripMenuItem";
             this.nonPrintableCharsAsHexToolStripMenuItem.Size = new System.Drawing.Size(330, 34);
             this.nonPrintableCharsAsHexToolStripMenuItem.Text = "Non-Printable Chars as Hex";
@@ -412,15 +369,12 @@
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolsAddViewToolStripMenuItem,
             this.toolsSerialSendToolStripMenuItem});
-            this.toolsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(69, 29);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // toolsAddViewToolStripMenuItem
             // 
-            this.toolsAddViewToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.toolsAddViewToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.toolsAddViewToolStripMenuItem.Name = "toolsAddViewToolStripMenuItem";
             this.toolsAddViewToolStripMenuItem.Size = new System.Drawing.Size(213, 34);
             this.toolsAddViewToolStripMenuItem.Text = "Add View...";
@@ -428,8 +382,6 @@
             // 
             // toolsSerialSendToolStripMenuItem
             // 
-            this.toolsSerialSendToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.toolsSerialSendToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.toolsSerialSendToolStripMenuItem.Name = "toolsSerialSendToolStripMenuItem";
             this.toolsSerialSendToolStripMenuItem.Size = new System.Drawing.Size(213, 34);
             this.toolsSerialSendToolStripMenuItem.Text = "Serial Send...";
@@ -459,9 +411,7 @@
             // 
             // comboBox_port
             // 
-            this.comboBox_port.BackColor = System.Drawing.SystemColors.Window;
             this.comboBox_port.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBox_port.ForeColor = System.Drawing.SystemColors.WindowText;
             this.comboBox_port.FormattingEnabled = true;
             this.comboBox_port.Location = new System.Drawing.Point(71, 53);
             this.comboBox_port.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -639,7 +589,6 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.ClientSize = new System.Drawing.Size(1334, 1602);
             this.Controls.Add(this.checkBoxRegex);
             this.Controls.Add(this.button_prev_highlight);
@@ -658,7 +607,6 @@
             this.Controls.Add(this.button_run);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.menuStrip1);
-            this.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;

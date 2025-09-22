@@ -38,7 +38,6 @@
             // 
             // contextMenuStrip1
             // 
-            this.contextMenuStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.hideUnhighlightedToolStripMenuItem});
@@ -48,20 +47,17 @@
             // hideUnhighlightedToolStripMenuItem
             // 
             this.hideUnhighlightedToolStripMenuItem.CheckOnClick = true;
-            this.hideUnhighlightedToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.hideUnhighlightedToolStripMenuItem.Name = "hideUnhighlightedToolStripMenuItem";
             this.hideUnhighlightedToolStripMenuItem.Size = new System.Drawing.Size(236, 32);
             this.hideUnhighlightedToolStripMenuItem.Text = "Hide unhighlighted";
             // 
             // listView1
             // 
-            this.listView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
             this.listView1.ContextMenuStrip = this.contextMenuStrip1;
             this.listView1.DataLog = null;
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.ForeColor = System.Drawing.SystemColors.ButtonShadow;
             this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.listView1.HideNonMatchingLines = false;
             this.listView1.HighlightsDisabled = false;
