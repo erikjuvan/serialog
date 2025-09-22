@@ -72,8 +72,8 @@ namespace serialog
             // Default
             HighlightStyle style = new HighlightStyle
             {
-                ForeColor = Color.FromKnownColor(KnownColor.ButtonShadow),
-                BackColor = Color.FromArgb(30, 30, 30),
+                ForeColor = Color.FromKnownColor(KnownColor.WindowText),
+                BackColor = Color.FromKnownColor(KnownColor.Window),
                 FontStyle = FontStyle.Regular,
                 Hide = false
             };
