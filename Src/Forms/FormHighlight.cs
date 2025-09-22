@@ -6,7 +6,7 @@ namespace serialog
 {
     public partial class FormHighlight : Form
     {
-        static public HighlightEntries highlightEntries = new HighlightEntries();
+        static public Highlights highlightEntries = new Highlights();
         private Color hlBgColor;
         private Color hlFgColor;
         private string _highlightsFileExtension = ".highlight";
@@ -80,7 +80,7 @@ namespace serialog
             }));
         }
 
-        private void AddHighlightEntryToListView(ref ListView listView, HighlightEntry highlightEntry)
+        private void AddHighlightEntryToListView(ref ListView listView, Highlight highlightEntry)
         {
             ListViewItem item = new ListViewItem();
             item.Checked = highlightEntry.Enabled;
@@ -140,7 +140,7 @@ namespace serialog
             else
                 fgcol = hlFgColor;
 
-            HighlightEntry highlightEntry = new HighlightEntry();
+            Highlight highlightEntry = new Highlight();
             highlightEntry.Enabled = true;
             highlightEntry.UseRegex = checkBoxUseRegex.Checked;
             highlightEntry.Text = textBox_string.Text;
@@ -475,7 +475,7 @@ namespace serialog
             try
             {
                 string json = File.ReadAllText(fullpath);
-                var entries = JsonSerializer.Deserialize<List<HighlightEntry>>(json);
+                var entries = JsonSerializer.Deserialize<List<Highlight>>(json);
 
                 if (entries != null)
                 {

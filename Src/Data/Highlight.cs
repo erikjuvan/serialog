@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace serialog
 {
-    public class HighlightEntry : INotifyPropertyChanged
+    public class Highlight : INotifyPropertyChanged
     {
         private bool _enabled = true;
         private bool _use_regex = false;
@@ -70,9 +70,9 @@ namespace serialog
         }
 
         // Constructors
-        public HighlightEntry() { }
+        public Highlight() { }
 
-        public HighlightEntry(HighlightEntry entry)
+        public Highlight(Highlight entry)
         {
             Enabled = entry.Enabled;
             UseRegex = entry.UseRegex;
@@ -85,12 +85,12 @@ namespace serialog
             Hide = entry.Hide;
         }
 
-        public HighlightEntry(string text)
+        public Highlight(string text)
         {
             Text = text;
         }
 
-        public HighlightEntry(ListViewItem listViewItem)
+        public Highlight(ListViewItem listViewItem)
         {
             Enabled = listViewItem.Checked;
             Text = listViewItem.Text;
@@ -106,9 +106,9 @@ namespace serialog
         }
     }
 
-    public class HighlightEntries
+    public class Highlights
     {
-        private List<HighlightEntry> items = new List<HighlightEntry>();
+        private List<Highlight> items = new List<Highlight>();
 
         // Event that fires when the collection or any entry changes
         public event EventHandler? EntriesChanged;
@@ -116,12 +116,12 @@ namespace serialog
         private bool _suspendNotifications = false;
         private bool _hasChangesDuringSuspend = false;
 
-        public HighlightEntries() { }
+        public Highlights() { }
 
-        public HighlightEntries(HighlightEntries highlightEntries)
+        public Highlights(Highlights highlights)
         {
             BeginUpdate();
-            foreach (HighlightEntry item in highlightEntries.items)
+            foreach (Highlight item in highlights.items)
             {
                 Add(item); // Use Add so PropertyChanged subscription is set
             }
@@ -162,12 +162,12 @@ namespace serialog
             }
         }
 
-        private void SubscribeToEntry(HighlightEntry entry)
+        private void SubscribeToEntry(Highlight entry)
         {
             entry.PropertyChanged += Entry_PropertyChanged;
         }
 
-        private void UnsubscribeFromEntry(HighlightEntry entry)
+        private void UnsubscribeFromEntry(Highlight entry)
         {
             entry.PropertyChanged -= Entry_PropertyChanged;
         }
@@ -178,17 +178,17 @@ namespace serialog
             OnEntriesChanged();
         }
 
-        public void Add(HighlightEntry highlightEntry)
+        public void Add(Highlight highlightEntry)
         {
-            var entryCopy = new HighlightEntry(highlightEntry);
+            var entryCopy = new Highlight(highlightEntry);
             items.Add(entryCopy);
             SubscribeToEntry(entryCopy);
             OnEntriesChanged();
         }
 
-        public void Insert(int index, HighlightEntry highlightEntry)
+        public void Insert(int index, Highlight highlightEntry)
         {
-            var entryCopy = new HighlightEntry(highlightEntry);
+            var entryCopy = new Highlight(highlightEntry);
             items.Insert(index, entryCopy);
             SubscribeToEntry(entryCopy);
             OnEntriesChanged();
@@ -196,7 +196,7 @@ namespace serialog
 
         public void Insert(int index, ListViewItem listViewItem)
         {
-            var entryCopy = new HighlightEntry(listViewItem);
+            var entryCopy = new Highlight(listViewItem);
             items.Insert(index, entryCopy);
             SubscribeToEntry(entryCopy);
             OnEntriesChanged();
@@ -217,13 +217,13 @@ namespace serialog
             OnEntriesChanged();
         }
 
-        public List<HighlightEntry> Items => items;
+        public List<Highlight> Items => items;
 
-        public HighlightEntry this[int index] {
+        public Highlight this[int index] {
             get => items[index];
             set {
                 UnsubscribeFromEntry(items[index]);
-                var entryCopy = new HighlightEntry(value);
+                var entryCopy = new Highlight(value);
                 items[index] = entryCopy;
                 SubscribeToEntry(entryCopy);
                 OnEntriesChanged();

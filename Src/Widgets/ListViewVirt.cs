@@ -5,7 +5,7 @@ namespace serialog
 {
     public class ListViewVirt : ListViewNF
     {
-        public List<HighlightEntry> HighlightItems { get; set; } = new List<HighlightEntry>();
+        public List<Highlight> HighlightItems { get; set; } = new List<Highlight>();
         public bool HighlightsDisabled { get; set; } = false;
         public bool HideNonMatchingLines { get; set; } = false;
 
@@ -113,9 +113,9 @@ namespace serialog
             return true;
         }
 
-        public HighlightEntry? FindHighlightMatch(string line)
+        public Highlight? FindHighlightMatch(string line)
         {
-            foreach (HighlightEntry highlight in HighlightItems)
+            foreach (Highlight highlight in HighlightItems)
             {
                 if (!highlight.Enabled) continue;
 
