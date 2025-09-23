@@ -378,28 +378,7 @@ namespace serialog
 
         private void Populate_comboBox_preset()
         {
-            comboBox_preset.Items.Clear();
-
-            try
-            {
-                string settingsDir = AppSettings.SettingsFolder;
-
-                if (!Directory.Exists(settingsDir))
-                    return;
-
-                // Only look for .highlight files in .settings (no recursion)
-                var listOfFiles = Directory.EnumerateFiles(settingsDir, "*" + _highlightsFileExtension, SearchOption.TopDirectoryOnly);
-
-                foreach (var file in listOfFiles)
-                {
-                    string presetName = Path.GetFileNameWithoutExtension(file);
-                    comboBox_preset.Items.Add(presetName);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Could not load presets: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            Helpers.PopulateComboBox(comboBox_preset, _highlightsFileExtension, false);
         }
 
         private void Populate_comboBox_preset_onFolderChange()

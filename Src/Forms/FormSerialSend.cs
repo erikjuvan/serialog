@@ -141,22 +141,7 @@
 
         private void Populate_comboBox_file()
         {
-            comboBox_file.Items.Clear();
-
-            try
-            {
-                var listOfFiles = Directory.EnumerateFiles(AppSettings.SettingsFolder, "*" + _sendFileExtension, SearchOption.AllDirectories)
-                                           .Select(Path.GetFileNameWithoutExtension);
-
-                foreach (var file in listOfFiles)
-                {
-                    comboBox_file.Items.Add(file);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            Helpers.PopulateComboBox(comboBox_file, _sendFileExtension, false);
         }
 
         private void Populate_comboBox_file_onFolderChange()

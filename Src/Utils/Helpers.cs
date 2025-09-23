@@ -100,5 +100,29 @@ namespace serialog
             // Fallback if nothing matched
             return fallback;
         }
+
+        public static void PopulateComboBox(ComboBox comboBox, string extension, bool recursive)
+        {
+            comboBox.Items.Clear();
+
+            try
+            {
+                string settingsDir = AppSettings.SettingsFolder;
+                if (!Directory.Exists(settingsDir))
+                    return;
+
+                var searchOption = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+
+                var listOfFiles = Directory.EnumerateFiles(settingsDir, "*" + extension, searchOption)
+                                           .Select(Path.GetFileNameWithoutExtension);
+
+                foreach (var file in listOfFiles)
+                    comboBox.Items.Add(file);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Could not load files: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
