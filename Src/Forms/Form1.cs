@@ -39,15 +39,19 @@ namespace serialog
         private FormHighlight formHighlight = null;
         private FormSerialSend formSerialSend = null;
 
+        // Command line options
+        private readonly CommandLineOptions _commandLineOptions;
+
         // Pipe server for IPC
         private PipeServer pipeServer;
 
-        public Form1(Dictionary<string, string> options)
+        public Form1(CommandLineOptions options)
         {
             InitializeComponent();
 
             // Parse command line arguments
-            ParseCommandLineArguments(options);
+            _commandLineOptions = options;
+            ApplyCommandLineOptions();
 
             // Subscribe to highlight changes
             FormHighlight.Highlights.EntriesChanged += HighlightEntries_Changed;
@@ -129,71 +133,35 @@ namespace serialog
             }
         }
 
-        private void ParseCommandLineArguments(Dictionary<string, string> options)
+        private void ApplyCommandLineOptions()
         {
-            // Apply user arguments
-            if (options.TryGetValue("port", out var port))
+            // Port
+            if (!string.IsNullOrEmpty(_commandLineOptions.Port))
             {
-                string portString = port.ToString();
-
-                // If the item exists in the comboBox, select it
-                int index = comboBox_port.Items.IndexOf(portString);
-                if (index >= 0)
-                {
-                    comboBox_port.SelectedIndex = index;
-                }
-                else
-                {
-                    // If it's not in the list, just set the text
-                    comboBox_port.Text = portString;
-                }
+                int index = comboBox_port.Items.IndexOf(_commandLineOptions.Port);
+                comboBox_port.SelectedIndex = index >= 0 ? index : -1;
+                if (index < 0)
+                    comboBox_port.Text = _commandLineOptions.Port;
             }
             else if (comboBox_port.Items.Count > 0)
             {
-                 comboBox_port.SelectedIndex = 0;
+                comboBox_port.SelectedIndex = 0;
             }
 
-            if (options.TryGetValue("baud", out var baudStr) &&
-                int.TryParse(baudStr, out var rate))
-            {
-                string rateString = rate.ToString();
+            // Baud
+            string baudString = _commandLineOptions.Baud.ToString();
+            int baudIndex = comboBox_baud.Items.IndexOf(baudString);
+            comboBox_baud.SelectedIndex = baudIndex >= 0 ? baudIndex : -1;
+            if (baudIndex < 0)
+                comboBox_baud.Text = baudString;
 
-                // If the item exists in the comboBox, select it
-                int index = comboBox_baud.Items.IndexOf(rateString);
-                if (index >= 0)
-                {
-                    comboBox_baud.SelectedIndex = index;
-                }
-                else
-                {
-                    // If it's not in the list, just set the text
-                    comboBox_baud.Text = rateString;
-                }
-            }
-            else
-            {
-                comboBox_baud.SelectedItem = "921600";
-            }
+            // Auto-connect
+            if (_commandLineOptions.AutoConnect)
+                ConnectSerial();
 
-            if (options.TryGetValue("autoconnect", out var ac))
-            {
-                bool autoConnect = ac.Equals("true", StringComparison.OrdinalIgnoreCase);
-
-                if (autoConnect)
-                {
-                    button_run_Click(this, EventArgs.Empty);
-                }
-            }
-
-            if (options.TryGetValue("load-highlight-preset", out var highlightPresetFilename))
-            {
-                _cmdlineHighlightPresetFilename = highlightPresetFilename.ToString();
-            }
-
-            if (options.TryGetValue("load-serial-preset", out var serialPresetFilename))
-            {
-                _cmdlineSerialPresetFilename = serialPresetFilename.ToString();
-            }
+            // Presets
+            _cmdlineHighlightPresetFilename = _commandLineOptions.HighlightPresetFile;
+            _cmdlineSerialPresetFilename = _commandLineOptions.SerialPresetFile;
         }
 
         private void HandlePipeCommand(string command)
