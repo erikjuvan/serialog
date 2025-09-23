@@ -8,7 +8,6 @@ namespace serialog
         public static Highlights Highlights = new Highlights();
         private Color hlBgColor;
         private Color hlFgColor;
-        private string _highlightsFileExtension = ".highlight";
 
         public FormHighlight()
         {
@@ -26,7 +25,7 @@ namespace serialog
             Populate_comboBox_preset_onFolderChange();
 
             // Subscribe to folder change
-            AppSettings.SettingsFolderChanged += (_, __) => Populate_comboBox_preset_onFolderChange();
+            SettingsManager.SettingsFolderChanged += (_, __) => Populate_comboBox_preset_onFolderChange();
         }
 
         // Handle when user selects a color from the ComboBox
@@ -378,7 +377,7 @@ namespace serialog
 
         private void Populate_comboBox_preset()
         {
-            Helpers.PopulateComboBox(comboBox_preset, _highlightsFileExtension, false);
+            Helpers.PopulateComboBox(comboBox_preset, SettingsManager.Default.HighlightPresetExt, false);
         }
 
         private void Populate_comboBox_preset_onFolderChange()
@@ -401,9 +400,9 @@ namespace serialog
                 return;
 
             // Ensure the folder exists
-            Directory.CreateDirectory(AppSettings.SettingsFolder);
+            Directory.CreateDirectory(SettingsManager.SettingsFolder);
 
-            string fullpath = Path.Combine(AppSettings.SettingsFolder, comboBox_preset.Text + _highlightsFileExtension);
+            string fullpath = Path.Combine(SettingsManager.SettingsFolder, comboBox_preset.Text + SettingsManager.Default.HighlightPresetExt);
 
             if (File.Exists(fullpath))
             {
@@ -430,7 +429,7 @@ namespace serialog
 
         public void LoadPreset(string presetFileName)
         {
-            string fullpath = Path.Combine(AppSettings.SettingsFolder, presetFileName + _highlightsFileExtension);
+            string fullpath = Path.Combine(SettingsManager.SettingsFolder, presetFileName + SettingsManager.Default.HighlightPresetExt);
 
             if (!File.Exists(fullpath))
             {
@@ -485,7 +484,7 @@ namespace serialog
                 return;
             }
 
-            string fullpath = Path.Combine(AppSettings.SettingsFolder, comboBox_preset.Text + _highlightsFileExtension);
+            string fullpath = Path.Combine(SettingsManager.SettingsFolder, comboBox_preset.Text + SettingsManager.Default.HighlightPresetExt);
 
             if (!File.Exists(fullpath))
             {

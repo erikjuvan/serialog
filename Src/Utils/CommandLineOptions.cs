@@ -1,4 +1,6 @@
-﻿namespace serialog
+﻿using System.Text.Json;
+
+namespace serialog
 {
     public class CommandLineOptions
     {
@@ -9,7 +11,6 @@
         public string HighlightPresetFile { get; set; } = null;
         public string SerialPresetFile { get; set; } = null;
 
-        // Factory method to parse args
         public static CommandLineOptions Parse(string[] args)
         {
             var options = new CommandLineOptions();
@@ -52,6 +53,37 @@
             }
 
             return options;
+        }
+
+        public static CommandLineOptions Merge(CommandLineOptions baseOptions, CommandLineOptions overrideOptions)
+        {
+            // CLI options override file options
+            var result = new CommandLineOptions
+            {
+                Port = overrideOptions.Port ?? baseOptions.Port,
+                Baud = overrideOptions.Baud != 0 ? overrideOptions.Baud : baseOptions.Baud,
+                AutoConnect = overrideOptions.AutoConnect || baseOptions.AutoConnect,
+                HighlightPresetFile = overrideOptions.HighlightPresetFile ?? baseOptions.HighlightPresetFile,
+                SerialPresetFile = overrideOptions.SerialPresetFile ?? baseOptions.SerialPresetFile
+            };
+            return result;
+        }
+
+        public static CommandLineOptions FromJsonFile(string filePath)
+        {
+            if (!File.Exists(filePath))
+                return new CommandLineOptions();
+
+            var json = File.ReadAllText(filePath);
+            try
+            {
+                return JsonSerializer.Deserialize<CommandLineOptions>(json) ?? new CommandLineOptions();
+            }
+            catch
+            {
+                // Could log error or ignore silently
+                return new CommandLineOptions();
+            }
         }
     }
 }

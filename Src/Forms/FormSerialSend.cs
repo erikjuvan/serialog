@@ -5,7 +5,6 @@
         private Form1 _parentForm;
         private System.IO.Ports.SerialPort _serial;
         private DataLog _dataLog;
-        private string _sendFileExtension = ".send";
 
         public class DataRowModel
         {
@@ -25,7 +24,7 @@
             Populate_comboBox_file_onFolderChange();
 
             // Subscribe to folder change
-            AppSettings.SettingsFolderChanged += (_, __) => Populate_comboBox_file_onFolderChange();
+            SettingsManager.SettingsFolderChanged += (_, __) => Populate_comboBox_file_onFolderChange();
         }
 
         private bool CanSendData()
@@ -141,7 +140,7 @@
 
         private void Populate_comboBox_file()
         {
-            Helpers.PopulateComboBox(comboBox_file, _sendFileExtension, false);
+            Helpers.PopulateComboBox(comboBox_file, SettingsManager.Default.SerialPresetExt, false);
         }
 
         private void Populate_comboBox_file_onFolderChange()
@@ -169,10 +168,10 @@
                 return;
 
             // Ensure the folder exists
-            Directory.CreateDirectory(AppSettings.SettingsFolder);
+            Directory.CreateDirectory(SettingsManager.SettingsFolder);
 
             // Combine folder + file
-            string fullpath = Path.Combine(AppSettings.SettingsFolder, comboBox_file.Text + _sendFileExtension);
+            string fullpath = Path.Combine(SettingsManager.SettingsFolder, comboBox_file.Text + SettingsManager.Default.SerialPresetExt);
 
             if (File.Exists(fullpath))
             {
@@ -209,7 +208,7 @@
 
         public async void LoadPreset(string presetFileName)
         {
-            string fullpath = Path.Combine(AppSettings.SettingsFolder, presetFileName + _sendFileExtension);
+            string fullpath = Path.Combine(SettingsManager.SettingsFolder, presetFileName + SettingsManager.Default.SerialPresetExt);
 
             if (!File.Exists(fullpath))
             {
@@ -252,7 +251,7 @@
                 return;
             }
 
-            string fullpath = Path.Combine(AppSettings.SettingsFolder, comboBox_file.Text + _sendFileExtension);
+            string fullpath = Path.Combine(SettingsManager.SettingsFolder, comboBox_file.Text + SettingsManager.Default.SerialPresetExt);
 
             if (!File.Exists(fullpath))
             {

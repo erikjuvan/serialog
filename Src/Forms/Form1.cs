@@ -379,7 +379,7 @@ namespace serialog
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show($"ConnectSerial failed: {ex.Message}");
                     return;
                 }
 
@@ -742,17 +742,17 @@ namespace serialog
             using var dialog = new FolderBrowserDialog
             {
                 ShowNewFolderButton = true,
-                SelectedPath = AppSettings.SettingsFolder // start in current folder
+                SelectedPath = SettingsManager.SettingsFolder // start in current folder
             };
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 // Store the absolute path directly
-                AppSettings.SettingsFolder = dialog.SelectedPath;
-                Directory.CreateDirectory(AppSettings.SettingsFolder); // ensure it exists
+                SettingsManager.SettingsFolder = dialog.SelectedPath;
+                Directory.CreateDirectory(SettingsManager.SettingsFolder); // ensure it exists
 
                 MessageBox.Show(
-                    $"Settings directory set to '{AppSettings.SettingsFolder}'",
+                    $"Settings directory set to '{SettingsManager.SettingsFolder}'",
                     "Directory",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
@@ -761,10 +761,10 @@ namespace serialog
 
         private void settingsFolderResetToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AppSettings.SettingsFolder = AppSettings.DefaultSettingsFolder;
+            SettingsManager.SettingsFolder = SettingsManager.Default.SettingsFolder;
 
             MessageBox.Show(
-                $"Settings directory reset to '{AppSettings.SettingsFolder}'",
+                $"Settings directory reset to '{SettingsManager.SettingsFolder}'",
                 "Directory",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);

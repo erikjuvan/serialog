@@ -12,7 +12,7 @@ namespace serialog
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
-            var options = CommandLineOptions.Parse(args);
+            var options = SettingsManager.LoadSettings(args);
 
             Application.Run(new Form1(options));
         }
