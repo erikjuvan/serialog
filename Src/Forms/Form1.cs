@@ -40,20 +40,20 @@ namespace serialog
         private FormSerialSend formSerialSend = null;
 
         // Command line options
-        private readonly CommandLineOptions _commandLineOptions;
+        private readonly AppOptions _appOptions;
 
         // Pipe server for IPC
         private PipeServer pipeServer;
 
-        public Form1(CommandLineOptions options)
+        public Form1()
         {
             InitializeComponent();
 
             RefreshComPortComboBox();
 
             // Parse command line arguments
-            _commandLineOptions = options;
-            ApplyCommandLineOptions();
+            _appOptions = AppConfigurationManager.Load(Environment.GetCommandLineArgs());
+            ApplyAppOptions();
 
             // Subscribe to highlight changes
             FormHighlight.Highlights.EntriesChanged += HighlightEntries_Changed;
@@ -133,15 +133,15 @@ namespace serialog
             }
         }
 
-        private void ApplyCommandLineOptions()
+        private void ApplyAppOptions()
         {
             // Port
-            if (!string.IsNullOrEmpty(_commandLineOptions.Port))
+            if (!string.IsNullOrEmpty(_appOptions.Port))
             {
-                int index = comboBox_port.Items.IndexOf(_commandLineOptions.Port);
+                int index = comboBox_port.Items.IndexOf(_appOptions.Port);
                 comboBox_port.SelectedIndex = index >= 0 ? index : -1;
                 if (index < 0)
-                    comboBox_port.Text = _commandLineOptions.Port;
+                    comboBox_port.Text = _appOptions.Port;
             }
             else if (comboBox_port.Items.Count > 0)
             {
@@ -149,19 +149,19 @@ namespace serialog
             }
 
             // Baud
-            string baudString = _commandLineOptions.Baud.ToString();
+            string baudString = _appOptions.Baud.ToString();
             int baudIndex = comboBox_baud.Items.IndexOf(baudString);
             comboBox_baud.SelectedIndex = baudIndex >= 0 ? baudIndex : -1;
             if (baudIndex < 0)
                 comboBox_baud.Text = baudString;
 
             // Auto-connect
-            if (_commandLineOptions.AutoConnect)
+            if (_appOptions.AutoConnect)
                 ConnectSerial();
 
             // Only assign preset filenames if the user actually passed them
-            _cmdlineHighlightPresetFilename = _commandLineOptions.HighlightPresetFile ?? null;
-            _cmdlineSerialPresetFilename = _commandLineOptions.SerialPresetFile ?? null;
+            _cmdlineHighlightPresetFilename = _appOptions.HighlightPresetFile ?? null;
+            _cmdlineSerialPresetFilename = _appOptions.SerialPresetFile ?? null;
         }
 
         private void HandlePipeCommand(string command)
@@ -742,17 +742,17 @@ namespace serialog
             using var dialog = new FolderBrowserDialog
             {
                 ShowNewFolderButton = true,
-                SelectedPath = SettingsManager.SettingsFolder // start in current folder
+                SelectedPath = AppConfigurationManager.Folder // start in current folder
             };
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 // Store the absolute path directly
-                SettingsManager.SettingsFolder = dialog.SelectedPath;
-                Directory.CreateDirectory(SettingsManager.SettingsFolder); // ensure it exists
+                AppConfigurationManager.Folder = dialog.SelectedPath;
+                Directory.CreateDirectory(AppConfigurationManager.Folder); // ensure it exists
 
                 MessageBox.Show(
-                    $"Settings directory set to '{SettingsManager.SettingsFolder}'",
+                    $"Settings directory set to '{AppConfigurationManager.Folder}'",
                     "Directory",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
@@ -761,10 +761,10 @@ namespace serialog
 
         private void settingsFolderResetToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SettingsManager.SettingsFolder = SettingsManager.Default.SettingsFolder;
+            AppConfigurationManager.Folder = AppConfigurationManager.Default.Folder;
 
             MessageBox.Show(
-                $"Settings directory reset to '{SettingsManager.SettingsFolder}'",
+                $"Settings directory reset to '{AppConfigurationManager.Folder}'",
                 "Directory",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);

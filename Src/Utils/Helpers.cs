@@ -192,7 +192,7 @@ namespace serialog
 
             try
             {
-                string settingsDir = SettingsManager.Default.SettingsFolder;
+                string settingsDir = AppConfigurationManager.Default.Folder;
                 if (!Directory.Exists(settingsDir))
                     return;
 

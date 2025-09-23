@@ -25,7 +25,7 @@ namespace serialog
             Populate_comboBox_preset_onFolderChange();
 
             // Subscribe to folder change
-            SettingsManager.SettingsFolderChanged += (_, __) => Populate_comboBox_preset_onFolderChange();
+            AppConfigurationManager.FolderChanged += (_, __) => Populate_comboBox_preset_onFolderChange();
         }
 
         // Handle when user selects a color from the ComboBox
@@ -377,7 +377,7 @@ namespace serialog
 
         private void Populate_comboBox_preset()
         {
-            Helpers.PopulateComboBox(comboBox_preset, SettingsManager.Default.HighlightPresetExt, false);
+            Helpers.PopulateComboBox(comboBox_preset, AppConfigurationManager.Default.HighlightPresetExt, false);
         }
 
         private void Populate_comboBox_preset_onFolderChange()
@@ -400,9 +400,9 @@ namespace serialog
                 return;
 
             // Ensure the folder exists
-            Directory.CreateDirectory(SettingsManager.SettingsFolder);
+            Directory.CreateDirectory(AppConfigurationManager.Folder);
 
-            string fullpath = Path.Combine(SettingsManager.SettingsFolder, comboBox_preset.Text + SettingsManager.Default.HighlightPresetExt);
+            string fullpath = Path.Combine(AppConfigurationManager.Folder, comboBox_preset.Text + AppConfigurationManager.Default.HighlightPresetExt);
 
             if (File.Exists(fullpath))
             {
@@ -429,7 +429,7 @@ namespace serialog
 
         public void LoadPreset(string presetFileName)
         {
-            string fullpath = Path.Combine(SettingsManager.SettingsFolder, presetFileName + SettingsManager.Default.HighlightPresetExt);
+            string fullpath = Path.Combine(AppConfigurationManager.Folder, presetFileName + AppConfigurationManager.Default.HighlightPresetExt);
 
             if (!File.Exists(fullpath))
             {
@@ -484,7 +484,7 @@ namespace serialog
                 return;
             }
 
-            string fullpath = Path.Combine(SettingsManager.SettingsFolder, comboBox_preset.Text + SettingsManager.Default.HighlightPresetExt);
+            string fullpath = Path.Combine(AppConfigurationManager.Folder, comboBox_preset.Text + AppConfigurationManager.Default.HighlightPresetExt);
 
             if (!File.Exists(fullpath))
             {

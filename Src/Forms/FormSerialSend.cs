@@ -24,7 +24,7 @@
             Populate_comboBox_file_onFolderChange();
 
             // Subscribe to folder change
-            SettingsManager.SettingsFolderChanged += (_, __) => Populate_comboBox_file_onFolderChange();
+            AppConfigurationManager.FolderChanged += (_, __) => Populate_comboBox_file_onFolderChange();
         }
 
         private bool CanSendData()
@@ -140,7 +140,7 @@
 
         private void Populate_comboBox_file()
         {
-            Helpers.PopulateComboBox(comboBox_file, SettingsManager.Default.SerialPresetExt, false);
+            Helpers.PopulateComboBox(comboBox_file, AppConfigurationManager.Default.SerialPresetExt, false);
         }
 
         private void Populate_comboBox_file_onFolderChange()
@@ -168,10 +168,10 @@
                 return;
 
             // Ensure the folder exists
-            Directory.CreateDirectory(SettingsManager.SettingsFolder);
+            Directory.CreateDirectory(AppConfigurationManager.Folder);
 
             // Combine folder + file
-            string fullpath = Path.Combine(SettingsManager.SettingsFolder, comboBox_file.Text + SettingsManager.Default.SerialPresetExt);
+            string fullpath = Path.Combine(AppConfigurationManager.Folder, comboBox_file.Text + AppConfigurationManager.Default.SerialPresetExt);
 
             if (File.Exists(fullpath))
             {
@@ -208,7 +208,7 @@
 
         public async void LoadPreset(string presetFileName)
         {
-            string fullpath = Path.Combine(SettingsManager.SettingsFolder, presetFileName + SettingsManager.Default.SerialPresetExt);
+            string fullpath = Path.Combine(AppConfigurationManager.Folder, presetFileName + AppConfigurationManager.Default.SerialPresetExt);
 
             if (!File.Exists(fullpath))
             {
@@ -251,7 +251,7 @@
                 return;
             }
 
-            string fullpath = Path.Combine(SettingsManager.SettingsFolder, comboBox_file.Text + SettingsManager.Default.SerialPresetExt);
+            string fullpath = Path.Combine(AppConfigurationManager.Folder, comboBox_file.Text + AppConfigurationManager.Default.SerialPresetExt);
 
             if (!File.Exists(fullpath))
             {
