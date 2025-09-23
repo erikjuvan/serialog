@@ -43,8 +43,6 @@ namespace serialog
         {
             InitializeComponent();
 
-            comboBox_port.Items.AddRange(Helpers.GetSortedPorts());
-
             // Parse command line arguments
             ParseCommandLineArguments(options);
 
@@ -82,6 +80,8 @@ namespace serialog
                 formSerialSend.LoadPreset(_cmdlineSerialPresetFilename);
 
             FitListviewToWidth();
+
+            RefreshComPortComboBox();
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -272,12 +272,67 @@ namespace serialog
             checkBox_follow.Checked = false;
         }
 
+        void RefreshComPortComboBox()
+        {
+            var ports = Helpers.SerialPort.GetPorts(); // get fresh list
+            int previousIndex = comboBox_port.SelectedIndex;
+
+            comboBox_port.Items.Clear();
+
+            foreach (var port in ports)
+                comboBox_port.Items.Add(port.Description);
+
+            // Restore previous selection if still valid
+            if (previousIndex >= 0 && previousIndex < comboBox_port.Items.Count)
+                comboBox_port.SelectedIndex = previousIndex;
+            else if (comboBox_port.Items.Count > 0)
+                comboBox_port.SelectedIndex = 0; // default to first item
+
+            // Set collapsed text to COM name of selected port
+            if (comboBox_port.SelectedIndex >= 0)
+                comboBox_port.Text = ports[comboBox_port.SelectedIndex].PortName;
+
+            // Resize dropdown
+            AdjustComboBoxDropDownWidth(comboBox_port);
+        }
+
         private void comboBox_port_DropDown(object sender, EventArgs e)
         {
-            comboBox_port.Items.Clear();
-            comboBox_port.Items.AddRange(Helpers.GetSortedPorts());
-            if (comboBox_port.Items.Count > 0)
-                comboBox_port.SelectedIndex = 0;
+            RefreshComPortComboBox();
+        }
+
+        private void comboBox_port_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            var ports = Helpers.SerialPort.GetPorts();
+            int index = comboBox_port.SelectedIndex;
+            if (index >= 0 && index < ports.Length)
+            {
+                string comName = ports[index].PortName;
+
+                // Delay assignment to avoid ComboBox overwriting
+                comboBox_port.BeginInvoke((Action)(() =>
+                {
+                    comboBox_port.Text = comName;
+                    comboBox_port.SelectAll(); // optional: highlights all text in collapsed ComboBox
+                }));
+            }
+        }
+
+        // Helper to resize dropdown width
+        private void AdjustComboBoxDropDownWidth(ComboBox combo)
+        {
+            int maxWidth = 0;
+            using (var g = combo.CreateGraphics())
+            {
+                foreach (var item in combo.Items)
+                {
+                    string text = item.ToString();
+                    int width = TextRenderer.MeasureText(text, combo.Font).Width;
+                    if (width > maxWidth)
+                        maxWidth = width;
+                }
+            }
+            combo.DropDownWidth = maxWidth + 20;
         }
 
         private void button_run_Click(object sender, EventArgs e)

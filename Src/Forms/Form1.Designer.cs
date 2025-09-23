@@ -419,6 +419,7 @@
             this.comboBox_port.Size = new System.Drawing.Size(93, 33);
             this.comboBox_port.TabIndex = 1;
             this.comboBox_port.DropDown += new System.EventHandler(this.comboBox_port_DropDown);
+            this.comboBox_port.SelectionChangeCommitted += new System.EventHandler(this.comboBox_port_SelectionChangeCommitted);
             // 
             // label2
             // 
