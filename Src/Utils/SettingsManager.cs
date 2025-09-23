@@ -45,9 +45,14 @@
                 var json = File.ReadAllText(SettingsFile);
                 return System.Text.Json.JsonSerializer.Deserialize<CommandLineOptions>(json) ?? new CommandLineOptions();
             }
-            catch
+            catch (Exception ex)
             {
-                // Optionally log errors here
+                MessageBox.Show(
+                    $"Failed to load settings from {SettingsFile}:\n{ex.Message}",
+                    "Settings Load Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
                 return new CommandLineOptions();
             }
         }

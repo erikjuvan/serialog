@@ -49,6 +49,8 @@ namespace serialog
         {
             InitializeComponent();
 
+            RefreshComPortComboBox();
+
             // Parse command line arguments
             _commandLineOptions = options;
             ApplyCommandLineOptions();
@@ -81,18 +83,16 @@ namespace serialog
             // Create Highlight form and load preset
             formHighlight = new FormHighlight();
             RegisterChild(formHighlight);
-            if (_cmdlineHighlightPresetFilename != "")
+            if (_cmdlineHighlightPresetFilename != null)
                 formHighlight.LoadPreset(_cmdlineHighlightPresetFilename);
 
             // Create Serial Send form
             formSerialSend = new FormSerialSend(this, _serialPort, _dataLog);
             RegisterChild(formSerialSend);
-            if (_cmdlineSerialPresetFilename != "")
+            if (_cmdlineSerialPresetFilename != null)
                 formSerialSend.LoadPreset(_cmdlineSerialPresetFilename);
 
             FitListviewToWidth();
-
-            RefreshComPortComboBox();
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -159,9 +159,9 @@ namespace serialog
             if (_commandLineOptions.AutoConnect)
                 ConnectSerial();
 
-            // Presets
-            _cmdlineHighlightPresetFilename = _commandLineOptions.HighlightPresetFile;
-            _cmdlineSerialPresetFilename = _commandLineOptions.SerialPresetFile;
+            // Only assign preset filenames if the user actually passed them
+            _cmdlineHighlightPresetFilename = _commandLineOptions.HighlightPresetFile ?? null;
+            _cmdlineSerialPresetFilename = _commandLineOptions.SerialPresetFile ?? null;
         }
 
         private void HandlePipeCommand(string command)
