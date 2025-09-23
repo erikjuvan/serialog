@@ -38,7 +38,10 @@ namespace serialog
         // Forms
         private FormHighlight formHighlight = null;
         private FormSerialSend formSerialSend = null;
-        
+
+        // Pipe server for IPC
+        private PipeServer pipeServer;
+
         public Form1(Dictionary<string, string> options)
         {
             InitializeComponent();
@@ -63,6 +66,10 @@ namespace serialog
             _serialReader = new SerialReader(_serialPort, _serialDataBuffer, _serialRXDataParser);
 
             upTime.Start();
+
+            // Start the pipe server with command handling
+            pipeServer = new PipeServer("SerialLoggerPipe", HandlePipeCommand);
+            pipeServer.Start();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -189,6 +196,43 @@ namespace serialog
             }
         }
 
+        private void HandlePipeCommand(string command)
+        {
+            // Ensure cross-thread safety for UI
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(() => HandlePipeCommand(command)));
+                return;
+            }
+
+            if (command == "disconnect")
+            {
+                try
+                {
+                    DisconnectSerial();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error during disconnect: {ex.Message}");
+                }
+            }
+            else if (command == "connect")
+            {
+                try
+                {
+                    ConnectSerial();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error during connect: {ex.Message}");
+                }
+            }
+            else
+            {
+                MessageBox.Show($"Unknown pipe command: {command}");
+            }
+        }
+
         public void AddLogEntry(DataEntry entry)
         {
             _dataLog.Add(entry);
@@ -254,6 +298,9 @@ namespace serialog
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            pipeServer?.Stop();
+
+            // Serial comm
             _serialcomStopped = true;
             _serialPort.Close();
         }
@@ -337,6 +384,11 @@ namespace serialog
 
         private void button_run_Click(object sender, EventArgs e)
         {
+            ConnectSerial();
+        }
+
+        private void ConnectSerial()
+        {
             if (_serialcomStopped)
             {
                 int baud = 0;
@@ -380,6 +432,11 @@ namespace serialog
         }
 
         private void button_stop_Click(object sender, EventArgs e)
+        {
+            DisconnectSerial();
+        }
+
+        private void DisconnectSerial()
         {
             if (!_serialcomStopped)
             {
