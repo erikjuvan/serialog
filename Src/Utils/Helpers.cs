@@ -186,7 +186,7 @@ namespace serialog
             return fallback;
         }
 
-        public static void PopulateComboBox(ComboBox comboBox, string extension, bool recursive)
+        public static void PopulateComboBoxWithPresets(ComboBox comboBox, string extension, bool recursive)
         {
             comboBox.Items.Clear();
 

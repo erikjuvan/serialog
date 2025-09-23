@@ -377,7 +377,7 @@ namespace serialog
 
         private void Populate_comboBox_preset()
         {
-            Helpers.PopulateComboBox(comboBox_preset, AppConfigurationManager.Default.HighlightPresetExt, false);
+            Helpers.PopulateComboBoxWithPresets(comboBox_preset, AppConfigurationManager.Default.HighlightPresetExt, false);
         }
 
         private void Populate_comboBox_preset_onFolderChange()

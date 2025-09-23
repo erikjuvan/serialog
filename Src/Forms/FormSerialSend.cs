@@ -140,7 +140,7 @@
 
         private void Populate_comboBox_file()
         {
-            Helpers.PopulateComboBox(comboBox_file, AppConfigurationManager.Default.SerialPresetExt, false);
+            Helpers.PopulateComboBoxWithPresets(comboBox_file, AppConfigurationManager.Default.SerialPresetExt, false);
         }
 
         private void Populate_comboBox_file_onFolderChange()
