@@ -133,7 +133,7 @@
             this.hideUnhighlightedContextMenuItem,
             this.disableHighlightsContextMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(259, 202);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(259, 235);
             // 
             // selectAllContextMenuItem
             // 
@@ -321,7 +321,9 @@
             // 
             // addStartStopTimestampToolStripMenuItem
             // 
+            this.addStartStopTimestampToolStripMenuItem.Checked = true;
             this.addStartStopTimestampToolStripMenuItem.CheckOnClick = true;
+            this.addStartStopTimestampToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.addStartStopTimestampToolStripMenuItem.Name = "addStartStopTimestampToolStripMenuItem";
             this.addStartStopTimestampToolStripMenuItem.Size = new System.Drawing.Size(330, 34);
             this.addStartStopTimestampToolStripMenuItem.Text = "Add Start/Stop Timestamp";
