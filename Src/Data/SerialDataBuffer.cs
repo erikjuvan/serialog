@@ -5,6 +5,8 @@
         private readonly List<byte> _rawBytes = new List<byte>();
         private readonly object _lock = new object();
 
+        public int Count => _rawBytes.Count;
+
         public void Append(byte[] data, int count)
         {
             lock (_lock)

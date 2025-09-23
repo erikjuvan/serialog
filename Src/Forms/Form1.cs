@@ -4,6 +4,14 @@ namespace serialog
 {
     public partial class Form1 : Form
     {
+        public class ProgramInfo
+        {
+            public static int ListviewBytes = 0;
+            public static int PrevListviewBytes = 0;
+            public static int SerialDataBytes = 0;
+            public static int PrevSerialDataBytes = 0;
+        }
+
         private System.IO.Ports.SerialPort _serialPort = new System.IO.Ports.SerialPort();
         private readonly SerialDataBuffer _serialDataBuffer = new SerialDataBuffer();
         private readonly DataParser _serialRXDataParser = new DataParser();
@@ -18,10 +26,7 @@ namespace serialog
 
         private static bool _serialcomStopped = true;
         private bool serialcomStoppedHandleEvent = new bool();
-        private static int _listviewSizeBytes = 0;
-        private static int _prevListviewSizeBytes = 0;
-        private static int _serialDataListSizeBytes = 0;
-        private static int _prevSerialDataListSizeBytes = 0;
+
         private static readonly object _serialDataLock = new object();
 
         private Stopwatch runTime = new Stopwatch();
@@ -267,53 +272,6 @@ namespace serialog
             checkBox_follow.Checked = false;
         }
 
-        private void timer_updatesysinfo_Tick(object sender, EventArgs e)
-        {
-            var up = upTime.Elapsed;
-            string ups = "";
-            if (up.Hours > 0) ups += up.Hours.ToString() + ":";
-            if (up.Minutes > 0) ups += up.Minutes.ToString("00") + ":";
-            if (up.Seconds > 0) ups += up.Seconds.ToString("00");
-
-            var run = runTime.Elapsed;
-            string runs = "";
-            if (run.Hours > 0) runs += run.Hours.ToString() + ":";
-            if (run.Minutes > 0) runs += run.Minutes.ToString("00") + ":";
-            if (run.Seconds > 0) runs += run.Seconds.ToString("00");
-
-
-            string serialSizeStr = FormatHelpers.NumberToBKBMB(_serialDataListSizeBytes);
-
-            double serialBytesPerSec = (double)(_serialDataListSizeBytes - _prevSerialDataListSizeBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
-            _prevSerialDataListSizeBytes = _serialDataListSizeBytes;
-            string serialSpeedStr = FormatHelpers.NumberToBKBMB(serialBytesPerSec, "/s");
-            double avgSerialBytesPerSec = _serialDataListSizeBytes / (run.TotalSeconds > 0 ? run.TotalSeconds : 1);
-            string avgSerialSpeedStr = FormatHelpers.NumberToBKBMB(avgSerialBytesPerSec, "/s");
-
-            // So that saved file size will be the same as the one in the label subtract one byte (last newline)                       
-            double listSize = _listviewSizeBytes > 0 ? _listviewSizeBytes - 1 : 0;
-            string listSizeStr = FormatHelpers.NumberToBKBMB(listSize);
-
-            double listBytesPerSec = (double)(_listviewSizeBytes - _prevListviewSizeBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
-            _prevListviewSizeBytes = _listviewSizeBytes;
-            string listSpeedStr = FormatHelpers.NumberToBKBMB(listBytesPerSec, "/s");
-            double avgListBytesPerSec = _listviewSizeBytes / (run.TotalSeconds > 0 ? run.TotalSeconds : 1);
-            string avgListSpeedStr = FormatHelpers.NumberToBKBMB(avgListBytesPerSec, "/s");
-
-            int bytesToRead = 0;
-            if (_serialPort.IsOpen)
-                bytesToRead = _serialPort.BytesToRead;
-
-            string availableBytesStr = FormatHelpers.NumberToBKBMB(bytesToRead);
-
-            this.Text = "Serialog |" +
-                "   Serial: " + serialSizeStr + " @ " + serialSpeedStr + " (avg. " + avgSerialSpeedStr + ")" +
-                "   List: " + listSizeStr + " @ " + listSpeedStr + " (avg. " + avgListSpeedStr + ")" +
-                "   Available: " + availableBytesStr +
-                "   Alive: " + ups +
-                "   Running: " + runs;
-        }
-
         private void comboBox_port_DropDown(object sender, EventArgs e)
         {
             comboBox_port.Items.Clear();
@@ -547,7 +505,7 @@ namespace serialog
                 string filename = saveFileDialog1.FileName;
 
                 // Save raw bytes
-                File.WriteAllBytes(filename, _serialDataBuffer.GetSnapshot().ToArray());
+                File.WriteAllBytes(filename, _serialDataBuffer.GetSnapshot());
             }
         }
 
@@ -818,6 +776,54 @@ namespace serialog
         private void nonPrintableCharsAsHexToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DisplayNonPrintableCharsAsHex = nonPrintableCharsAsHexToolStripMenuItem.Checked;
+        }
+
+        private void timer_updatesysinfo_Tick(object sender, EventArgs e)
+        {
+            var up = upTime.Elapsed;
+            string ups = "";
+            if (up.Hours > 0) ups += up.Hours.ToString() + ":";
+            if (up.Minutes > 0) ups += up.Minutes.ToString("00") + ":";
+            if (up.Seconds > 0) ups += up.Seconds.ToString("00");
+
+            var run = runTime.Elapsed;
+            string runs = "";
+            if (run.Hours > 0) runs += run.Hours.ToString() + ":";
+            if (run.Minutes > 0) runs += run.Minutes.ToString("00") + ":";
+            if (run.Seconds > 0) runs += run.Seconds.ToString("00");
+
+            ProgramInfo.SerialDataBytes = _serialDataBuffer.Count;
+            string serialSizeStr = FormatHelpers.NumberToBKBMB(ProgramInfo.SerialDataBytes);
+
+            double serialBytesPerSec = (double)(ProgramInfo.SerialDataBytes - ProgramInfo.PrevSerialDataBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
+            ProgramInfo.PrevSerialDataBytes = ProgramInfo.SerialDataBytes;
+            string serialSpeedStr = FormatHelpers.NumberToBKBMB(serialBytesPerSec, "/s");
+            double avgSerialBytesPerSec = ProgramInfo.SerialDataBytes / (run.TotalSeconds > 0 ? run.TotalSeconds : 1);
+            string avgSerialSpeedStr = FormatHelpers.NumberToBKBMB(avgSerialBytesPerSec, "/s");
+
+            //ProgramInfo.ListviewBytes = _dataLog.Size;
+            // So that saved file size will be the same as the one in the label subtract one byte (last newline)                       
+            double listSize = ProgramInfo.ListviewBytes > 0 ? ProgramInfo.ListviewBytes - 1 : 0;
+            string listSizeStr = FormatHelpers.NumberToBKBMB(listSize);
+
+            double listBytesPerSec = (double)(ProgramInfo.ListviewBytes - ProgramInfo.PrevListviewBytes) / ((double)timer_updatesysinfo.Interval / 1000.0);
+            ProgramInfo.PrevListviewBytes = ProgramInfo.ListviewBytes;
+            string listSpeedStr = FormatHelpers.NumberToBKBMB(listBytesPerSec, "/s");
+            double avgListBytesPerSec = ProgramInfo.ListviewBytes / (run.TotalSeconds > 0 ? run.TotalSeconds : 1);
+            string avgListSpeedStr = FormatHelpers.NumberToBKBMB(avgListBytesPerSec, "/s");
+
+            int bytesToRead = 0;
+            if (_serialPort.IsOpen)
+                bytesToRead = _serialPort.BytesToRead;
+
+            string availableBytesStr = FormatHelpers.NumberToBKBMB(bytesToRead);
+
+            this.Text = "Serialog |" +
+                "   Serial: " + serialSizeStr + " @ " + serialSpeedStr + " (avg. " + avgSerialSpeedStr + ")" +
+                "   List: " + listSizeStr + " @ " + listSpeedStr + " (avg. " + avgListSpeedStr + ")" +
+                "   Available: " + availableBytesStr +
+                "   Alive: " + ups +
+                "   Running: " + runs;
         }
     }
 }
