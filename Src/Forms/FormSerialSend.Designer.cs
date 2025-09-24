@@ -57,7 +57,7 @@
             // 
             // button_file_delete
             // 
-            this.button_file_delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button_file_delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button_file_delete.Location = new System.Drawing.Point(717, 839);
             this.button_file_delete.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_file_delete.Name = "button_file_delete";
@@ -69,7 +69,7 @@
             // 
             // label4
             // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(510, 806);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
@@ -80,7 +80,7 @@
             // 
             // button_file_load
             // 
-            this.button_file_load.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button_file_load.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button_file_load.Location = new System.Drawing.Point(638, 839);
             this.button_file_load.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_file_load.Name = "button_file_load";
@@ -92,7 +92,7 @@
             // 
             // button_file_save
             // 
-            this.button_file_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button_file_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button_file_save.Location = new System.Drawing.Point(558, 839);
             this.button_file_save.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_file_save.Name = "button_file_save";
@@ -104,7 +104,7 @@
             // 
             // comboBox_file
             // 
-            this.comboBox_file.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.comboBox_file.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBox_file.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBox_file.FormattingEnabled = true;
             this.comboBox_file.Location = new System.Drawing.Point(560, 802);
@@ -141,6 +141,9 @@
             // dataGridView1
             // 
             this.dataGridView1.AllowUserToResizeRows = false;
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -173,7 +176,7 @@
             this.dataGridViewTextBoxColumn2.MinimumWidth = 8;
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             // 
-            // Form4_Send
+            // FormSerialSend
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -189,7 +192,7 @@
             this.Controls.Add(this.button2_send);
             this.KeyPreview = true;
             this.MinimizeBox = false;
-            this.Name = "Form4_Send";
+            this.Name = "FormSerialSend";
             this.Text = "Serial Send";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
