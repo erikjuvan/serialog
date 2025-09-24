@@ -909,5 +909,19 @@ namespace serialog
                 "   Alive: " + ups +
                 "   Running: " + runs;
         }
+
+        private void buttonResetSerial_Click(object sender, EventArgs e)
+        {
+            if (_serialPort.IsOpen)
+            {
+                _serialPort.RtsEnable = true;
+                _serialPort.DtrEnable = true;
+
+                System.Threading.Thread.Sleep(100); // 100 ms pulse
+
+                _serialPort.RtsEnable = false;
+                _serialPort.DtrEnable = false;
+            }            
+        }
     }
 }

@@ -84,6 +84,7 @@
             this.button_prev_highlight = new System.Windows.Forms.Button();
             this.button_next_highlight = new System.Windows.Forms.Button();
             this.checkBoxRegex = new System.Windows.Forms.CheckBox();
+            this.buttonResetSerial = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -588,11 +589,23 @@
             this.checkBoxRegex.UseVisualStyleBackColor = true;
             this.checkBoxRegex.CheckedChanged += new System.EventHandler(this.checkBoxRegex_CheckedChanged);
             // 
+            // buttonResetSerial
+            // 
+            this.buttonResetSerial.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.buttonResetSerial.Location = new System.Drawing.Point(481, 53);
+            this.buttonResetSerial.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonResetSerial.Name = "buttonResetSerial";
+            this.buttonResetSerial.Size = new System.Drawing.Size(51, 38);
+            this.buttonResetSerial.TabIndex = 20;
+            this.buttonResetSerial.Text = "RST";
+            this.buttonResetSerial.UseVisualStyleBackColor = true;
+            this.buttonResetSerial.Click += new System.EventHandler(this.buttonResetSerial_Click);
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1334, 1602);
+            this.Controls.Add(this.buttonResetSerial);
             this.Controls.Add(this.checkBoxRegex);
             this.Controls.Add(this.button_prev_highlight);
             this.Controls.Add(this.button_next_highlight);
@@ -686,5 +699,6 @@
         private ToolStripMenuItem settingsFolderResetToolStripMenuItem;
         private ToolStripMenuItem nonPrintableCharsAsHexToolStripMenuItem;
         private CheckBox checkBoxRegex;
+        private Button buttonResetSerial;
     }
 }
