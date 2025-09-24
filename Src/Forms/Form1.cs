@@ -923,5 +923,45 @@ namespace serialog
                 _serialPort.DtrEnable = false;
             }            
         }
+
+        private void ListviewJumpToTop()
+        {
+            // Jump to top
+            if (listView1.Items.Count > 0)
+            {
+                checkBox_follow.Checked = false;
+                listView1.Items[0].EnsureVisible();
+            }
+        }
+
+        private void ListviewJumpToBottom()
+        {
+            // Jump to bottom
+            if (listView1.Items.Count > 0)
+            {
+                checkBox_follow.Checked = false;
+                listView1.Items[listView1.Items.Count - 1].EnsureVisible();
+            }
+        }
+
+        private void buttonToTop_Click(object sender, EventArgs e)
+        {
+            ListviewJumpToTop();
+        }
+
+        private void buttonToBottom_Click(object sender, EventArgs e)
+        {
+            ListviewJumpToBottom();
+        }
+
+        private void jumpToTopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ListviewJumpToTop();
+        }
+
+        private void jumpToBottomToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ListviewJumpToBottom();
+        }
     }
 }

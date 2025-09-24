@@ -40,6 +40,9 @@
             this.formHighlightContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideUnhighlightedContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disableHighlightsContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.jumpToTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.jumpToBottomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,6 +88,8 @@
             this.button_next_highlight = new System.Windows.Forms.Button();
             this.checkBoxRegex = new System.Windows.Forms.CheckBox();
             this.buttonResetSerial = new System.Windows.Forms.Button();
+            this.buttonToTop = new System.Windows.Forms.Button();
+            this.buttonToBottom = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -109,7 +114,7 @@
             this.listView1.Name = "listView1";
             this.listView1.OwnerDraw = true;
             this.listView1.ShowGroups = false;
-            this.listView1.Size = new System.Drawing.Size(1304, 1479);
+            this.listView1.Size = new System.Drawing.Size(1427, 1479);
             this.listView1.TabIndex = 12;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -132,9 +137,12 @@
             this.toolStripMenuItem2,
             this.formHighlightContextMenuItem,
             this.hideUnhighlightedContextMenuItem,
-            this.disableHighlightsContextMenuItem});
+            this.disableHighlightsContextMenuItem,
+            this.toolStripSeparator1,
+            this.jumpToTopToolStripMenuItem,
+            this.jumpToBottomToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(259, 235);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(259, 272);
             // 
             // selectAllContextMenuItem
             // 
@@ -185,6 +193,25 @@
             this.disableHighlightsContextMenuItem.Text = "Disable Highlighting";
             this.disableHighlightsContextMenuItem.Click += new System.EventHandler(this.disableHighlightsToolStripMenuItem_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(255, 6);
+            // 
+            // jumpToTopToolStripMenuItem
+            // 
+            this.jumpToTopToolStripMenuItem.Name = "jumpToTopToolStripMenuItem";
+            this.jumpToTopToolStripMenuItem.Size = new System.Drawing.Size(258, 32);
+            this.jumpToTopToolStripMenuItem.Text = "Jump to Top";
+            this.jumpToTopToolStripMenuItem.Click += new System.EventHandler(this.jumpToTopToolStripMenuItem_Click);
+            // 
+            // jumpToBottomToolStripMenuItem
+            // 
+            this.jumpToBottomToolStripMenuItem.Name = "jumpToBottomToolStripMenuItem";
+            this.jumpToBottomToolStripMenuItem.Size = new System.Drawing.Size(258, 32);
+            this.jumpToBottomToolStripMenuItem.Text = "Jump to Bottom";
+            this.jumpToBottomToolStripMenuItem.Click += new System.EventHandler(this.jumpToBottomToolStripMenuItem_Click);
+            // 
             // menuStrip1
             // 
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -196,7 +223,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
-            this.menuStrip1.Size = new System.Drawing.Size(1334, 35);
+            this.menuStrip1.Size = new System.Drawing.Size(1457, 35);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -452,7 +479,7 @@
             this.checkBox_follow.AutoSize = true;
             this.checkBox_follow.Checked = true;
             this.checkBox_follow.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_follow.Location = new System.Drawing.Point(487, 57);
+            this.checkBox_follow.Location = new System.Drawing.Point(600, 58);
             this.checkBox_follow.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_follow.Name = "checkBox_follow";
             this.checkBox_follow.Size = new System.Drawing.Size(90, 29);
@@ -492,7 +519,7 @@
             // 
             this.button_findnext.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button_findnext.ForeColor = System.Drawing.Color.Black;
-            this.button_findnext.Location = new System.Drawing.Point(837, 53);
+            this.button_findnext.Location = new System.Drawing.Point(950, 53);
             this.button_findnext.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_findnext.Name = "button_findnext";
             this.button_findnext.Size = new System.Drawing.Size(47, 38);
@@ -505,7 +532,7 @@
             // 
             this.button_findprev.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button_findprev.ForeColor = System.Drawing.Color.Black;
-            this.button_findprev.Location = new System.Drawing.Point(784, 53);
+            this.button_findprev.Location = new System.Drawing.Point(897, 53);
             this.button_findprev.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_findprev.Name = "button_findprev";
             this.button_findprev.Size = new System.Drawing.Size(47, 38);
@@ -517,7 +544,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(577, 60);
+            this.label3.Location = new System.Drawing.Point(690, 60);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(50, 25);
@@ -526,7 +553,7 @@
             // 
             // textBox_find
             // 
-            this.textBox_find.Location = new System.Drawing.Point(631, 53);
+            this.textBox_find.Location = new System.Drawing.Point(748, 57);
             this.textBox_find.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_find.Name = "textBox_find";
             this.textBox_find.Size = new System.Drawing.Size(141, 31);
@@ -537,7 +564,7 @@
             // 
             this.button_findall.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button_findall.ForeColor = System.Drawing.Color.Black;
-            this.button_findall.Location = new System.Drawing.Point(891, 53);
+            this.button_findall.Location = new System.Drawing.Point(1004, 53);
             this.button_findall.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_findall.Name = "button_findall";
             this.button_findall.Size = new System.Drawing.Size(47, 38);
@@ -556,7 +583,7 @@
             // 
             this.button_prev_highlight.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button_prev_highlight.ForeColor = System.Drawing.Color.Black;
-            this.button_prev_highlight.Location = new System.Drawing.Point(1108, 53);
+            this.button_prev_highlight.Location = new System.Drawing.Point(1221, 53);
             this.button_prev_highlight.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_prev_highlight.Name = "button_prev_highlight";
             this.button_prev_highlight.Size = new System.Drawing.Size(47, 38);
@@ -569,7 +596,7 @@
             // 
             this.button_next_highlight.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button_next_highlight.ForeColor = System.Drawing.Color.Black;
-            this.button_next_highlight.Location = new System.Drawing.Point(1161, 53);
+            this.button_next_highlight.Location = new System.Drawing.Point(1274, 53);
             this.button_next_highlight.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_next_highlight.Name = "button_next_highlight";
             this.button_next_highlight.Size = new System.Drawing.Size(47, 38);
@@ -581,7 +608,7 @@
             // checkBoxRegex
             // 
             this.checkBoxRegex.AutoSize = true;
-            this.checkBoxRegex.Location = new System.Drawing.Point(950, 57);
+            this.checkBoxRegex.Location = new System.Drawing.Point(1063, 58);
             this.checkBoxRegex.Name = "checkBoxRegex";
             this.checkBoxRegex.Size = new System.Drawing.Size(85, 29);
             this.checkBoxRegex.TabIndex = 19;
@@ -600,11 +627,40 @@
             this.buttonResetSerial.Text = "RST";
             this.buttonResetSerial.UseVisualStyleBackColor = true;
             this.buttonResetSerial.Click += new System.EventHandler(this.buttonResetSerial_Click);
+            // 
+            // buttonToTop
+            // 
+            this.buttonToTop.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonToTop.ForeColor = System.Drawing.Color.Black;
+            this.buttonToTop.Location = new System.Drawing.Point(1342, 54);
+            this.buttonToTop.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonToTop.Name = "buttonToTop";
+            this.buttonToTop.Size = new System.Drawing.Size(47, 38);
+            this.buttonToTop.TabIndex = 21;
+            this.buttonToTop.Text = "↑";
+            this.buttonToTop.UseVisualStyleBackColor = true;
+            this.buttonToTop.Click += new System.EventHandler(this.buttonToTop_Click);
+            // 
+            // buttonToBottom
+            // 
+            this.buttonToBottom.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.buttonToBottom.ForeColor = System.Drawing.Color.Black;
+            this.buttonToBottom.Location = new System.Drawing.Point(1397, 52);
+            this.buttonToBottom.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonToBottom.Name = "buttonToBottom";
+            this.buttonToBottom.Size = new System.Drawing.Size(47, 38);
+            this.buttonToBottom.TabIndex = 22;
+            this.buttonToBottom.Text = "↓";
+            this.buttonToBottom.UseVisualStyleBackColor = true;
+            this.buttonToBottom.Click += new System.EventHandler(this.buttonToBottom_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1334, 1602);
+            this.ClientSize = new System.Drawing.Size(1457, 1602);
+            this.Controls.Add(this.buttonToBottom);
+            this.Controls.Add(this.buttonToTop);
             this.Controls.Add(this.buttonResetSerial);
             this.Controls.Add(this.checkBoxRegex);
             this.Controls.Add(this.button_prev_highlight);
@@ -700,5 +756,10 @@
         private ToolStripMenuItem nonPrintableCharsAsHexToolStripMenuItem;
         private CheckBox checkBoxRegex;
         private Button buttonResetSerial;
+        private Button buttonToTop;
+        private Button buttonToBottom;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem jumpToTopToolStripMenuItem;
+        private ToolStripMenuItem jumpToBottomToolStripMenuItem;
     }
 }
