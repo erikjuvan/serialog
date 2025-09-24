@@ -392,7 +392,11 @@ namespace serialog
 
                 if (addStartStopTimestampToolStripMenuItem.Checked)
                 {
-                    AddLogEntry(new DataEntry(DateTime.Now, DataEntrySource.User, "ACQUISITION STARTED"));
+                    // Adding it by hand and not calling (AddLogEntry();) since that doesn't work without ready form.
+                    // but if autostart is on then ConnectSerial is called even before the form is loaded.
+                    var entry = new DataEntry(DateTime.Now, DataEntrySource.User, "ACQUISITION STARTED");
+                    _dataLog.Add(entry);
+                    _dataLogEditable.Add(entry);
                 }
 
                 runTime.Start();
