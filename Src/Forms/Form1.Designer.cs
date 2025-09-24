@@ -120,7 +120,6 @@
             this.listView1.View = System.Windows.Forms.View.Details;
             this.listView1.VirtualMode = true;
             this.listView1.Scrolled += new System.EventHandler<System.EventArgs>(this.listView1_Scrolled);
-            this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listView1_KeyDown);
             // 
             // column1
             // 

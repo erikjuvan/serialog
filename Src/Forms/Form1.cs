@@ -131,6 +131,18 @@ namespace serialog
                     listView1.FindNext(textBox_find.Text);
                 }
             }
+
+            if (e.KeyCode == Keys.F && e.Modifiers == Keys.None)
+            {
+                var focused = this.ActiveControl;
+
+                // Skip if editing
+                if (focused is TextBoxBase || focused is ComboBox)
+                    return;
+
+                checkBox_follow.Checked = !checkBox_follow.Checked;
+                e.Handled = true;
+            }
         }
 
         private void ApplyAppOptions()
@@ -271,15 +283,6 @@ namespace serialog
             // Serial comm
             _serialcomStopped = true;
             _serialPort.Close();
-        }
-
-        private void listView1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.F && e.Modifiers == Keys.None)
-            {
-                checkBox_follow.Checked = !checkBox_follow.Checked;
-                e.Handled = true;
-            }
         }
 
         private void listView1_Scrolled(object sender, EventArgs e)
