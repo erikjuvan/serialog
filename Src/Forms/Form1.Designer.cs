@@ -621,7 +621,7 @@
             this.buttonResetSerial.Location = new System.Drawing.Point(481, 53);
             this.buttonResetSerial.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonResetSerial.Name = "buttonResetSerial";
-            this.buttonResetSerial.Size = new System.Drawing.Size(51, 38);
+            this.buttonResetSerial.Size = new System.Drawing.Size(61, 38);
             this.buttonResetSerial.TabIndex = 20;
             this.buttonResetSerial.Text = "RST";
             this.buttonResetSerial.UseVisualStyleBackColor = true;
