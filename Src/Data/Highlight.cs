@@ -11,6 +11,14 @@ namespace serialog
         public Color BackColor { get; set; }
         public FontStyle FontStyle { get; set; }
         public bool Hide { get; set; }
+
+        public HighlightStyle Clone() => new HighlightStyle
+        {
+            ForeColor = this.ForeColor,
+            BackColor = this.BackColor,
+            FontStyle = this.FontStyle,
+            Hide = this.Hide
+        };
     }
 
     public class Highlight : INotifyPropertyChanged

@@ -89,7 +89,7 @@ namespace serialog
                 }
                 else
                 {
-                    style = effective;
+                    style = effective.Clone();
                 }
 
                 if (style.Hide)
