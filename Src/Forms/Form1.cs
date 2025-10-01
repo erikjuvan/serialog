@@ -932,7 +932,6 @@ namespace serialog
             // Jump to top
             if (listView1.Items.Count > 0)
             {
-                checkBox_follow.Checked = false;
                 listView1.Items[0].EnsureVisible();
             }
         }
@@ -942,7 +941,6 @@ namespace serialog
             // Jump to bottom
             if (listView1.Items.Count > 0)
             {
-                checkBox_follow.Checked = false;
                 listView1.Items[listView1.Items.Count - 1].EnsureVisible();
             }
         }
