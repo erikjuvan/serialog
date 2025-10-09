@@ -58,7 +58,7 @@
 
             for (int i = 0; i < listView.DataLog.Count; i++)
             {
-                if (Helpers.MatchesPattern(listView.DataLog[i].GetContent(), text, UseRegex))
+                if (Helpers.MatchesPattern(listView.DataLog[i].ToString(), text, UseRegex))
                 {
                     listView.SelectedIndices.Add(i);
                     found = true;
@@ -81,7 +81,7 @@
             int i = startIndex;
             while (i >= 0 && i < listView.DataLog.Count)
             {
-                if (Helpers.MatchesPattern(listView.DataLog[i].GetContent(), text, UseRegex))
+                if (Helpers.MatchesPattern(listView.DataLog[i].ToString(), text, UseRegex))
                 {
                     listView.SelectedIndices.Clear();
                     listView.SelectedIndices.Add(i);
@@ -132,7 +132,7 @@
             int i = startIndex;
             while (i >= 0 && i < listView.DataLog.Count)
             {
-                var highlight = FormHighlight.Highlights.FindMatch(listView.DataLog[i].GetContent());
+                var highlight = FormHighlight.Highlights.FindMatch(listView.DataLog[i].ToString());
                 if (highlight != null && !highlight.Hide)
                 {
                     listView.SelectedIndices.Clear();
