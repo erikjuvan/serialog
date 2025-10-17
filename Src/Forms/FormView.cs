@@ -4,14 +4,16 @@ namespace serialog
 {
     public partial class FormView : Form
     {
+        private Form1 _parentForm;
         private readonly DataLog _dataLog;
         private DataLog _dataLogList = new DataLog();
         private List<int> _dataLogListIndicies = new List<int>();
 
-        public FormView(DataLog dataLog)
+        public FormView(Form1 parent, DataLog dataLog)
         {
             InitializeComponent();
 
+            _parentForm = parent;
             _dataLog = dataLog;
             listView1.DataLog = _dataLogList;
         }
@@ -93,7 +95,22 @@ namespace serialog
 
         private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            if (listView1.SelectedIndices.Count == 0)
+                return;
 
+            // Get the selected index in the filtered list
+            int filteredIndex = listView1.SelectedIndices[0];
+
+            if (filteredIndex < 0 || filteredIndex >= _dataLogListIndicies.Count)
+                return;
+
+            // Get the corresponding index in the original list
+            int originalIndex = _dataLogListIndicies[filteredIndex];
+
+            // Example: select this index in another ListView (on another form)
+            _parentForm.listView1.SelectedIndices.Clear();
+            _parentForm.listView1.SelectedIndices.Add(originalIndex);
+            _parentForm.listView1.EnsureVisible(originalIndex);
         }
 
         private void textBoxMatch_KeyDown(object sender, KeyEventArgs e)

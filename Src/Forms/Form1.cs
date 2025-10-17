@@ -90,7 +90,7 @@ namespace serialog
                 formHighlight.LoadPreset(_cmdlineHighlightPresetFilename);
 
             // Create View form
-            formView = new FormView(_dataLog);
+            formView = new FormView(this, _dataLog);
             RegisterChild(formView);
 
             // Create Serial Send form
