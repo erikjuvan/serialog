@@ -1,5 +1,4 @@
 - double click na item v view menu skoci na to v main form
-- context menu v main window, da lahko enostavno pokazemo v view form-i
 - search box v view formi
 - moving highlighted items up or down makes the unchecked item not checked but it does not take into account it is unchecked
 - Scrolling issue when selected

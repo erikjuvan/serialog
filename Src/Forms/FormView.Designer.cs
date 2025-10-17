@@ -123,9 +123,9 @@
         #endregion
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem hideUnhighlightedToolStripMenuItem;
-        private ListViewVirt listView1;
         private ColumnHeader columnHeader1;
         private TextBox textBoxMatch;
         private TextBox textBoxSearch;
+        public ListViewVirt listView1;
     }
 }

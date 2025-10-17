@@ -7,7 +7,7 @@ namespace serialog
         private Form1 _parentForm;
         private readonly DataLog _dataLog;
         private DataLog _dataLogList = new DataLog();
-        private List<int> _dataLogListIndicies = new List<int>();
+        public List<int> DataLogListIndicies = new List<int>();
 
         public FormView(Form1 parent, DataLog dataLog)
         {
@@ -73,7 +73,7 @@ namespace serialog
         public void UpdateList()
         {
             _dataLogList.Clear();
-            _dataLogListIndicies.Clear();
+            DataLogListIndicies.Clear();
 
             for (int i = 0; i < _dataLog.Count; i++)
             {
@@ -82,7 +82,7 @@ namespace serialog
                     if (Helpers.MatchesPattern(_dataLog[i].ToString(), textBoxMatch.Text, ListViewVirtExtensions.MatchCase, ListViewVirtExtensions.UseRegex))
                     {
                         _dataLogList.Add(_dataLog[i]);
-                        _dataLogListIndicies.Add(i);
+                        DataLogListIndicies.Add(i);
                     }
                 }
                 catch (ArgumentException)
@@ -101,11 +101,11 @@ namespace serialog
             // Get the selected index in the filtered list
             int filteredIndex = listView1.SelectedIndices[0];
 
-            if (filteredIndex < 0 || filteredIndex >= _dataLogListIndicies.Count)
+            if (filteredIndex < 0 || filteredIndex >= DataLogListIndicies.Count)
                 return;
 
             // Get the corresponding index in the original list
-            int originalIndex = _dataLogListIndicies[filteredIndex];
+            int originalIndex = DataLogListIndicies[filteredIndex];
 
             // Example: select this index in another ListView (on another form)
             _parentForm.listView1.SelectedIndices.Clear();

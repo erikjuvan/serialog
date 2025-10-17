@@ -1036,5 +1036,26 @@ namespace serialog
         {
             ListviewJumpToBottom();
         }
+
+        private void showInViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedIndices.Count > 0)
+            {
+                int mainIndex = listView1.SelectedIndices[0];
+
+                if (mainIndex < 0 || mainIndex >= _dataLog.Count)
+                    return;
+
+                // Find the corresponding index in the filtered list
+                int filteredIndex = formView.DataLogListIndicies.IndexOf(mainIndex);
+                if (filteredIndex == -1)
+                    return; // item not in the filtered list
+
+                // Select it in the filtered listView
+                formView.listView1.SelectedIndices.Clear();
+                formView.listView1.SelectedIndices.Add(filteredIndex);
+                formView.listView1.EnsureVisible(filteredIndex);
+            }
+        }
     }
 }
