@@ -253,10 +253,7 @@ namespace serialog
             {
                 if (!highlight.Enabled) continue;
 
-                string haystack = highlight.IgnoreCase ? line.ToLowerInvariant() : line;
-                string pattern = highlight.IgnoreCase ? highlight.Text.ToLowerInvariant() : highlight.Text;
-
-                if (Helpers.MatchesPattern(haystack, pattern, highlight.UseRegex))
+                if (Helpers.MatchesPattern(line, highlight.Text, !highlight.IgnoreCase, highlight.UseRegex))
                     return highlight; // first match wins
             }
 

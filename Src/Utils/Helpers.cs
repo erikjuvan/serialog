@@ -124,21 +124,32 @@ namespace serialog
             }
         }
 
-        public static bool MatchesPattern(string line, string pattern, bool useRegex)
+        public static bool MatchesPattern(string haystack, string pattern, bool matchCase, bool useRegex)
         {
+            if (string.IsNullOrEmpty(pattern))
+                return false;
+
+            if (!matchCase)
+            {
+                haystack = haystack.ToLowerInvariant();
+                pattern = pattern.ToLowerInvariant();
+            }
+
             if (useRegex)
             {
                 try
                 {
-                    return Regex.IsMatch(line, pattern, RegexOptions.IgnoreCase);
+                    var options = matchCase ? RegexOptions.None : RegexOptions.IgnoreCase;
+                    return Regex.IsMatch(haystack, pattern, options);
                 }
                 catch (ArgumentException)
                 {
+                    // Invalid regex pattern
                     return false;
                 }
             }
 
-            return line.Contains(pattern);
+            return haystack.Contains(pattern);
         }
 
         public static Color ParseColorInput(string input, Color fallback)
