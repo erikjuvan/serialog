@@ -18,7 +18,6 @@ namespace serialog
         private SerialReader _serialReader;
 
         private readonly DataLog _dataLog = new DataLog();
-        private readonly DataLog _dataLogEditable = new DataLog();
 
         private int _uiUpdatePending = 0; // 0 = none pending, 1 = pending
 
@@ -38,6 +37,7 @@ namespace serialog
         // Forms
         private FormHighlight formHighlight = null;
         private FormSerialSend formSerialSend = null;
+        private FormView formView = null;
 
         // Command line options
         private readonly AppOptions _appOptions;
@@ -58,7 +58,7 @@ namespace serialog
             // Subscribe to highlight changes
             FormHighlight.Highlights.EntriesChanged += HighlightEntries_Changed;
 
-            listView1.DataLog = _dataLogEditable;
+            listView1.DataLog = _dataLog;
 
             // Attach parser to UI updates
             _serialRXDataParser.LineParsed += bytes =>
@@ -85,6 +85,10 @@ namespace serialog
             RegisterChild(formHighlight);
             if (_cmdlineHighlightPresetFilename != null)
                 formHighlight.LoadPreset(_cmdlineHighlightPresetFilename);
+
+            // Create View form
+            formView = new FormView(_dataLog);
+            RegisterChild(formView);
 
             // Create Serial Send form
             formSerialSend = new FormSerialSend(this, _serialPort, _dataLog);
@@ -216,7 +220,6 @@ namespace serialog
         public void AddLogEntry(DataEntry entry)
         {
             _dataLog.Add(entry);
-            _dataLogEditable.Add(entry);
 
             // Try to schedule one UI update if none is queued yet
             if (Interlocked.Exchange(ref _uiUpdatePending, 1) == 0)
@@ -235,7 +238,7 @@ namespace serialog
                 try
                 {
                     // Grow virtual size to match the log size
-                    listView1.VirtualListSize = _dataLogEditable.Count;
+                    listView1.VirtualListSize = _dataLog.Count;
 
                     // If follow is ON and user is already at bottom (or near it), scroll to end
                     if (checkBox_follow.Checked)
@@ -399,7 +402,6 @@ namespace serialog
                     // but if autostart is on then ConnectSerial is called even before the form is loaded.
                     var entry = new DataEntry(DateTime.Now, DataEntrySource.User, "ACQUISITION STARTED");
                     _dataLog.Add(entry);
-                    _dataLogEditable.Add(entry);
                 }
 
                 runTime.Start();
@@ -623,6 +625,7 @@ namespace serialog
             lock (_serialDataLock)
             {
                 listView1.ClearView();
+                formView.UpdateList();
             }
 
             runTime = new Stopwatch();
@@ -831,22 +834,8 @@ namespace serialog
 
         private void toolsAddViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var child = new FormView
-            {
-                Owner = this,
-                ShowInTaskbar = false,
-            };
-
-            child.KeyDown += (s, e) =>
-            {
-                if (e.KeyCode == Keys.Escape)
-                {
-                    child.Close();
-                    e.Handled = true;
-                }
-            };
-
-            child.Show();
+            formView.Show();   // unhide if hidden
+            formView.Focus();
         }
 
         private void toolsSerialSendToolStripMenuItem_Click(object sender, EventArgs e)

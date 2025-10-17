@@ -28,7 +28,6 @@ namespace serialog
             this.OwnerDraw = true;
 
             this.RetrieveVirtualItem += OnRetrieveVirtualItem;
-            this.DrawColumnHeader += OnDrawColumnHeader;
             this.DrawItem += OnDrawItem;
             this.DrawSubItem += OnDrawSubItem;
             this.KeyDown += OnKeyDown;
@@ -49,12 +48,6 @@ namespace serialog
                 var entry = DataLog[e.ItemIndex];
                 e.Item = new ListViewItem(entry.ToString());
             }
-        }
-
-        private void OnDrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
-        {
-            e.DrawBackground();
-            e.Graphics.DrawString(e.Header.Text, this.Font, Brushes.Black, e.Bounds);
         }
 
         private void OnDrawItem(object sender, DrawListViewItemEventArgs e)
