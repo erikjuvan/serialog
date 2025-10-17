@@ -49,6 +49,9 @@ namespace serialog
         {
             InitializeComponent();
 
+            // Register message filter
+            Application.AddMessageFilter(new ShortcutFilter(this));
+
             RefreshComPortComboBox();
 
             // Parse command line arguments
@@ -148,6 +151,80 @@ namespace serialog
                 e.Handled = true;
             }
         }
+
+        // Generic toggle by name
+        public void ToggleToolWindow(int windowIndex)
+        {
+            Form? f = windowIndex switch
+            {
+                1 => formHighlight,
+                2 => formSerialSend,
+                3 => formView,
+                _ => null
+            };
+
+            if (f == null) return;
+
+            if (f.Visible)
+                f.Hide();
+            else
+            {
+                f.Show();
+                f.Focus();
+            }
+
+            // Recalculate layout after toggling visibility
+            ArrangeToolWindows(formHighlight, formSerialSend, formView);
+        }
+
+        private void ArrangeToolWindows(params Form[] toolWindows)
+        {
+            // Filter only visible ones
+            var visible = toolWindows.Where(w => w.Visible).ToList();
+            if (visible.Count == 0) return;
+
+            int padding = 10;
+            int totalWidth = visible.Sum(w => w.Width) + (visible.Count - 1) * padding;
+
+            // Start horizontally centered around the main form
+            int startX = this.Left + this.Width / 2 - totalWidth / 2;
+            int y = this.Top + this.Height / 2 - visible[0].Height / 2;
+
+            int x = startX;
+            foreach (var w in visible)
+            {
+                w.StartPosition = FormStartPosition.Manual;
+                w.Location = new Point(x, y);
+                x += w.Width + padding;
+            }
+        }
+
+        public void ToggleAllToolWindows()
+        {
+            Form[] windows = { formHighlight, formSerialSend, formView };
+
+            // If any window is hidden open all; otherwise close all
+            bool anyHidden = windows.Any(w => !w.Visible);
+
+            foreach (var w in windows)
+            {
+                if (anyHidden)
+                {
+                    if (!w.Visible)
+                        w.Show();
+                    w.Focus();
+                }
+                else
+                {
+                    w.Hide();
+                }
+            }
+
+            // Re-arrange after showing (optional)
+            if (anyHidden)
+                ArrangeToolWindows(windows);
+        }
+
 
         private void ApplyAppOptions()
         {
@@ -787,6 +864,7 @@ namespace serialog
             child.StartPosition = FormStartPosition.Manual;
             child.Left = this.Location.X + this.Width / 2 - child.Width / 2;
             child.Top = this.Location.Y + this.Height / 2 - child.Height / 2;
+            child.Visible = false;
 
             child.FormClosing += (s, e) =>
             {
@@ -847,6 +925,11 @@ namespace serialog
         private void checkBoxRegex_CheckedChanged(object sender, EventArgs e)
         {
             ListViewVirtExtensions.UseRegex = checkBoxRegex.Checked;
+        }
+
+        private void checkBoxMatchCase_CheckedChanged(object sender, EventArgs e)
+        {
+            ListViewVirtExtensions.MatchCase = checkBoxMatchCase.Checked;
         }
 
         private void nonPrintableCharsAsHexToolStripMenuItem_Click(object sender, EventArgs e)

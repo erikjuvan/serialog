@@ -193,7 +193,7 @@
             this.KeyPreview = true;
             this.MinimizeBox = false;
             this.Name = "FormSerialSend";
-            this.Text = "Serial Send";
+            this.Text = "Serial Send (2)";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

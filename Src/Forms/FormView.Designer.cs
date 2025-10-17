@@ -33,7 +33,8 @@
             this.hideUnhighlightedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listView1 = new serialog.ListViewVirt();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxMatch = new System.Windows.Forms.TextBox();
+            this.textBoxSearch = new System.Windows.Forms.TextBox();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,28 +76,43 @@
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
             this.listView1.VirtualMode = true;
+            this.listView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseDoubleClick);
             // 
-            // textBox1
+            // textBoxMatch
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 9);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(1554, 31);
-            this.textBox1.TabIndex = 1;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.textBoxMatch.Location = new System.Drawing.Point(12, 9);
+            this.textBoxMatch.Name = "textBoxMatch";
+            this.textBoxMatch.PlaceholderText = "Match text";
+            this.textBoxMatch.Size = new System.Drawing.Size(783, 31);
+            this.textBoxMatch.TabIndex = 1;
+            this.textBoxMatch.TextChanged += new System.EventHandler(this.textBoxMatch_TextChanged);
+            this.textBoxMatch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxMatch_KeyDown);
+            // 
+            // textBoxSearch
+            // 
+            this.textBoxSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxSearch.Location = new System.Drawing.Point(801, 9);
+            this.textBoxSearch.Name = "textBoxSearch";
+            this.textBoxSearch.PlaceholderText = "Search text";
+            this.textBoxSearch.Size = new System.Drawing.Size(765, 31);
+            this.textBoxSearch.TabIndex = 3;
+            this.textBoxSearch.TextChanged += new System.EventHandler(this.textBoxSearch_TextChanged);
+            this.textBoxSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxSearch_KeyDown);
             // 
             // FormView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1578, 944);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBoxSearch);
+            this.Controls.Add(this.textBoxMatch);
             this.Controls.Add(this.listView1);
             this.KeyPreview = true;
             this.MinimizeBox = false;
             this.Name = "FormView";
-            this.Text = "View";
+            this.Text = "View (3)";
             this.Load += new System.EventHandler(this.FormView_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormView_KeyDown);
             this.Resize += new System.EventHandler(this.FormView_Resize);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -109,6 +125,7 @@
         private ToolStripMenuItem hideUnhighlightedToolStripMenuItem;
         private ListViewVirt listView1;
         private ColumnHeader columnHeader1;
-        private TextBox textBox1;
+        private TextBox textBoxMatch;
+        private TextBox textBoxSearch;
     }
 }

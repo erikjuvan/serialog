@@ -414,7 +414,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(562, 796);
             this.Name = "FormHighlight";
-            this.Text = "Highlight";
+            this.Text = "Highlight (1)";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form2_Highlight_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();

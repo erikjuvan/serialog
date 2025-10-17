@@ -37,7 +37,6 @@
             this.clearAllContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addCustomRowContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.formHighlightContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideUnhighlightedContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disableHighlightsContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -55,7 +54,6 @@
             this.clearAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addCustomRowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.formHighlightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideUnhighlightedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disableHighlightsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addStartStopTimestampToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,8 +63,8 @@
             this.settingsFolderResetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nonPrintableCharsAsHexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolsAddViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsSerialSendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsAddViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.button_run = new System.Windows.Forms.Button();
             this.comboBox_port = new System.Windows.Forms.ComboBox();
@@ -90,8 +88,12 @@
             this.buttonResetSerial = new System.Windows.Forms.Button();
             this.buttonToTop = new System.Windows.Forms.Button();
             this.buttonToBottom = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBoxMatchCase = new System.Windows.Forms.CheckBox();
+            this.formHighlightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // listView1
@@ -114,7 +116,7 @@
             this.listView1.Name = "listView1";
             this.listView1.OwnerDraw = true;
             this.listView1.ShowGroups = false;
-            this.listView1.Size = new System.Drawing.Size(1427, 1479);
+            this.listView1.Size = new System.Drawing.Size(1836, 1479);
             this.listView1.TabIndex = 12;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -134,19 +136,18 @@
             this.clearAllContextMenuItem,
             this.addCustomRowContextMenuItem,
             this.toolStripMenuItem2,
-            this.formHighlightContextMenuItem,
             this.hideUnhighlightedContextMenuItem,
             this.disableHighlightsContextMenuItem,
             this.toolStripSeparator1,
             this.jumpToTopToolStripMenuItem,
             this.jumpToBottomToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(259, 272);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(246, 273);
             // 
             // selectAllContextMenuItem
             // 
             this.selectAllContextMenuItem.Name = "selectAllContextMenuItem";
-            this.selectAllContextMenuItem.Size = new System.Drawing.Size(258, 32);
+            this.selectAllContextMenuItem.Size = new System.Drawing.Size(245, 32);
             this.selectAllContextMenuItem.Text = "Select All";
             this.selectAllContextMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
             // 
@@ -154,60 +155,52 @@
             // 
             this.clearAllContextMenuItem.Name = "clearAllContextMenuItem";
             this.clearAllContextMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
-            this.clearAllContextMenuItem.Size = new System.Drawing.Size(258, 32);
+            this.clearAllContextMenuItem.Size = new System.Drawing.Size(245, 32);
             this.clearAllContextMenuItem.Text = "Clear All";
             this.clearAllContextMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
             // 
             // addCustomRowContextMenuItem
             // 
             this.addCustomRowContextMenuItem.Name = "addCustomRowContextMenuItem";
-            this.addCustomRowContextMenuItem.Size = new System.Drawing.Size(258, 32);
+            this.addCustomRowContextMenuItem.Size = new System.Drawing.Size(245, 32);
             this.addCustomRowContextMenuItem.Text = "Add Custom Row...";
             this.addCustomRowContextMenuItem.Click += new System.EventHandler(this.addCustomRowToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(255, 6);
-            // 
-            // formHighlightContextMenuItem
-            // 
-            this.formHighlightContextMenuItem.Name = "formHighlightContextMenuItem";
-            this.formHighlightContextMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
-            this.formHighlightContextMenuItem.Size = new System.Drawing.Size(258, 32);
-            this.formHighlightContextMenuItem.Text = "Highlighting...";
-            this.formHighlightContextMenuItem.Click += new System.EventHandler(this.formHighlightToolStripMenuItem_Click);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(242, 6);
             // 
             // hideUnhighlightedContextMenuItem
             // 
             this.hideUnhighlightedContextMenuItem.Name = "hideUnhighlightedContextMenuItem";
-            this.hideUnhighlightedContextMenuItem.Size = new System.Drawing.Size(258, 32);
+            this.hideUnhighlightedContextMenuItem.Size = new System.Drawing.Size(245, 32);
             this.hideUnhighlightedContextMenuItem.Text = "Hide Unhighlighted";
             this.hideUnhighlightedContextMenuItem.Click += new System.EventHandler(this.hideUnhighlightedToolStripMenuItem_Click);
             // 
             // disableHighlightsContextMenuItem
             // 
             this.disableHighlightsContextMenuItem.Name = "disableHighlightsContextMenuItem";
-            this.disableHighlightsContextMenuItem.Size = new System.Drawing.Size(258, 32);
+            this.disableHighlightsContextMenuItem.Size = new System.Drawing.Size(245, 32);
             this.disableHighlightsContextMenuItem.Text = "Disable Highlighting";
             this.disableHighlightsContextMenuItem.Click += new System.EventHandler(this.disableHighlightsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(255, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(242, 6);
             // 
             // jumpToTopToolStripMenuItem
             // 
             this.jumpToTopToolStripMenuItem.Name = "jumpToTopToolStripMenuItem";
-            this.jumpToTopToolStripMenuItem.Size = new System.Drawing.Size(258, 32);
+            this.jumpToTopToolStripMenuItem.Size = new System.Drawing.Size(245, 32);
             this.jumpToTopToolStripMenuItem.Text = "Jump to Top";
             this.jumpToTopToolStripMenuItem.Click += new System.EventHandler(this.jumpToTopToolStripMenuItem_Click);
             // 
             // jumpToBottomToolStripMenuItem
             // 
             this.jumpToBottomToolStripMenuItem.Name = "jumpToBottomToolStripMenuItem";
-            this.jumpToBottomToolStripMenuItem.Size = new System.Drawing.Size(258, 32);
+            this.jumpToBottomToolStripMenuItem.Size = new System.Drawing.Size(245, 32);
             this.jumpToBottomToolStripMenuItem.Text = "Jump to Bottom";
             this.jumpToBottomToolStripMenuItem.Click += new System.EventHandler(this.jumpToBottomToolStripMenuItem_Click);
             // 
@@ -222,7 +215,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
-            this.menuStrip1.Size = new System.Drawing.Size(1457, 35);
+            this.menuStrip1.Size = new System.Drawing.Size(1866, 35);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -291,7 +284,7 @@
             // selectAllToolStripMenuItem
             // 
             this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(266, 34);
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.selectAllToolStripMenuItem.Text = "Select All";
             this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
             // 
@@ -299,21 +292,20 @@
             // 
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
             this.clearAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(266, 34);
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.clearAllToolStripMenuItem.Text = "Clear All";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
             // 
             // addCustomRowToolStripMenuItem
             // 
             this.addCustomRowToolStripMenuItem.Name = "addCustomRowToolStripMenuItem";
-            this.addCustomRowToolStripMenuItem.Size = new System.Drawing.Size(266, 34);
+            this.addCustomRowToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.addCustomRowToolStripMenuItem.Text = "Add Custom Row...";
             this.addCustomRowToolStripMenuItem.Click += new System.EventHandler(this.addCustomRowToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.formHighlightToolStripMenuItem,
             this.hideUnhighlightedToolStripMenuItem,
             this.disableHighlightsToolStripMenuItem,
             this.addStartStopTimestampToolStripMenuItem,
@@ -323,14 +315,6 @@
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(92, 29);
             this.settingsToolStripMenuItem.Text = "Settings";
-            // 
-            // formHighlightToolStripMenuItem
-            // 
-            this.formHighlightToolStripMenuItem.Name = "formHighlightToolStripMenuItem";
-            this.formHighlightToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
-            this.formHighlightToolStripMenuItem.Size = new System.Drawing.Size(330, 34);
-            this.formHighlightToolStripMenuItem.Text = "Highlight...";
-            this.formHighlightToolStripMenuItem.Click += new System.EventHandler(this.formHighlightToolStripMenuItem_Click);
             // 
             // hideUnhighlightedToolStripMenuItem
             // 
@@ -396,25 +380,28 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.formHighlightToolStripMenuItem,
             this.toolsSerialSendToolStripMenuItem,
             this.toolsAddViewToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(69, 29);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
-            // toolsAddViewToolStripMenuItem
-            // 
-            this.toolsAddViewToolStripMenuItem.Name = "toolsAddViewToolStripMenuItem";
-            this.toolsAddViewToolStripMenuItem.Size = new System.Drawing.Size(213, 34);
-            this.toolsAddViewToolStripMenuItem.Text = "Add View...";
-            this.toolsAddViewToolStripMenuItem.Click += new System.EventHandler(this.toolsAddViewToolStripMenuItem_Click);
-            // 
             // toolsSerialSendToolStripMenuItem
             // 
             this.toolsSerialSendToolStripMenuItem.Name = "toolsSerialSendToolStripMenuItem";
-            this.toolsSerialSendToolStripMenuItem.Size = new System.Drawing.Size(213, 34);
+            this.toolsSerialSendToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D2)));
+            this.toolsSerialSendToolStripMenuItem.Size = new System.Drawing.Size(274, 34);
             this.toolsSerialSendToolStripMenuItem.Text = "Serial Send...";
             this.toolsSerialSendToolStripMenuItem.Click += new System.EventHandler(this.toolsSerialSendToolStripMenuItem_Click);
+            // 
+            // toolsAddViewToolStripMenuItem
+            // 
+            this.toolsAddViewToolStripMenuItem.Name = "toolsAddViewToolStripMenuItem";
+            this.toolsAddViewToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D3)));
+            this.toolsAddViewToolStripMenuItem.Size = new System.Drawing.Size(274, 34);
+            this.toolsAddViewToolStripMenuItem.Text = "Add View...";
+            this.toolsAddViewToolStripMenuItem.Click += new System.EventHandler(this.toolsAddViewToolStripMenuItem_Click);
             // 
             // label1
             // 
@@ -582,7 +569,7 @@
             // 
             this.button_prev_highlight.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button_prev_highlight.ForeColor = System.Drawing.Color.Black;
-            this.button_prev_highlight.Location = new System.Drawing.Point(1221, 53);
+            this.button_prev_highlight.Location = new System.Drawing.Point(1082, 53);
             this.button_prev_highlight.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_prev_highlight.Name = "button_prev_highlight";
             this.button_prev_highlight.Size = new System.Drawing.Size(47, 38);
@@ -595,7 +582,7 @@
             // 
             this.button_next_highlight.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.button_next_highlight.ForeColor = System.Drawing.Color.Black;
-            this.button_next_highlight.Location = new System.Drawing.Point(1274, 53);
+            this.button_next_highlight.Location = new System.Drawing.Point(1135, 53);
             this.button_next_highlight.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_next_highlight.Name = "button_next_highlight";
             this.button_next_highlight.Size = new System.Drawing.Size(47, 38);
@@ -607,7 +594,7 @@
             // checkBoxRegex
             // 
             this.checkBoxRegex.AutoSize = true;
-            this.checkBoxRegex.Location = new System.Drawing.Point(1063, 58);
+            this.checkBoxRegex.Location = new System.Drawing.Point(79, 12);
             this.checkBoxRegex.Name = "checkBoxRegex";
             this.checkBoxRegex.Size = new System.Drawing.Size(85, 29);
             this.checkBoxRegex.TabIndex = 19;
@@ -631,7 +618,7 @@
             // 
             this.buttonToTop.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.buttonToTop.ForeColor = System.Drawing.Color.Black;
-            this.buttonToTop.Location = new System.Drawing.Point(1342, 54);
+            this.buttonToTop.Location = new System.Drawing.Point(1203, 53);
             this.buttonToTop.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonToTop.Name = "buttonToTop";
             this.buttonToTop.Size = new System.Drawing.Size(47, 38);
@@ -644,7 +631,7 @@
             // 
             this.buttonToBottom.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.buttonToBottom.ForeColor = System.Drawing.Color.Black;
-            this.buttonToBottom.Location = new System.Drawing.Point(1397, 52);
+            this.buttonToBottom.Location = new System.Drawing.Point(1258, 53);
             this.buttonToBottom.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonToBottom.Name = "buttonToBottom";
             this.buttonToBottom.Size = new System.Drawing.Size(47, 38);
@@ -653,15 +640,44 @@
             this.buttonToBottom.UseVisualStyleBackColor = true;
             this.buttonToBottom.Click += new System.EventHandler(this.buttonToBottom_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.checkBoxMatchCase);
+            this.groupBox1.Controls.Add(this.checkBoxRegex);
+            this.groupBox1.Location = new System.Drawing.Point(1337, 53);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(302, 41);
+            this.groupBox1.TabIndex = 23;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Search";
+            // 
+            // checkBoxMatchCase
+            // 
+            this.checkBoxMatchCase.AutoSize = true;
+            this.checkBoxMatchCase.Location = new System.Drawing.Point(170, 12);
+            this.checkBoxMatchCase.Name = "checkBoxMatchCase";
+            this.checkBoxMatchCase.Size = new System.Drawing.Size(129, 29);
+            this.checkBoxMatchCase.TabIndex = 20;
+            this.checkBoxMatchCase.Text = "Match Case";
+            this.checkBoxMatchCase.UseVisualStyleBackColor = true;
+            this.checkBoxMatchCase.CheckedChanged += new System.EventHandler(this.checkBoxMatchCase_CheckedChanged);
+            // 
+            // formHighlightToolStripMenuItem
+            // 
+            this.formHighlightToolStripMenuItem.Name = "formHighlightToolStripMenuItem";
+            this.formHighlightToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
+            this.formHighlightToolStripMenuItem.Size = new System.Drawing.Size(274, 34);
+            this.formHighlightToolStripMenuItem.Text = "Highlight...";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1457, 1602);
+            this.ClientSize = new System.Drawing.Size(1866, 1602);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonToBottom);
             this.Controls.Add(this.buttonToTop);
             this.Controls.Add(this.buttonResetSerial);
-            this.Controls.Add(this.checkBoxRegex);
             this.Controls.Add(this.button_prev_highlight);
             this.Controls.Add(this.button_next_highlight);
             this.Controls.Add(this.button_findall);
@@ -693,6 +709,8 @@
             this.contextMenuStrip1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -711,7 +729,6 @@
         private ComboBox comboBox_port;
         private Label label2;
         private Button button_stop;
-        private ToolStripMenuItem formHighlightToolStripMenuItem;
         private CheckBox checkBox_follow;
         private System.Windows.Forms.Timer timer_addtolist;
         private ColumnHeader column1;
@@ -736,7 +753,6 @@
         private ToolStripMenuItem selectAllContextMenuItem;
         private ToolStripMenuItem clearAllContextMenuItem;
         private ToolStripSeparator toolStripMenuItem2;
-        private ToolStripMenuItem formHighlightContextMenuItem;
         private ToolStripMenuItem hideUnhighlightedContextMenuItem;
         private ToolStripMenuItem saveSerialAsToolStripMenuItem;
         private ToolStripMenuItem disableHighlightsToolStripMenuItem;
@@ -760,5 +776,8 @@
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem jumpToTopToolStripMenuItem;
         private ToolStripMenuItem jumpToBottomToolStripMenuItem;
+        private GroupBox groupBox1;
+        private CheckBox checkBoxMatchCase;
+        private ToolStripMenuItem formHighlightToolStripMenuItem;
     }
 }
