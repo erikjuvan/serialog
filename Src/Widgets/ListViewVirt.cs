@@ -11,12 +11,9 @@ namespace serialog
         public DataLog DataLog { get;  set; }
         private readonly Dictionary<FontStyle, Font> _fontCache = new Dictionary<FontStyle, Font>();
 
-        // Smoother mouse scrolling
-        [DllImport("user32.dll")]
-        private static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
-        private const int WM_VSCROLL = 0x0115;
-        private const int SB_LINEUP = 0;
-        private const int SB_LINEDOWN = 1;
+        // For scrolling
+        private int scrollAccumulatedDelta = 0;
+        private System.Windows.Forms.Timer scrollTimer;
 
         public ListViewVirt()
         {
@@ -31,7 +28,7 @@ namespace serialog
             this.DrawItem += OnDrawItem;
             this.DrawSubItem += OnDrawSubItem;
             this.KeyDown += OnKeyDown;
-            this.MouseWheel += OnMouseWheel;
+            //this.MouseWheel += OnMouseWheel;
         }
 
         /// <summary>Refresh when new entries were added to the log.</summary>
@@ -203,20 +200,31 @@ namespace serialog
             }
         }
 
-        private void OnMouseWheel(object sender, MouseEventArgs e)
+        protected override void OnMouseWheel(MouseEventArgs e)
         {
-            int linesToMove = e.Delta / 120;
-
-            if ((ModifierKeys & Keys.Control) == Keys.Control)
-                linesToMove *= 15;
-
-            for (int i = 0; i < Math.Abs(linesToMove); i++)
+            scrollAccumulatedDelta += e.Delta;
+            if (scrollTimer == null)
             {
-                int command = linesToMove > 0 ? SB_LINEUP : SB_LINEDOWN;
-                SendMessage(Handle, WM_VSCROLL, command, 0);
+                scrollTimer = new System.Windows.Forms.Timer();
+                scrollTimer.Interval = 15; // 15ms per “scroll frame”
+                scrollTimer.Tick += (s, args) =>
+                {
+                    scrollTimer.Stop();
+
+                    int lines = scrollAccumulatedDelta / 120;
+                    scrollAccumulatedDelta = 0;
+
+                    if ((ModifierKeys & Keys.Control) == Keys.Control)
+                        lines *= 30;
+
+                    int newTopIndex = Math.Max(0, Math.Min(Items.Count - 1, TopItem.Index - lines));
+                    if (newTopIndex != TopItem.Index)
+                        TopItem = Items[newTopIndex];
+                };
             }
 
-            ((HandledMouseEventArgs)e).Handled = true;
+            scrollTimer.Stop();
+            scrollTimer.Start();
         }
     }
 }
