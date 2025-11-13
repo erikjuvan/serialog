@@ -42,6 +42,8 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.jumpToTopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jumpToBottomToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.showInViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,8 +93,7 @@
             this.buttonToBottom = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkBoxMatchCase = new System.Windows.Forms.CheckBox();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.showInViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearMemoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -146,7 +147,7 @@
             this.toolStripSeparator2,
             this.showInViewToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(246, 311);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(246, 278);
             // 
             // selectAllContextMenuItem
             // 
@@ -208,6 +209,18 @@
             this.jumpToBottomToolStripMenuItem.Text = "Jump to Bottom";
             this.jumpToBottomToolStripMenuItem.Click += new System.EventHandler(this.jumpToBottomToolStripMenuItem_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(242, 6);
+            // 
+            // showInViewToolStripMenuItem
+            // 
+            this.showInViewToolStripMenuItem.Name = "showInViewToolStripMenuItem";
+            this.showInViewToolStripMenuItem.Size = new System.Drawing.Size(245, 32);
+            this.showInViewToolStripMenuItem.Text = "Show in View";
+            this.showInViewToolStripMenuItem.Click += new System.EventHandler(this.showInViewToolStripMenuItem_Click);
+            // 
             // menuStrip1
             // 
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -230,6 +243,7 @@
             this.saveAsToolStripMenuItem,
             this.saveSelectedToolStripMenuItem,
             this.saveSerialAsToolStripMenuItem,
+            this.clearMemoryToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(54, 29);
@@ -288,7 +302,7 @@
             // selectAllToolStripMenuItem
             // 
             this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(266, 34);
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.selectAllToolStripMenuItem.Text = "Select All";
             this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
             // 
@@ -296,14 +310,14 @@
             // 
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
             this.clearAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(266, 34);
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.clearAllToolStripMenuItem.Text = "Clear All";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
             // 
             // addCustomRowToolStripMenuItem
             // 
             this.addCustomRowToolStripMenuItem.Name = "addCustomRowToolStripMenuItem";
-            this.addCustomRowToolStripMenuItem.Size = new System.Drawing.Size(266, 34);
+            this.addCustomRowToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.addCustomRowToolStripMenuItem.Text = "Add Custom Row...";
             this.addCustomRowToolStripMenuItem.Click += new System.EventHandler(this.addCustomRowToolStripMenuItem_Click);
             // 
@@ -673,17 +687,12 @@
             this.checkBoxMatchCase.UseVisualStyleBackColor = true;
             this.checkBoxMatchCase.CheckedChanged += new System.EventHandler(this.checkBoxMatchCase_CheckedChanged);
             // 
-            // toolStripSeparator2
+            // clearMemoryToolStripMenuItem
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(242, 6);
-            // 
-            // showInViewToolStripMenuItem
-            // 
-            this.showInViewToolStripMenuItem.Name = "showInViewToolStripMenuItem";
-            this.showInViewToolStripMenuItem.Size = new System.Drawing.Size(245, 32);
-            this.showInViewToolStripMenuItem.Text = "Show in View";
-            this.showInViewToolStripMenuItem.Click += new System.EventHandler(this.showInViewToolStripMenuItem_Click);
+            this.clearMemoryToolStripMenuItem.Name = "clearMemoryToolStripMenuItem";
+            this.clearMemoryToolStripMenuItem.Size = new System.Drawing.Size(368, 34);
+            this.clearMemoryToolStripMenuItem.Text = "Clear memory";
+            this.clearMemoryToolStripMenuItem.Click += new System.EventHandler(this.clearMemoryToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -797,5 +806,6 @@
         private ToolStripMenuItem formHighlightToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripMenuItem showInViewToolStripMenuItem;
+        private ToolStripMenuItem clearMemoryToolStripMenuItem;
     }
 }

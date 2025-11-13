@@ -23,6 +23,14 @@
                 return _rawBytes.ToArray();
             }
         }
+
+        public void Clear()
+        {
+            lock (_lock)
+            {
+                _rawBytes.Clear();
+            }
+        }
     }
 
 }

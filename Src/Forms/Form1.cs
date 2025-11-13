@@ -675,6 +675,22 @@ namespace serialog
             }
         }
 
+        private void clearMemoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Clear shared data safely
+            lock (_serialDataLock)
+            {
+                listView1.ClearView();
+                formView.UpdateList();
+                _dataLog.Clear();
+                _serialDataBuffer.Clear();
+            }
+
+            runTime = new Stopwatch();
+            if (!_serialcomStopped)
+                runTime.Start();
+        }
+
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
