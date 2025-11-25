@@ -12,6 +12,21 @@ namespace serialog
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
+            // This is quite a hack to avoid an invalid item id after removing them from the FormView match and search comboboxes
+            Application.ThreadException += (sender, e) =>
+            {
+                if (e.Exception is ArgumentOutOfRangeException aoore &&
+                    aoore.StackTrace?.Contains("System.Windows.Forms.ComboBox") == true)
+                {
+                    // Ignore the ComboBox SelectedIndex glitch
+                    //MessageBox.Show(e.Exception.ToString(), "Ignoring combobox glitch");
+                    return; // swallow
+                }
+
+                // For all other exceptions, rethrow or log
+                MessageBox.Show(e.Exception.ToString(), "Unhandled UI Exception");
+            };
+
             Application.Run(new Form1());
         }
     }

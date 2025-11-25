@@ -33,8 +33,8 @@
             this.hideUnhighlightedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listView1 = new serialog.ListViewVirt();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-            this.textBoxMatch = new System.Windows.Forms.TextBox();
-            this.textBoxSearch = new System.Windows.Forms.TextBox();
+            this.comboMatch = new System.Windows.Forms.ComboBox();
+            this.comboSearch = new System.Windows.Forms.ComboBox();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -78,34 +78,31 @@
             this.listView1.VirtualMode = true;
             this.listView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseDoubleClick);
             // 
-            // textBoxMatch
+            // comboMatch
             // 
-            this.textBoxMatch.Location = new System.Drawing.Point(12, 9);
-            this.textBoxMatch.Name = "textBoxMatch";
-            this.textBoxMatch.PlaceholderText = "Match text";
-            this.textBoxMatch.Size = new System.Drawing.Size(783, 31);
-            this.textBoxMatch.TabIndex = 1;
-            this.textBoxMatch.TextChanged += new System.EventHandler(this.textBoxMatch_TextChanged);
-            this.textBoxMatch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxMatch_KeyDown);
+            this.comboMatch.FormattingEnabled = true;
+            this.comboMatch.Location = new System.Drawing.Point(12, 7);
+            this.comboMatch.Name = "comboMatch";
+            this.comboMatch.Size = new System.Drawing.Size(783, 33);
+            this.comboMatch.TabIndex = 4;
+            this.comboMatch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.comboMatch_KeyDown);
             // 
-            // textBoxSearch
+            // comboSearch
             // 
-            this.textBoxSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxSearch.Location = new System.Drawing.Point(801, 9);
-            this.textBoxSearch.Name = "textBoxSearch";
-            this.textBoxSearch.PlaceholderText = "Search text";
-            this.textBoxSearch.Size = new System.Drawing.Size(765, 31);
-            this.textBoxSearch.TabIndex = 3;
-            this.textBoxSearch.TextChanged += new System.EventHandler(this.textBoxSearch_TextChanged);
-            this.textBoxSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxSearch_KeyDown);
+            this.comboSearch.FormattingEnabled = true;
+            this.comboSearch.Location = new System.Drawing.Point(801, 7);
+            this.comboSearch.Name = "comboSearch";
+            this.comboSearch.Size = new System.Drawing.Size(765, 33);
+            this.comboSearch.TabIndex = 5;
+            this.comboSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.comboSearch_KeyDown);
             // 
             // FormView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1578, 944);
-            this.Controls.Add(this.textBoxSearch);
-            this.Controls.Add(this.textBoxMatch);
+            this.Controls.Add(this.comboSearch);
+            this.Controls.Add(this.comboMatch);
             this.Controls.Add(this.listView1);
             this.KeyPreview = true;
             this.MinimizeBox = false;
@@ -116,7 +113,6 @@
             this.Resize += new System.EventHandler(this.FormView_Resize);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -124,8 +120,8 @@
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem hideUnhighlightedToolStripMenuItem;
         private ColumnHeader columnHeader1;
-        private TextBox textBoxMatch;
-        private TextBox textBoxSearch;
         public ListViewVirt listView1;
+        private ComboBox comboMatch;
+        private ComboBox comboSearch;
     }
 }

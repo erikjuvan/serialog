@@ -21,31 +21,31 @@ namespace serialog
         private void FormView_Load(object sender, EventArgs e)
         {
             FitListviewToWidth();
-            FitTextboxes();
+            FitCombos();
         }
 
         private void FormView_Resize(object sender, EventArgs e)
         {
             FitListviewToWidth();
-            FitTextboxes();
+            FitCombos();
         }
 
         private void FormView_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.KeyCode == Keys.F)
             {
-                textBoxSearch.Select();
+                comboSearch.Select();
             }
 
             if (e.KeyCode == Keys.F3)
             {
                 if (e.Shift)
                 {
-                    listView1.FindPrev(textBoxSearch.Text);
+                    listView1.FindPrev(comboSearch.Text);
                 }
                 else
                 {
-                    listView1.FindNext(textBoxSearch.Text);
+                    listView1.FindNext(comboSearch.Text);
                 }
             }
         }
@@ -58,16 +58,17 @@ namespace serialog
             listView1.Columns[0].Width = availableWidth;
         }
 
-        private void FitTextboxes()
+        private void FitCombos()
         {
             int margin = 10;
             int totalWidth = this.ClientSize.Width - (3 * margin);
             int halfWidth = totalWidth / 2;
 
-            textBoxMatch.Width = halfWidth;
-            textBoxSearch.Width = halfWidth;
-            textBoxMatch.Left = margin;
-            textBoxSearch.Left = textBoxMatch.Right + margin;
+            comboMatch.Width = halfWidth;
+            comboSearch.Width = halfWidth;
+
+            comboMatch.Left = margin;
+            comboSearch.Left = comboMatch.Right + margin;
         }
 
         public void UpdateList()
@@ -79,7 +80,7 @@ namespace serialog
             {
                 try
                 {
-                    if (Helpers.MatchesPattern(_dataLog[i].ToString(), textBoxMatch.Text, ListViewVirtExtensions.MatchCase, ListViewVirtExtensions.UseRegex))
+                    if (Helpers.MatchesPattern(_dataLog[i].ToString(), comboMatch.Text, ListViewVirtExtensions.MatchCase, ListViewVirtExtensions.UseRegex))
                     {
                         _dataLogList.Add(_dataLog[i]);
                         DataLogListIndicies.Add(i);
@@ -130,7 +131,7 @@ namespace serialog
 
         private void textBoxSearch_TextChanged(object sender, EventArgs e)
         {
-            listView1.FindLive(textBoxSearch.Text);
+            listView1.FindLive(comboSearch.Text);
         }
 
         private void textBoxSearch_KeyDown(object sender, KeyEventArgs e)
@@ -139,13 +140,71 @@ namespace serialog
             {
                 if (e.Shift)
                 {
-                    listView1.FindPrev(textBoxSearch.Text);
+                    listView1.FindPrev(comboSearch.Text);
                 }
                 else
                 {
-                    listView1.FindNext(textBoxSearch.Text);
+                    listView1.FindNext(comboSearch.Text);
                 }
             }
+        }
+
+        private void combo_StoreOnEnter(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                var cb = (ComboBox)sender;
+
+                string text = cb.Text.Trim();
+                if (text.Length == 0)
+                    return;
+
+                // Only add if it's not already in history
+                if (!cb.Items.Contains(text))
+                    cb.Items.Add(text);
+
+                e.SuppressKeyPress = true; // Prevent system beep
+            }
+        }
+
+        private void combo_RemoveSelectedOnDelete(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                var cb = (ComboBox)sender;
+
+                // Only act when dropdown is open and there's a highlighted item
+                if (cb.DroppedDown && cb.SelectedIndex >= 0)
+                {
+                    // Save the current text before modifying the list
+                    string currentText = cb.Text;
+
+                    // Remove the selected (highlighted) item
+                    cb.Items.RemoveAt(cb.SelectedIndex);
+
+                    // Deselect any item
+                    //cb.SelectedIndex = -1; // Doesn't seem like it is needed
+
+                    // Restore the user's text
+                    cb.Text = currentText;
+
+                    // Prevent beep and default delete behavior
+                    e.SuppressKeyPress = true;
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void comboMatch_KeyDown(object sender, KeyEventArgs e)
+        {
+            combo_StoreOnEnter(sender, e);
+            combo_RemoveSelectedOnDelete(sender, e);
+        }
+
+        private void comboSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            combo_StoreOnEnter(sender, e);
+            combo_RemoveSelectedOnDelete(sender, e);
         }
     }
 }

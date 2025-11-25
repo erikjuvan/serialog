@@ -1,10 +1,13 @@
+- Make hide work, since it would be really useful!
+- highlight settings should be split to style(colors, bold, italic, (remove - here or in attributes??)...) and attributes (match case, regex, (remove - here or in style?))
+- horizontal scroll bar in listview (i feel it would be useful especially for view which is usually not full screen)
 - moving highlighted items up or down makes the unchecked item not checked but it does not take into account it is unchecked
 - Scrolling issue when selected
 - Find arrow up show previous find
 - Fix COM port combobox, try to have it work with autostart so it shows correct port and also have it show correct ports without config.json
 - Highlight window is incorrectly sized on other screens e.g. on work it has a horizontal scroll bar
 - Performance issues
-- Add view
+- "Control/Action Manager" - handle any input (JSON config file, command line arguments, pipe)
 - Highlight Hide
 - Save List All, Save List (what is currently visible), Save Selected, Save Serial
 - Odstrani virtual iz listview pa daj owner drawn pa probaj tako pohendlat razne issue
