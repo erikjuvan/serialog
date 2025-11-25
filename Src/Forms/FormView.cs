@@ -114,41 +114,6 @@ namespace serialog
             _parentForm.listView1.EnsureVisible(originalIndex);
         }
 
-        private void textBoxMatch_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.Handled = true;
-                e.SuppressKeyPress = true; // prevents "ding" sound
-                UpdateList();
-            }
-        }
-
-        private void textBoxMatch_TextChanged(object sender, EventArgs e)
-        {
-            UpdateList();
-        }
-
-        private void textBoxSearch_TextChanged(object sender, EventArgs e)
-        {
-            listView1.FindLive(comboSearch.Text);
-        }
-
-        private void textBoxSearch_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                if (e.Shift)
-                {
-                    listView1.FindPrev(comboSearch.Text);
-                }
-                else
-                {
-                    listView1.FindNext(comboSearch.Text);
-                }
-            }
-        }
-
         private void combo_StoreOnEnter(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -162,8 +127,6 @@ namespace serialog
                 // Only add if it's not already in history
                 if (!cb.Items.Contains(text))
                     cb.Items.Add(text);
-
-                e.SuppressKeyPress = true; // Prevent system beep
             }
         }
 
@@ -199,12 +162,41 @@ namespace serialog
         {
             combo_StoreOnEnter(sender, e);
             combo_RemoveSelectedOnDelete(sender, e);
+
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true; // prevents "ding" sound
+                UpdateList();
+            }
         }
 
         private void comboSearch_KeyDown(object sender, KeyEventArgs e)
         {
             combo_StoreOnEnter(sender, e);
             combo_RemoveSelectedOnDelete(sender, e);
+
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (e.Shift)
+                {
+                    listView1.FindPrev(comboSearch.Text);
+                }
+                else
+                {
+                    listView1.FindNext(comboSearch.Text);
+                }
+            }
+        }
+
+        private void comboMatch_TextChanged(object sender, EventArgs e)
+        {
+            UpdateList();
+        }
+
+        private void comboSearch_TextChanged(object sender, EventArgs e)
+        {
+            listView1.FindLive(comboSearch.Text);
         }
     }
 }

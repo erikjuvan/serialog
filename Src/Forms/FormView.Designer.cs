@@ -85,6 +85,7 @@
             this.comboMatch.Name = "comboMatch";
             this.comboMatch.Size = new System.Drawing.Size(783, 33);
             this.comboMatch.TabIndex = 4;
+            this.comboMatch.TextChanged += new System.EventHandler(this.comboMatch_TextChanged);
             this.comboMatch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.comboMatch_KeyDown);
             // 
             // comboSearch
@@ -94,6 +95,7 @@
             this.comboSearch.Name = "comboSearch";
             this.comboSearch.Size = new System.Drawing.Size(765, 33);
             this.comboSearch.TabIndex = 5;
+            this.comboSearch.TextChanged += new System.EventHandler(this.comboSearch_TextChanged);
             this.comboSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.comboSearch_KeyDown);
             // 
             // FormView
